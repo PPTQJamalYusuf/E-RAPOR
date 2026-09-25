@@ -5,19 +5,38 @@ import InputNilaiModal from './components/InputNilaiModal';
 import PrintRaporModal from './components/PrintRaporModal';
 import initialSantriData from './data/initialSantri.json';
 
-const STORAGE_KEY = 'pondok_erapot_tahfidz_data_v1';
+const STORAGE_KEY = 'pondok_erapot_tahfidz_data_v3';
 
 export default function App() {
   const [santriList, setSantriList] = useState(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        // Migrasi otomatis ke Semester Ganjil 1 (الأول) jika masih tersimpan versi lama
-        return parsed.map(s => ({
-          ...s,
-          semester: s.semester === 'الثاني' ? 'الأول' : (s.semester || 'الأول')
-        }));
+      const savedV3 = localStorage.getItem(STORAGE_KEY);
+      if (savedV3) {
+        return JSON.parse(savedV3);
+      }
+      // Ambil nilai yang pernah diinput dari storage lama (v2/v1) dan pasangkan ke nama Proper Case baru
+      const savedOld = localStorage.getItem('pondok_erapot_tahfidz_data_v2') || localStorage.getItem('pondok_erapot_tahfidz_data_v1');
+      if (savedOld) {
+        const parsedOld = JSON.parse(savedOld);
+        const gradesMap = {};
+        parsedOld.forEach(s => {
+          if (s.nilaiJuz && Object.keys(s.nilaiJuz).length > 0) {
+            const k = s.nis || s.id || s.nama.trim().toUpperCase();
+            gradesMap[k] = { nilaiJuz: s.nilaiJuz, catatan: s.catatan };
+            gradesMap[s.nama.trim().toUpperCase()] = gradesMap[k];
+          }
+        });
+        return initialSantriData.map(s => {
+          const old = gradesMap[s.nis] || gradesMap[s.id] || gradesMap[s.nama.trim().toUpperCase()];
+          if (old) {
+            return {
+              ...s,
+              nilaiJuz: old.nilaiJuz,
+              catatan: old.catatan || s.catatan
+            };
+          }
+          return s;
+        });
       }
     } catch (e) {
       console.error('Gagal membaca data dari LocalStorage:', e);
