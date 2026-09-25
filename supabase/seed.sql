@@ -1,0 +1,114 @@
+-- ==============================================================================
+-- Seed Data E-Rapot Tahfidz dari 'MASTER R.TAHFIDZ NEW.xlsx'
+-- Total Santri: 103
+-- ==============================================================================
+
+-- 1. Tahun Ajaran Default
+INSERT INTO tahun_ajaran (id, nama, semester, is_active)
+VALUES ('a0000000-0000-0000-0000-000000000001', '2024/2025', 'الثاني', true)
+ON CONFLICT DO NOTHING;
+
+-- 2. Data Santri Master
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0001', 'Aina San Salsabila', 'السادس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0002', 'Ainayya Nuriel Ihsan', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0003', 'Akilla Nasywa', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0004', 'Alda Aru Ella', 'السادس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0005', 'Alfin Umdatus Syifa', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0006', 'Alisha Nurmala Dewi', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0007', 'Al-Lathifa Pria Hanindyta', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0008', 'Annisa Balqis Azzahra', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0009', 'Annisa Hidayah Nurussunnah', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0010', 'Annisa Nabilla Alfania', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0011', 'Annisa Rizky Amelia', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0012', 'Aqila Assyifa Shahidah', 'السادس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0013', 'Assyfa Rahma Irawadi', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0014', 'Atika Aisyah', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0015', 'Aulia Salsabila Lubis', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0016', 'Aulia Silvina Muklis', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0017', 'Ayudhia'' Sodri''na Na''imah', 'السادس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0018', 'Aziza', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0019', 'Aziza Latif', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0020', 'Az-Zahra Salsabila', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0021', 'Chika Kholifatul Latiffa', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0022', 'Chila Miftahul Janah', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0023', 'Dechila Fadillah Setiawan', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0024', 'Dewi Hasanah', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0025', 'Difa Anita Mara', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0026', 'Dina Febriyanti', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0027', 'Dinah Syakira', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0028', 'Dzakia Rihadatul Adhwa', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0029', 'Dzulfa Salsabila', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0030', 'Eka Wahyu Nur Kholimah', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0031', 'Elin Setia Wati', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0032', 'Fega Aulia Putri', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0033', 'Fhisnia Anisa Sholehah', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0034', 'Fina Fadhilatul Muthi''ah', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0035', 'Gina Sonya', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0036', 'Habibah Hasna Sukoco', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0037', 'Hanifa', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0038', 'Iqlima Izzatul Hasanah', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0039', 'Izza Rahma Wati', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0040', 'Jamilatun Humairo', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0041', 'Jean Sentari', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0042', 'Jihan Nabila', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0043', 'Jihan Qonita Khamelia', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0044', 'Khana Syelindra Unzila Noer', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0045', 'Khanza Nur Rahma Al Magh firah', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0046', 'Khoirun Nis''A', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0047', 'Kinanti Diva Meisya', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0048', 'Kinar Kirana Chotimah', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0049', 'Lathifa Syauqina', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0050', 'Leila iren Suprapto', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0051', 'Luluk Adelia Lutfia', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0052', 'Lutvy Al-Muslimah', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0053', 'Miftha Talita Zakiah', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0054', 'Milani Az Zahra', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0055', 'Mufidatul Husna', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0056', 'Muflikhatun Istiatul Husnah', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0057', 'Nabila Fatin', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0058', 'Nabila felicia', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0059', 'Nadia Anggita', 'السادس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0060', 'Nadin Hasheiva Zahrani', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0061', 'Nadyah Artala Marsid', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0062', 'Nafisatun Najuwa', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0063', 'Naiyla Salsabrina', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0064', 'Najla Lutfiana Nurjeha', 'السادس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0065', 'Natzwa Fitriani', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0066', 'Naura Syifa', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0067', 'Nazwa Putri Dwi Aulia', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0068', 'Nurma Khoirunnisa', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0069', 'Qaila Mumtazah Assakinah', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0070', 'Qonitatun Hafizhoh', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0071', 'Raqiqa Nurin Mahira', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0072', 'Rayya Faiza Balqis', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0073', 'Rifa Rumaisya Kamal', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0074', 'Rifta Ikhda Adha Maulida', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0075', 'Riska Aulia Hidayah', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0076', 'Rumaisha Al-Hawra', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0077', 'Sab''Atul Mukharomah', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0078', 'Saffanah Muzdhalifah', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0079', 'Salsha Wangsit Wardani', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0080', 'Salwa Putri Azkia', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0081', 'Sara Janina Arifin', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0082', 'Shabita Attala Kania', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0083', 'Sharliz Humaira', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0084', 'Sifa Khalis Dahlina', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0085', 'Sifa Khanif Azzahra', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0086', 'Siti Novianti Qholifah', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0087', 'Sokhivatul Izah', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0088', 'Suci Romadhona', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0089', 'Sunur Najiah Hashifah', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0090', 'Syarafana Zoya', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0091', 'Tiara Hesti Audina', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0092', 'Tirtana Prasetyo', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0093', 'Umi Nur Hidayah', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0094', 'Unzila Istiqomah', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0095', 'Vebika Sandi Safitri', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0096', 'Vina Ashari', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0097', 'Warisa', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0098', 'Zahirotun Nafisah', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0099', 'Zahra Saputri', 'الثاني', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0100', 'Zahwa Aqila Rahmania', 'الخامس', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0101', 'Zaskia Rahma Isnaini', 'الرابع', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0102', 'Zayyini Husna Abida', 'الثالث', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;
+INSERT INTO santri (nis, nama, kelas, jenis_kelamin, status) VALUES ('ST-0103', 'Marisa Amrin', 'الأول', 'P', 'aktif') ON CONFLICT (nis) DO UPDATE SET nama = EXCLUDED.nama, kelas = EXCLUDED.kelas;

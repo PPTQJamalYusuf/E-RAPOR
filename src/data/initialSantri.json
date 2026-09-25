@@ -1,0 +1,826 @@
+[
+  {
+    "id": "ST-0001",
+    "no": 1,
+    "nama": "Aina San Salsabila",
+    "kelas": "السادس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0002",
+    "no": 2,
+    "nama": "Ainayya Nuriel Ihsan",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0003",
+    "no": 3,
+    "nama": "Akilla Nasywa",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0004",
+    "no": 4,
+    "nama": "Alda Aru Ella",
+    "kelas": "السادس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0005",
+    "no": 5,
+    "nama": "Alfin Umdatus Syifa",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0006",
+    "no": 6,
+    "nama": "Alisha Nurmala Dewi",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0007",
+    "no": 7,
+    "nama": "Al-Lathifa Pria Hanindyta",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0008",
+    "no": 8,
+    "nama": "Annisa Balqis Azzahra",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0009",
+    "no": 9,
+    "nama": "Annisa Hidayah Nurussunnah",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0010",
+    "no": 10,
+    "nama": "Annisa Nabilla Alfania",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0011",
+    "no": 11,
+    "nama": "Annisa Rizky Amelia",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0012",
+    "no": 12,
+    "nama": "Aqila Assyifa Shahidah",
+    "kelas": "السادس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0013",
+    "no": 13,
+    "nama": "Assyfa Rahma Irawadi",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0014",
+    "no": 14,
+    "nama": "Atika Aisyah",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0015",
+    "no": 15,
+    "nama": "Aulia Salsabila Lubis",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0016",
+    "no": 16,
+    "nama": "Aulia Silvina Muklis",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0017",
+    "no": 17,
+    "nama": "Ayudhia' Sodri'na Na'imah",
+    "kelas": "السادس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0018",
+    "no": 18,
+    "nama": "Aziza",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0019",
+    "no": 19,
+    "nama": "Aziza Latif",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0020",
+    "no": 20,
+    "nama": "Az-Zahra Salsabila",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0021",
+    "no": 21,
+    "nama": "Chika Kholifatul Latiffa",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0022",
+    "no": 22,
+    "nama": "Chila Miftahul Janah",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0023",
+    "no": 23,
+    "nama": "Dechila Fadillah Setiawan",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0024",
+    "no": 24,
+    "nama": "Dewi Hasanah",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0025",
+    "no": 25,
+    "nama": "Difa Anita Mara",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0026",
+    "no": 26,
+    "nama": "Dina Febriyanti",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0027",
+    "no": 27,
+    "nama": "Dinah Syakira",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0028",
+    "no": 28,
+    "nama": "Dzakia Rihadatul Adhwa",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0029",
+    "no": 29,
+    "nama": "Dzulfa Salsabila",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0030",
+    "no": 30,
+    "nama": "Eka Wahyu Nur Kholimah",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0031",
+    "no": 31,
+    "nama": "Elin Setia Wati",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0032",
+    "no": 32,
+    "nama": "Fega Aulia Putri",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0033",
+    "no": 33,
+    "nama": "Fhisnia Anisa Sholehah",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0034",
+    "no": 34,
+    "nama": "Fina Fadhilatul Muthi'ah",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0035",
+    "no": 35,
+    "nama": "Gina Sonya",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0036",
+    "no": 36,
+    "nama": "Habibah Hasna Sukoco",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0037",
+    "no": 37,
+    "nama": "Hanifa",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0038",
+    "no": 38,
+    "nama": "Iqlima Izzatul Hasanah",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0039",
+    "no": 39,
+    "nama": "Izza Rahma Wati",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0040",
+    "no": 40,
+    "nama": "Jamilatun Humairo",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0041",
+    "no": 41,
+    "nama": "Jean Sentari",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0042",
+    "no": 42,
+    "nama": "Jihan Nabila",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0043",
+    "no": 43,
+    "nama": "Jihan Qonita Khamelia",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0044",
+    "no": 44,
+    "nama": "Khana Syelindra Unzila Noer",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0045",
+    "no": 45,
+    "nama": "Khanza Nur Rahma Al Magh firah",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0046",
+    "no": 46,
+    "nama": "Khoirun Nis'A",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0047",
+    "no": 47,
+    "nama": "Kinanti Diva Meisya",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0048",
+    "no": 48,
+    "nama": "Kinar Kirana Chotimah",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0049",
+    "no": 49,
+    "nama": "Lathifa Syauqina",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0050",
+    "no": 50,
+    "nama": "Leila iren Suprapto",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0051",
+    "no": 51,
+    "nama": "Luluk Adelia Lutfia",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0052",
+    "no": 52,
+    "nama": "Lutvy Al-Muslimah",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0053",
+    "no": 53,
+    "nama": "Miftha Talita Zakiah",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0054",
+    "no": 54,
+    "nama": "Milani Az Zahra",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0055",
+    "no": 55,
+    "nama": "Mufidatul Husna",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0056",
+    "no": 56,
+    "nama": "Muflikhatun Istiatul Husnah",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0057",
+    "no": 57,
+    "nama": "Nabila Fatin",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0058",
+    "no": 58,
+    "nama": "Nabila felicia",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0059",
+    "no": 59,
+    "nama": "Nadia Anggita",
+    "kelas": "السادس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0060",
+    "no": 60,
+    "nama": "Nadin Hasheiva Zahrani",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0061",
+    "no": 61,
+    "nama": "Nadyah Artala Marsid",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0062",
+    "no": 62,
+    "nama": "Nafisatun Najuwa",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0063",
+    "no": 63,
+    "nama": "Naiyla Salsabrina",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0064",
+    "no": 64,
+    "nama": "Najla Lutfiana Nurjeha",
+    "kelas": "السادس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0065",
+    "no": 65,
+    "nama": "Natzwa Fitriani",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0066",
+    "no": 66,
+    "nama": "Naura Syifa",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0067",
+    "no": 67,
+    "nama": "Nazwa Putri Dwi Aulia",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0068",
+    "no": 68,
+    "nama": "Nurma Khoirunnisa",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0069",
+    "no": 69,
+    "nama": "Qaila Mumtazah Assakinah",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0070",
+    "no": 70,
+    "nama": "Qonitatun Hafizhoh",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0071",
+    "no": 71,
+    "nama": "Raqiqa Nurin Mahira",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0072",
+    "no": 72,
+    "nama": "Rayya Faiza Balqis",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0073",
+    "no": 73,
+    "nama": "Rifa Rumaisya Kamal",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0074",
+    "no": 74,
+    "nama": "Rifta Ikhda Adha Maulida",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0075",
+    "no": 75,
+    "nama": "Riska Aulia Hidayah",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0076",
+    "no": 76,
+    "nama": "Rumaisha Al-Hawra",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0077",
+    "no": 77,
+    "nama": "Sab'Atul Mukharomah",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0078",
+    "no": 78,
+    "nama": "Saffanah Muzdhalifah",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0079",
+    "no": 79,
+    "nama": "Salsha Wangsit Wardani",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0080",
+    "no": 80,
+    "nama": "Salwa Putri Azkia",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0081",
+    "no": 81,
+    "nama": "Sara Janina Arifin",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0082",
+    "no": 82,
+    "nama": "Shabita Attala Kania",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0083",
+    "no": 83,
+    "nama": "Sharliz Humaira",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0084",
+    "no": 84,
+    "nama": "Sifa Khalis Dahlina",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0085",
+    "no": 85,
+    "nama": "Sifa Khanif Azzahra",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0086",
+    "no": 86,
+    "nama": "Siti Novianti Qholifah",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0087",
+    "no": 87,
+    "nama": "Sokhivatul Izah",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0088",
+    "no": 88,
+    "nama": "Suci Romadhona",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0089",
+    "no": 89,
+    "nama": "Sunur Najiah Hashifah",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0090",
+    "no": 90,
+    "nama": "Syarafana Zoya",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0091",
+    "no": 91,
+    "nama": "Tiara Hesti Audina",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0092",
+    "no": 92,
+    "nama": "Tirtana Prasetyo",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0093",
+    "no": 93,
+    "nama": "Umi Nur Hidayah",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0094",
+    "no": 94,
+    "nama": "Unzila Istiqomah",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0095",
+    "no": 95,
+    "nama": "Vebika Sandi Safitri",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0096",
+    "no": 96,
+    "nama": "Vina Ashari",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0097",
+    "no": 97,
+    "nama": "Warisa",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0098",
+    "no": 98,
+    "nama": "Zahirotun Nafisah",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0099",
+    "no": 99,
+    "nama": "Zahra Saputri",
+    "kelas": "الثاني",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0100",
+    "no": 100,
+    "nama": "Zahwa Aqila Rahmania",
+    "kelas": "الخامس",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0101",
+    "no": 101,
+    "nama": "Zaskia Rahma Isnaini",
+    "kelas": "الرابع",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0102",
+    "no": 102,
+    "nama": "Zayyini Husna Abida",
+    "kelas": "الثالث",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  },
+  {
+    "id": "ST-0103",
+    "no": 103,
+    "nama": "Marisa Amrin",
+    "kelas": "الأول",
+    "semester": "الأول",
+    "nilaiJuz": {}
+  }
+]

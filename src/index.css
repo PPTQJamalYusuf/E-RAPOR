@@ -1,0 +1,1049 @@
+:root {
+  --primary: #047857;
+  --primary-hover: #065f46;
+  --primary-light: #ecfdf5;
+  --primary-glow: rgba(4, 120, 87, 0.15);
+  --gold: #d97706;
+  --gold-light: #fef3c7;
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  --card-bg: #ffffff;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --font-sans: 'Calibri', 'Segoe UI', 'Arial', system-ui, sans-serif;
+  --font-arabic: 'Amiri', 'Traditional Arabic', serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  color: var(--slate-800);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.arabic {
+  font-family: var(--font-arabic);
+}
+
+.bold {
+  font-weight: 700;
+}
+
+/* App Container */
+.app-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem 1rem;
+}
+
+/* Header Web Dashboard */
+.app-header {
+  background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #0d9488 100%);
+  color: white;
+  padding: 1.75rem 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 24px -6px rgba(4, 120, 87, 0.35);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-branding {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.logo-badge {
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: #fef08a;
+}
+
+.header-title-arabic {
+  font-family: var(--font-arabic);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fef08a;
+  line-height: 1.2;
+}
+
+.header-title-latin {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.header-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.badge-free {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #fef08a;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--slate-200);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.stat-val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--slate-900);
+}
+
+.stat-lbl {
+  font-size: 0.82rem;
+  color: var(--slate-500);
+}
+
+/* Toolbar & Filters */
+.toolbar-card {
+  background: var(--card-bg);
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--slate-200);
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.search-and-tools {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.65rem 1rem 0.65rem 2.6rem;
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--slate-400);
+}
+
+.class-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-btn {
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--slate-200);
+  background: var(--slate-50);
+  color: var(--slate-600);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* Table */
+.table-container {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--slate-200);
+  overflow-x: auto;
+}
+
+.santri-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.santri-table th {
+  background: #f8fafc;
+  padding: 0.85rem 1rem;
+  font-weight: 700;
+  border-bottom: 2px solid var(--slate-200);
+}
+
+.santri-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.santri-table tr:hover {
+  background: #f8fafc;
+}
+
+.santri-name {
+  font-weight: 600;
+  color: var(--slate-900);
+}
+
+.santri-nis {
+  font-size: 0.78rem;
+  color: var(--slate-400);
+  font-family: monospace;
+}
+
+.predikat-pill {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.48rem 0.9rem;
+  border-radius: var(--radius-md);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-secondary {
+  background: var(--slate-100);
+  color: var(--slate-700);
+  border: 1px solid var(--slate-300);
+}
+
+.btn-gold {
+  background: #2d6a4f;
+  color: white;
+}
+
+.btn-gold:hover {
+  background: #1b4332;
+}
+
+.btn-sm {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+.btn-preset-chip {
+  background: white;
+  border: 1px solid var(--slate-300);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-preset-chip:hover {
+  background: #e2e8f0;
+  border-color: #2d6a4f;
+  color: #1b4332;
+}
+
+/* Modal Styling */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 930px;
+  max-height: 94vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1.15rem 1.5rem;
+  border-bottom: 1px solid var(--slate-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 0.9rem 1.5rem;
+  border-top: 1px solid var(--slate-200);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: #f8fafc;
+}
+
+/* Juz Grid Inputs */
+.juz-section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.juz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.juz-card-input {
+  background: #f8fafc;
+  border: 1px solid var(--slate-200);
+  border-radius: 8px;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.juz-number {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--slate-700);
+  margin-bottom: 0.35rem;
+}
+
+.juz-input-field {
+  width: 100%;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.35rem;
+  border: 1px solid var(--slate-300);
+  border-radius: 6px;
+  outline: none;
+}
+
+.juz-predikat-badge {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  font-family: var(--font-arabic);
+  font-weight: 700;
+}
+
+/* ========================================================================== */
+/* DESAIN RAPOR FORMAL PRESISI A4 BERSAMA KOP PONDOK                         */
+/* ========================================================================== */
+
+.print-modal-container {
+  max-width: 930px;
+  background: #f1f5f9;
+}
+
+.print-modal-body {
+  padding: 1.25rem 0.5rem;
+  background: #cbd5e1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Lembar Kertas A4 Formal */
+.rapor-a4-formal {
+  background: #ffffff;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 6mm 10mm;
+  box-sizing: border-box;
+  color: #111827;
+  font-family: 'Calibri', 'Segoe UI', 'Arial', sans-serif;
+  font-size: 9.2pt;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #d1d5db;
+}
+
+/* Spacers Proporsional Sesuai Permintaan */
+.spacer-2 {
+  height: 6px;
+}
+
+.spacer-3 {
+  height: 10px;
+}
+
+/* 1. Kop Pondok */
+.letterhead-wrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0 0 3px 0;
+  border-bottom: 3.5px double #1b4332;
+}
+
+.letterhead-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 2. Judul Dokumen Dwibahasa */
+.doc-header-formal {
+  text-align: center;
+  border-bottom: 2px solid #2d6a4f;
+  padding-bottom: 3px;
+}
+
+.title-ar {
+  font-size: 15pt;
+  font-weight: bold;
+  color: #1b4332;
+  margin-bottom: 1px;
+  line-height: 1.2;
+}
+
+.doc-title-formal {
+  font-size: 13pt;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #1b4332;
+  text-transform: uppercase;
+  margin: 1px 0;
+}
+
+.title-rapor-tahfidz,
+.title-rapot-tahfidz {
+  font-size: 13.5pt !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px !important;
+  color: #1b4332 !important;
+  text-transform: uppercase !important;
+  margin: 1px 0 !important;
+}
+
+.doc-subtitle-formal {
+  display: none;
+}
+
+/* 3. Data Santri (2 Kolom Lebar & Rapi Tanpa Wrapping) */
+.student-info-formal {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 8px;
+  font-size: 9pt;
+}
+
+.student-info-formal td {
+  padding: 2.5px 5px;
+  vertical-align: middle;
+}
+
+.info-label {
+  width: 21%;
+  font-weight: 700;
+  color: #1f2937;
+  white-space: nowrap;
+}
+
+.info-colon {
+  width: 2%;
+  text-align: center;
+  font-weight: 700;
+}
+
+.info-val {
+  width: 27%;
+  color: #111827;
+}
+
+.ar-label-inline {
+  font-family: 'Amiri', serif;
+  font-size: 9.5pt;
+  color: #047857;
+  margin-left: 4px;
+}
+
+/* 4. Tabel Penilaian Hafalan (Nuansa Hijau Calm / Teduh) */
+.section-title-formal {
+  font-size: 9pt;
+  font-weight: bold;
+  color: #1b4332;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2px;
+  border-bottom: 1.5px solid #2d6a4f;
+}
+
+/* 3. Data Santri Lebih Besar & Jelas (9.8pt) */
+.student-info-formal-lg {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 7px;
+  font-size: 9.8pt !important;
+}
+
+.student-info-formal-lg td {
+  padding: 2.5px 5px;
+  vertical-align: middle;
+}
+
+.student-info-formal-lg .info-label {
+  width: 22%;
+  font-weight: 700;
+  color: #1f2937;
+  white-space: nowrap;
+}
+
+.student-info-formal-lg .info-colon {
+  width: 2%;
+  text-align: center;
+  font-weight: 700;
+}
+
+.student-info-formal-lg .info-val {
+  width: 26%;
+  color: #111827;
+  font-size: 9.8pt;
+}
+
+/* ==========================================================================
+   FORMAT RESMI 2 KOLOM VERTIKAL: JUZ 1-15 (KIRI) & JUZ 16-30 (KANAN)
+   Presisi 1 Lembar A4, Tulisan Besar 11pt, Semua 30 Juz Terbaca Jelas
+   ========================================================================== */
+.tabel-split-vertical-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.tabel-split-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.table-split-vertical {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #111827;
+  background: #ffffff;
+  font-size: 9pt;
+}
+
+.table-split-vertical th {
+  background-color: #1b4332;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 8.8pt;
+  padding: 3px 5px;
+  border: 1px solid #111827;
+  text-align: center;
+}
+
+.table-split-vertical th .arabic {
+  font-family: 'Amiri', serif;
+  font-size: 10pt;
+  margin-left: 4px;
+}
+
+.table-split-vertical td {
+  padding: 2px 5px;
+  border: 1px solid #111827;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 9pt;
+}
+
+.table-split-vertical tr:hover {
+  background-color: #f0fdf4;
+}
+
+.cell-split-juz {
+  text-align: left !important;
+  font-weight: 700;
+  color: #1f2937;
+  padding-left: 6px !important;
+  white-space: nowrap;
+}
+
+.cell-split-juz .ar-juz-tag {
+  font-family: 'Amiri', serif;
+  font-size: 10.5pt;
+  color: #2d6a4f;
+  margin-left: 5px;
+}
+
+.cell-split-nilai {
+  font-size: 11pt !important;
+  font-weight: 800 !important;
+  color: #1b4332 !important;
+  letter-spacing: 0.3px;
+}
+
+.cell-split-nilai.has-val {
+  color: #15803d !important;
+}
+
+.cell-split-nilai.is-empty {
+  color: #9ca3af !important;
+  font-weight: normal !important;
+}
+
+.cell-split-pred {
+  font-family: 'Amiri', serif;
+  font-size: 10.5pt !important;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.cell-split-pred.is-empty {
+  color: #9ca3af;
+  font-family: inherit;
+  font-size: 8.5pt !important;
+  font-weight: normal;
+}
+
+/* Ringkasan Nilai 4-Kolom Lapang */
+.summary-cards-4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.summary-card-item {
+  border: 1px solid #111827;
+  border-radius: 4px;
+  padding: 4px 6px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.summary-card-label {
+  font-size: 8pt;
+  font-weight: 700;
+  color: #1b4332;
+  margin-bottom: 2px;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.summary-card-label .arabic {
+  font-family: 'Amiri', serif;
+  font-size: 9pt;
+  color: #047857;
+}
+
+.summary-card-val {
+  font-size: 12.5pt;
+  font-weight: 800;
+  color: #111827;
+}
+
+.summary-card-val.highlight-green {
+  color: #166534;
+}
+
+.summary-card-val.highlight-gold {
+  color: #b45309;
+}
+
+/* Legenda Kriteria Kelulusan Horizontal (Hemat Ruang) */
+.legenda-kriteria-horizontal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0fdf4;
+  border: 1px solid #2d6a4f;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 8pt;
+  color: #166534;
+  margin-bottom: 6px;
+}
+
+.legenda-title {
+  font-weight: bold;
+  color: #1b4332;
+  white-space: nowrap;
+}
+
+.legenda-items {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.legenda-chip {
+  white-space: nowrap;
+  font-size: 7.8pt;
+}
+
+.legenda-chip strong.arabic {
+  font-family: 'Amiri', serif;
+  font-size: 9pt;
+  margin-left: 2px;
+}
+
+/* Catatan Pembina */
+.catatan-box-formal {
+  border: 1px solid #111827;
+  padding: 4px 8px;
+  font-size: 9.2pt;
+  min-height: 38px;
+  background: #ffffff;
+  margin-bottom: 4px;
+}
+
+.catatan-title-formal {
+  font-weight: bold;
+  color: #1b4332;
+  margin-bottom: 2px;
+  font-size: 8.5pt;
+  display: flex;
+  justify-content: space-between;
+}
+
+.catatan-content-formal {
+  color: #1f2937;
+  line-height: 1.35;
+}
+
+.catatan-dotted-line {
+  margin-top: 3px;
+  border-bottom: 1px dotted #10b981;
+  height: 6px;
+}
+
+/* Area Tanda Tangan */
+.signature-container-formal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8.8pt;
+  padding: 0 15px;
+}
+
+.signature-col-formal {
+  text-align: center;
+  width: 220px;
+}
+
+.sig-role-formal {
+  color: #1f2937;
+  margin-bottom: 1px;
+}
+
+.sig-date-formal {
+  color: #374151;
+  margin-bottom: 1px;
+}
+
+.sig-space-formal {
+  height: 60px;
+}
+
+.sig-name-formal {
+  text-decoration: underline;
+}
+
+.sig-line-formal {
+  color: #1f2937;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sig-solid-line {
+  display: inline-block;
+  width: 165px;
+  border-bottom: 1.2px solid #1f2937;
+  height: 0;
+  margin: 0 4px;
+}
+
+/* Footer Dokumen Resmi */
+.doc-footer-formal {
+  margin-top: auto;
+  padding-top: 4px;
+  border-top: 1px solid #cbd5e1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 7.5pt;
+  color: #64748b;
+  letter-spacing: 0.2px;
+}
+
+/* ========================================================================== */
+/* PRINT OPTIMIZATION STRICT UNTUK PRINTER / SIMPAN PDF A4                   */
+/* ========================================================================== */
+
+@page {
+  size: A4 portrait;
+  margin: 6mm 8mm;
+}
+
+@media print {
+  html, body {
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Sembunyikan SEMUA elemen web dashboard di luar modal cetak */
+  header,
+  main,
+  .no-print,
+  .app-header,
+  .stats-grid,
+  .toolbar-card,
+  .table-container {
+    display: none !important;
+  }
+
+  .app-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+
+  .modal-overlay {
+    position: static !important;
+    background: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .modal-content,
+  .print-modal-container {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  .print-modal-body {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .rapor-a4-formal {
+    width: 100% !important;
+    min-height: 280mm !important;
+    height: 280mm !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .letterhead-img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .table-penilaian-wrapper {
+    margin-bottom: 6px !important;
+    background: transparent !important;
+    padding: 0 !important;
+    break-inside: avoid !important;
+  }
+
+  .table-split-vertical,
+  .summary-card-item,
+  .legenda-kriteria-horizontal,
+  .catatan-box-formal {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    border: 1px solid #000000 !important;
+  }
+
+  .table-split-vertical th {
+    background-color: #1b4332 !important;
+    color: #ffffff !important;
+    border: 1px solid #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .table-split-vertical td {
+    border: 1px solid #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .doc-footer-formal {
+    margin-top: auto !important;
+    padding-top: 3px !important;
+    border-top: 1px solid #6b7280 !important;
+    color: #4b5563 !important;
+    break-inside: avoid !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .letterhead-wrapper,
+  .doc-header-formal,
+  .student-info-formal-lg,
+  .tabel-split-vertical-wrapper,
+  .table-split-vertical,
+  .summary-cards-4col,
+  .legenda-kriteria-horizontal,
+  .catatan-box-formal,
+  .signature-container-formal,
+  .doc-footer-formal {
+    break-inside: avoid !important;
+  }
+}
