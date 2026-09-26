@@ -12,7 +12,7 @@ export async function authenticateUser(username, password) {
   try {
     const { data, error } = await supabase
       .from('app_users')
-      .select('*')
+      .select('id, username, nama, role, kelas_binaan, is_active')
       .eq('username', username.trim().toLowerCase())
       .eq('password_hash', password)
       .eq('is_active', true)
