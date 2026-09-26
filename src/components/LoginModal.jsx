@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, User, LogIn, AlertCircle, Sparkles } from 'lucide-react';
+import { Lock, User, LogIn, AlertCircle } from 'lucide-react';
 import { authenticateUser } from '../lib/supabase';
 
 export default function LoginModal({ onLoginSuccess }) {
@@ -30,11 +30,6 @@ export default function LoginModal({ onLoginSuccess }) {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleQuickFill = (u, p) => {
-    setUsername(u);
-    setPassword(p);
   };
 
   return (
@@ -102,28 +97,6 @@ export default function LoginModal({ onLoginSuccess }) {
             )}
           </button>
         </form>
-
-        <div className="login-quick-demo">
-          <div className="quick-demo-title">
-            <Sparkles size={14} /> Akun Tersedia untuk Uji Coba:
-          </div>
-          <div className="quick-demo-buttons">
-            <button
-              type="button"
-              className="quick-btn admin"
-              onClick={() => handleQuickFill('admin', 'admin123')}
-            >
-              👑 Login Admin (admin / admin123)
-            </button>
-            <button
-              type="button"
-              className="quick-btn guru"
-              onClick={() => handleQuickFill('guru1', 'guru123')}
-            >
-              👩‍🏫 Login Guru Kelas 1 (guru1 / guru123)
-            </button>
-          </div>
-        </div>
 
         <div className="login-footer">
           <span>Kulliyyatul Mu'allimat Al-Islamiyyah • Terkoneksi Cloud Database</span>
