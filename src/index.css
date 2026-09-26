@@ -1327,3 +1327,451 @@ body {
   font-weight: 500;
 }
 
+/* ==========================================================================
+   RESPONSIVE — TABLET (≤768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* App container — kurangi padding */
+  .app-container {
+    padding: 1rem 0.5rem 3rem 0.5rem;
+  }
+
+  /* Header — stack vertikal */
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.25rem 1rem;
+    gap: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+  }
+
+  .header-branding {
+    gap: 0.75rem;
+  }
+
+  .logo-badge {
+    width: 44px;
+    height: 44px;
+  }
+
+  .header-title-arabic {
+    font-size: 1.2rem;
+  }
+
+  .header-title-latin {
+    font-size: 1rem;
+  }
+
+  .header-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Stats — 1 kolom */
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .stat-card {
+    padding: 0.85rem 1rem;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.15rem;
+  }
+
+  .stat-val {
+    font-size: 1.3rem;
+  }
+
+  /* Toolbar — stack search & filters */
+  .toolbar-card {
+    padding: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-and-tools {
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .search-box {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .search-input {
+    font-size: 0.88rem;
+    padding: 0.6rem 0.85rem 0.6rem 2.4rem;
+  }
+
+  /* Filter kelas — scrollable horizontal */
+  .class-filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .class-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  /* Tabel santri — scroll horizontal, font kecil */
+  .table-container {
+    border-radius: 8px;
+    margin: 0 -0.25rem;
+  }
+
+  .santri-table {
+    font-size: 0.8rem;
+    min-width: 700px;
+  }
+
+  .santri-table th,
+  .santri-table td {
+    padding: 0.6rem 0.5rem;
+  }
+
+  /* Modal — full screen di tablet */
+  .modal-overlay,
+  .modal-backdrop {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-width: 100%;
+    max-height: 96vh;
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    padding: 0.85rem 1rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-footer {
+    padding: 0.75rem 1rem;
+  }
+
+  /* Juz grid — 3 kolom di tablet */
+  .juz-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  .juz-card-input {
+    padding: 0.5rem;
+  }
+
+  .juz-number {
+    font-size: 0.72rem;
+  }
+
+  .juz-input-field {
+    font-size: 1rem;
+    padding: 0.3rem;
+  }
+
+  /* Print modal */
+  .print-modal-container {
+    max-width: 100%;
+  }
+
+  .print-modal-body {
+    padding: 0.5rem;
+  }
+
+  .rapor-a4-formal {
+    width: 100%;
+    min-height: auto;
+    padding: 4mm 6mm;
+    font-size: 8pt;
+  }
+
+  /* Login */
+  .login-card {
+    padding: 1.5rem;
+    border-radius: 14px;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE — MOBILE (≤480px)
+   ========================================================================== */
+@media (max-width: 480px) {
+  .app-container {
+    padding: 0.65rem 0.35rem 2.5rem 0.35rem;
+  }
+
+  /* Header — compact mobile */
+  .app-header {
+    padding: 1rem 0.75rem;
+    gap: 0.75rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .logo-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .header-title-arabic {
+    font-size: 1rem;
+  }
+
+  .header-title-latin {
+    font-size: 0.88rem;
+  }
+
+  .header-subtitle {
+    font-size: 0.72rem;
+  }
+
+  /* Header actions — wrap menjadi grid 2 kolom */
+  .header-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+    width: 100%;
+  }
+
+  .header-actions > * {
+    min-height: 36px;
+  }
+
+  /* Stats cards — more compact */
+  .stat-card {
+    padding: 0.7rem 0.85rem;
+    gap: 0.65rem;
+  }
+
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+
+  .stat-val {
+    font-size: 1.15rem;
+  }
+
+  .stat-lbl {
+    font-size: 0.75rem;
+  }
+
+  /* Toolbar */
+  .toolbar-card {
+    padding: 0.65rem;
+    gap: 0.6rem;
+  }
+
+  .search-input {
+    font-size: 0.85rem;
+    height: 44px;
+  }
+
+  /* Tabel — compact */
+  .santri-table {
+    font-size: 0.75rem;
+    min-width: 620px;
+  }
+
+  .santri-table th,
+  .santri-table td {
+    padding: 0.5rem 0.35rem;
+  }
+
+  .santri-table th {
+    font-size: 0.72rem;
+  }
+
+  .santri-name {
+    font-size: 0.82rem;
+  }
+
+  .santri-nis {
+    font-size: 0.75rem;
+  }
+
+  .predikat-pill {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  /* Tombol aksi — touch-friendly */
+  .btn {
+    min-height: 36px;
+    font-size: 0.8rem;
+  }
+
+  .btn-sm {
+    min-height: 34px;
+    padding: 0.35rem 0.55rem;
+    font-size: 0.75rem;
+  }
+
+  /* Modal — full screen mobile */
+  .modal-overlay,
+  .modal-backdrop {
+    padding: 0;
+  }
+
+  .modal-content {
+    border-radius: 0;
+    max-height: 100vh;
+    height: 100vh;
+  }
+
+  .modal-header {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1rem !important;
+  }
+
+  .modal-body {
+    padding: 0.75rem;
+  }
+
+  .modal-footer {
+    padding: 0.65rem 0.75rem;
+  }
+
+  /* Juz grid — 2 kolom di HP */
+  .juz-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+
+  .juz-card-input {
+    padding: 0.4rem;
+  }
+
+  .juz-number {
+    font-size: 0.68rem;
+  }
+
+  .juz-input-field {
+    font-size: 0.95rem;
+    padding: 0.25rem;
+    height: 38px;
+  }
+
+  .juz-predikat-badge {
+    font-size: 0.68rem;
+  }
+
+  .juz-section-title {
+    font-size: 0.85rem;
+  }
+
+  /* Print modal — compact mobile */
+  .print-modal-body {
+    padding: 0.25rem;
+  }
+
+  .rapor-a4-formal {
+    font-size: 7.5pt;
+    padding: 3mm 4mm;
+  }
+
+  .tabel-split-vertical-wrapper {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .summary-cards-4col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+  }
+
+  .signature-container-formal {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 0 5px;
+  }
+
+  .signature-col-formal {
+    width: 100%;
+  }
+
+  /* Login — compact */
+  .login-overlay {
+    padding: 0.75rem;
+  }
+
+  .login-card {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .login-logo-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .login-arabic {
+    font-size: 1.25rem;
+  }
+
+  .login-title {
+    font-size: 1.1rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .login-btn {
+    height: 48px;
+    font-size: 0.95rem;
+  }
+
+  .form-control {
+    font-size: 0.92rem;
+    height: 46px;
+  }
+
+  /* Legenda horizontal — stack di HP */
+  .legenda-kriteria-horizontal {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 5px 6px;
+  }
+
+  .legenda-items {
+    justify-content: flex-start;
+    gap: 5px;
+  }
+}
+

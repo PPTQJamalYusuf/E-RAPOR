@@ -151,9 +151,10 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '1rem',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            overflow: 'hidden'
           }}>
-            <div style={{ flex: '1', minWidth: '220px' }}>
+            <div style={{ flex: '1', minWidth: '0' }}>
               <label style={{
                 display: 'block',
                 fontSize: '0.88rem',
@@ -180,7 +181,8 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
                   fontWeight: 700,
                   border: '1.5px solid #047857',
                   borderRadius: '6px',
-                  width: '180px',
+                  width: '100%',
+                  maxWidth: '180px',
                   color: '#1b4332',
                   outline: 'none',
                   background: '#f0fdf4'

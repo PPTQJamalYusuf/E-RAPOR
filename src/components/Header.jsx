@@ -40,7 +40,9 @@ export default function Header({
             borderRadius: '10px', 
             padding: '4px 10px', 
             gap: '6px',
-            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.12)'
+            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.12)',
+            flexWrap: 'wrap',
+            maxWidth: '100%'
           }}>
             <Calendar size={16} style={{ color: '#047857' }} />
             <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#047857' }}>Atur Semester:</span>
