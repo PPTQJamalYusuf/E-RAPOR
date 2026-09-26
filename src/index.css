@@ -1330,7 +1330,7 @@ body {
 /* ==========================================================================
    RESPONSIVE — TABLET (≤768px)
    ========================================================================== */
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   /* App container — kurangi padding */
   .app-container {
     padding: 1rem 0.5rem 3rem 0.5rem;
@@ -1443,7 +1443,7 @@ body {
 
   .santri-table {
     font-size: 0.8rem;
-    min-width: 700px;
+    min-width: 650px;
   }
 
   .santri-table th,
@@ -1454,13 +1454,14 @@ body {
   /* Modal — full screen di tablet */
   .modal-overlay,
   .modal-backdrop {
-    padding: 0.5rem;
+    padding: 0;
   }
 
   .modal-content {
     max-width: 100%;
-    max-height: 96vh;
-    border-radius: 12px;
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
   }
 
   .modal-header {
@@ -1494,20 +1495,30 @@ body {
     padding: 0.3rem;
   }
 
-  /* Print modal */
+  /* Print modal di tablet */
   .print-modal-container {
-    max-width: 100%;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
   }
 
   .print-modal-body {
-    padding: 0.5rem;
+    padding: 0.5rem !important;
+    background: #cbd5e1 !important;
+    overflow-x: auto !important;
   }
 
   .rapor-a4-formal {
-    width: 100%;
-    min-height: auto;
-    padding: 4mm 6mm;
-    font-size: 8pt;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    padding: 6mm 8mm !important;
+    font-size: 8.5pt !important;
+    border: none !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
   }
 
   /* Login */
@@ -1520,7 +1531,7 @@ body {
 /* ==========================================================================
    RESPONSIVE — MOBILE (≤480px)
    ========================================================================== */
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
   .app-container {
     padding: 0.65rem 0.35rem 2.5rem 0.35rem;
   }
@@ -1599,7 +1610,7 @@ body {
   /* Tabel — compact */
   .santri-table {
     font-size: 0.75rem;
-    min-width: 620px;
+    min-width: 600px;
   }
 
   .santri-table th,
@@ -1639,13 +1650,15 @@ body {
   /* Modal — full screen mobile */
   .modal-overlay,
   .modal-backdrop {
-    padding: 0;
+    padding: 0 !important;
   }
 
   .modal-content {
-    border-radius: 0;
-    max-height: 100vh;
-    height: 100vh;
+    border-radius: 0 !important;
+    max-height: 100vh !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
   }
 
   .modal-header {
@@ -1693,35 +1706,275 @@ body {
     font-size: 0.85rem;
   }
 
-  /* Print modal — compact mobile */
+  /* ========================================================================
+     MODAL CETAK RAPOR — TAMPILAN MOBILE PENUH (FULLSCREEN & FULL-WIDTH)
+     ======================================================================== */
+  .print-modal-container {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .print-modal-header {
+    padding: 0.6rem 0.75rem !important;
+    gap: 0.5rem !important;
+    background: #f8fafc !important;
+    border-bottom: 1.5px solid #cbd5e1 !important;
+  }
+
+  .print-modal-title-box h2 {
+    font-size: 0.95rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .print-modal-subtitle {
+    display: none !important; /* Ringkas layar di mobile */
+  }
+
+  .print-modal-actions {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+  }
+
+  .print-semester-select {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.3rem !important;
+    background: #ffffff !important;
+    padding: 0.3rem 0.5rem !important;
+    border-radius: 6px !important;
+    border: 1px solid #cbd5e1 !important;
+    font-size: 0.78rem !important;
+  }
+
+  .print-semester-select label {
+    font-size: 0.75rem !important;
+  }
+
+  .print-semester-select select {
+    font-size: 0.8rem !important;
+  }
+
+  .btn-print-main {
+    flex: 1 !important;
+    height: 38px !important;
+    font-size: 0.84rem !important;
+    font-weight: 700 !important;
+    justify-content: center !important;
+    background: #047857 !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+  }
+
+  .btn-print-close {
+    height: 38px !important;
+    padding: 0 0.65rem !important;
+    border-radius: 6px !important;
+  }
+
   .print-modal-body {
-    padding: 0.25rem;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #cbd5e1 !important;
+    width: 100% !important;
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: block !important;
   }
 
+  /* Lembar Dokumen Rapor Penuh Layar Mobile */
   .rapor-a4-formal {
-    font-size: 7.5pt;
-    padding: 3mm 4mm;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    box-sizing: border-box !important;
+    padding: 6px 8px !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 7.8pt !important;
+    line-height: 1.25 !important;
   }
 
+  .letterhead-wrapper {
+    margin-bottom: 2px !important;
+  }
+
+  .spacer-header-top {
+    height: 6px !important;
+    min-height: 6px !important;
+  }
+
+  .spacer-header-bottom {
+    height: 6px !important;
+    min-height: 6px !important;
+  }
+
+  .title-ar {
+    font-size: 13pt !important;
+    margin: 1px 0 2px 0 !important;
+  }
+
+  .title-rapor-tahfidz {
+    font-size: 10.5pt !important;
+    margin: 1px 0 !important;
+  }
+
+  .student-info-formal-lg {
+    font-size: 7.5pt !important;
+    margin-bottom: 4px !important;
+  }
+
+  .student-info-formal-lg td {
+    padding: 1.5px 3px !important;
+  }
+
+  .section-title-formal {
+    font-size: 7.8pt !important;
+    margin-bottom: 3px !important;
+    padding-bottom: 1px !important;
+  }
+
+  /* 2 Kolom Vertikal Tetap Berdampingan Sesuai Format Asli */
   .tabel-split-vertical-wrapper {
-    flex-direction: column;
-    gap: 6px;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 4px !important;
+    margin-bottom: 4px !important;
+    width: 100% !important;
   }
 
+  .tabel-split-col {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .table-split-vertical {
+    font-size: 7.2pt !important;
+  }
+
+  .table-split-vertical th {
+    font-size: 7pt !important;
+    padding: 2px 2px !important;
+  }
+
+  .table-split-vertical td {
+    padding: 1.5px 2px !important;
+    font-size: 7.2pt !important;
+  }
+
+  .cell-split-juz {
+    padding-left: 2px !important;
+  }
+
+  .cell-split-juz .ar-juz-tag {
+    font-size: 8.5pt !important;
+    margin-left: 2px !important;
+  }
+
+  .cell-split-nilai {
+    font-size: 8.5pt !important;
+  }
+
+  .cell-split-pred {
+    font-size: 8pt !important;
+  }
+
+  /* Ringkasan 4 Kolom di Mobile */
   .summary-cards-4col {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 3px !important;
+    margin-bottom: 4px !important;
   }
 
+  .summary-card-item {
+    padding: 2px 2px !important;
+  }
+
+  .summary-card-label {
+    font-size: 6.8pt !important;
+  }
+
+  .summary-card-val {
+    font-size: 9.5pt !important;
+  }
+
+  /* Legenda Kriteria Ringkas */
+  .legenda-kriteria-horizontal {
+    font-size: 6.8pt !important;
+    padding: 2px 4px !important;
+    margin-bottom: 4px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 3px !important;
+  }
+
+  .legenda-chip {
+    font-size: 6.5pt !important;
+  }
+
+  /* Catatan Ringkas */
+  .catatan-box-formal {
+    padding: 2px 5px !important;
+    font-size: 7.5pt !important;
+    min-height: 26px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .catatan-title-formal {
+    font-size: 7.2pt !important;
+  }
+
+  .catatan-content-formal {
+    font-size: 7.5pt !important;
+  }
+
+  /* Tanda Tangan Berdampingan Presisi */
   .signature-container-formal {
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: center;
-    padding: 0 5px;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    padding: 0 4px !important;
+    font-size: 7.2pt !important;
   }
 
   .signature-col-formal {
-    width: 100%;
+    width: 48% !important;
+    text-align: center !important;
+  }
+
+  .sig-space-formal {
+    height: 30px !important;
+  }
+
+  .sig-solid-line {
+    width: 90px !important;
+  }
+
+  .sig-name-latin {
+    font-size: 7.8pt !important;
+  }
+
+  .sig-name-ar {
+    font-size: 9pt !important;
+  }
+
+  .doc-footer-formal {
+    font-size: 6.5pt !important;
+    padding-top: 2px !important;
   }
 
   /* Login — compact */
@@ -1759,19 +2012,6 @@ body {
   .form-control {
     font-size: 0.92rem;
     height: 46px;
-  }
-
-  /* Legenda horizontal — stack di HP */
-  .legenda-kriteria-horizontal {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 5px 6px;
-  }
-
-  .legenda-items {
-    justify-content: flex-start;
-    gap: 5px;
   }
 }
 

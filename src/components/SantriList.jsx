@@ -136,7 +136,7 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, c
               <th style={{ width: '90px' }}>Rata-rata</th>
               <th style={{ width: '120px' }}>Predikat</th>
               <th style={{ width: '80px' }}>Ranking</th>
-              <th style={{ width: '190px', textAlign: 'center' }}>Aksi</th>
+              <th style={{ width: currentUser?.role === 'admin' ? '190px' : '90px', textAlign: 'center' }}>Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -204,13 +204,15 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, c
                         >
                           <Edit3 size={13} /> Nilai
                         </button>
-                        <button
-                          className="btn btn-gold btn-sm"
-                          onClick={() => onSelectPrint(santri, santri.ranking)}
-                          title="Pratinjau & Cetak E-Rapor format resmi"
-                        >
-                          <Printer size={13} /> Cetak
-                        </button>
+                        {currentUser?.role === 'admin' && (
+                          <button
+                            className="btn btn-gold btn-sm"
+                            onClick={() => onSelectPrint && onSelectPrint(santri, santri.ranking)}
+                            title="Pratinjau & Cetak E-Rapor format resmi (Khusus Admin)"
+                          >
+                            <Printer size={13} /> Cetak
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

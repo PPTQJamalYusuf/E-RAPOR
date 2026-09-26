@@ -97,26 +97,18 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content print-modal-container" onClick={(e) => e.stopPropagation()}>
         {/* Toolbar Aksi (Disembunyikan saat dicetak) */}
-        <div className="modal-header no-print">
-          <div>
+        <div className="modal-header print-modal-header no-print">
+          <div className="print-modal-title-box">
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--slate-900)' }}>
               RAPOR TAHFIDZ (A4 Formal Bersama Kop)
             </h2>
-            <p style={{ fontSize: '0.82rem', color: 'var(--slate-500)' }}>
+            <p className="print-modal-subtitle" style={{ fontSize: '0.82rem', color: 'var(--slate-500)' }}>
               Format resmi dwibahasa 2 Kolom Vertikal (Juz 1–30 presisi 1 lembar A4).
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              background: '#f8fafc',
-              padding: '0.3rem 0.65rem',
-              borderRadius: '6px',
-              border: '1px solid var(--slate-300)'
-            }}>
+          <div className="print-modal-actions">
+            <div className="print-semester-select">
               <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--slate-700)' }}>
                 Semester:
               </label>
@@ -137,10 +129,10 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                 <option value="الثاني">Genap 2 (الثاني)</option>
               </select>
             </div>
-            <button className="btn btn-primary" onClick={handlePrint}>
+            <button className="btn btn-primary btn-print-main" onClick={handlePrint}>
               <Printer size={16} /> Cetak Dokumen (A4)
             </button>
-            <button className="btn btn-secondary btn-sm" onClick={onClose}>
+            <button className="btn btn-secondary btn-sm btn-print-close" onClick={onClose} title="Tutup Pratinjau">
               <X size={16} />
             </button>
           </div>
