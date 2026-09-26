@@ -3,109 +3,199 @@ import Header from './components/Header';
 import SantriList from './components/SantriList';
 import InputNilaiModal from './components/InputNilaiModal';
 import PrintRaporModal from './components/PrintRaporModal';
+import LoginModal from './components/LoginModal';
+import ManageUsersModal from './components/ManageUsersModal';
+import SemesterModal from './components/SemesterModal';
+import { 
+  getAcademicPeriods, 
+  getSantriWithGrades, 
+  saveSantriRapor 
+} from './lib/supabase';
 import initialSantriData from './data/initialSantri.json';
 
-const STORAGE_KEY = 'pondok_erapot_tahfidz_data_v3';
+const USER_SESSION_KEY = 'pondok_erapot_auth_user';
 
 export default function App() {
-  const [santriList, setSantriList] = useState(() => {
+  // 1. Auth State
+  const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const savedV3 = localStorage.getItem(STORAGE_KEY);
-      if (savedV3) {
-        return JSON.parse(savedV3);
-      }
-      // Ambil nilai yang pernah diinput dari storage lama (v2/v1) dan pasangkan ke nama Proper Case baru
-      const savedOld = localStorage.getItem('pondok_erapot_tahfidz_data_v2') || localStorage.getItem('pondok_erapot_tahfidz_data_v1');
-      if (savedOld) {
-        const parsedOld = JSON.parse(savedOld);
-        const gradesMap = {};
-        parsedOld.forEach(s => {
-          if (s.nilaiJuz && Object.keys(s.nilaiJuz).length > 0) {
-            const k = s.nis || s.id || s.nama.trim().toUpperCase();
-            gradesMap[k] = { nilaiJuz: s.nilaiJuz, catatan: s.catatan };
-            gradesMap[s.nama.trim().toUpperCase()] = gradesMap[k];
-          }
-        });
-        return initialSantriData.map(s => {
-          const old = gradesMap[s.nis] || gradesMap[s.id] || gradesMap[s.nama.trim().toUpperCase()];
-          if (old) {
-            return {
-              ...s,
-              nilaiJuz: old.nilaiJuz,
-              catatan: old.catatan || s.catatan
-            };
-          }
-          return s;
-        });
-      }
+      const savedUser = localStorage.getItem(USER_SESSION_KEY);
+      return savedUser ? JSON.parse(savedUser) : null;
     } catch (e) {
-      console.error('Gagal membaca data dari LocalStorage:', e);
+      return null;
     }
-    return initialSantriData;
   });
 
+  // 2. Academic Periods & Santri State
+  const [periods, setPeriods] = useState([]);
+  const [currentPeriod, setCurrentPeriod] = useState(null);
+  const [santriList, setSantriList] = useState([]);
+  const [loadingData, setLoadingData] = useState(false);
+
+  // 3. Modals State
   const [inputSantri, setInputSantri] = useState(null);
   const [printData, setPrintData] = useState(null);
+  const [showManageUsers, setShowManageUsers] = useState(false);
+  const [showAddSemester, setShowAddSemester] = useState(false);
 
-  // Simpan otomatis ke LocalStorage setiap ada update
-  useEffect(() => {
+  // Handle Login & Logout
+  const handleLoginSuccess = (user) => {
+    setCurrentUser(user);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(santriList));
-    } catch (e) {
-      console.error('Gagal menyimpan data ke LocalStorage:', e);
-    }
-  }, [santriList]);
+      localStorage.setItem(USER_SESSION_KEY, JSON.stringify(user));
+    } catch (e) {}
+  };
 
-  // Handler simpan nilai dan catatan dari modal input
-  const handleSaveNilai = (santriId, newNilaiJuz, newCatatan) => {
+  const handleLogout = () => {
+    if (window.confirm('Keluar dari sistem E-Rapor?')) {
+      setCurrentUser(null);
+      try {
+        localStorage.removeItem(USER_SESSION_KEY);
+      } catch (e) {}
+    }
+  };
+
+  // Muat daftar periode semester saat user login
+  useEffect(() => {
+    if (!currentUser) return;
+
+    async function loadPeriods() {
+      try {
+        const periodList = await getAcademicPeriods();
+        if (periodList && periodList.length > 0) {
+          setPeriods(periodList);
+          // Cari yang is_active = true, jika tidak ada pilih yang pertama
+          const active = periodList.find(p => p.is_active) || periodList[0];
+          setCurrentPeriod(active);
+        } else {
+          // Fallback periode default
+          const defaultP = { id: 'default', tahun_ajaran: '2024/2025', semester: 'Ganjil' };
+          setPeriods([defaultP]);
+          setCurrentPeriod(defaultP);
+        }
+      } catch (err) {
+        console.error('Gagal mengambil periode:', err);
+      }
+    }
+
+    loadPeriods();
+  }, [currentUser]);
+
+  // Muat data santri & nilai setiap kali periode berubah
+  useEffect(() => {
+    if (!currentUser || !currentPeriod) return;
+
+    async function loadSantriData() {
+      setLoadingData(true);
+      try {
+        const data = await getSantriWithGrades(currentPeriod.id);
+        if (data && data.length > 0) {
+          setSantriList(data);
+        } else {
+          // Jika di DB belum ada, pakai data initial
+          setSantriList(initialSantriData);
+        }
+      } catch (err) {
+        console.error('Gagal memuat data santri dari Supabase:', err);
+        setSantriList(initialSantriData);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    loadSantriData();
+  }, [currentUser, currentPeriod]);
+
+  // Handler simpan nilai, catatan, dan jumlah hafalan ke Supabase
+  const handleSaveNilai = async (santriId, newNilaiJuz, newCatatan, newJumlahHafalan) => {
+    // 1. Optimistic Update di UI lokal
     setSantriList(prev =>
       prev.map(s => {
         if (s.id === santriId) {
           return {
             ...s,
             nilaiJuz: newNilaiJuz,
-            catatan: newCatatan !== undefined ? newCatatan : s.catatan
+            catatan: newCatatan !== undefined ? newCatatan : s.catatan,
+            jumlahHafalan: newJumlahHafalan !== undefined ? newJumlahHafalan : s.jumlahHafalan
           };
         }
         return s;
       })
     );
+
+    // 2. Simpan permanen ke Supabase Cloud
+    if (currentPeriod?.id && currentPeriod.id !== 'default') {
+      try {
+        await saveSantriRapor(
+          currentPeriod.id,
+          santriId,
+          newNilaiJuz,
+          newCatatan,
+          newJumlahHafalan
+        );
+      } catch (err) {
+        console.error('Gagal menyimpan nilai ke Supabase:', err);
+        alert('Peringatan: Nilai belum tersimpan ke Cloud Supabase. Periksa koneksi internet Anda.');
+      }
+    }
   };
 
-  // Handler ekspor file cadangan JSON
-  const handleExportBackup = () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(santriList, null, 2));
+  // Handler penambahan semester baru
+  const handleSemesterCreated = (newPeriod) => {
+    setPeriods(prev => [newPeriod, ...prev]);
+    setCurrentPeriod(newPeriod);
+  };
+
+  // Handler ekspor file cadangan JSON semester aktif
+  const handleExportSemester = () => {
+    const periodLabel = `${currentPeriod?.tahun_ajaran || '2024-2025'}_Sem_${currentPeriod?.semester || 'Ganjil'}`.replace(/[\/\s]/g, '-');
+    const exportPayload = {
+      periode: currentPeriod,
+      tanggalExport: new Date().toISOString(),
+      santriList: santriList
+    };
+
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportPayload, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `cadangan_erapot_tahfidz_${new Date().toISOString().slice(0, 10)}.json`);
+    downloadAnchor.setAttribute('download', `Arsip_Rapor_Tahfidz_${periodLabel}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
   };
 
-  // Handler reset ke data bawaan Excel
-  const handleResetData = () => {
-    if (window.confirm('Apakah Anda yakin ingin mereset seluruh data kembali ke data master Excel asli? Semua nilai yang baru dimasukkan akan terhapus.')) {
-      setSantriList(initialSantriData);
-      localStorage.removeItem(STORAGE_KEY);
-      alert('Data berhasil direset ke master Excel.');
-    }
-  };
+  // Jika belum login, tampilkan layar login
+  if (!currentUser) {
+    return <LoginModal onLoginSuccess={handleLoginSuccess} />;
+  }
 
   return (
     <div className="app-container">
       <Header
-        onExport={handleExportBackup}
-        onReset={handleResetData}
-        santriCount={santriList.length}
+        currentUser={currentUser}
+        onLogout={handleLogout}
+        onOpenManageUsers={() => setShowManageUsers(true)}
+        periods={periods}
+        currentPeriod={currentPeriod}
+        onChangePeriod={(p) => setCurrentPeriod(p)}
+        onOpenAddSemester={() => setShowAddSemester(true)}
+        onExportSemester={handleExportSemester}
       />
 
       <main>
-        <SantriList
-          santriList={santriList}
-          onSelectInput={(s) => setInputSantri(s)}
-          onSelectPrint={(s, rank) => setPrintData({ santri: s, ranking: rank })}
-        />
+        {loadingData ? (
+          <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
+            <div style={{ fontSize: '1.8rem', marginBottom: '10px' }}>⏳</div>
+            <div style={{ fontSize: '1.05rem', fontWeight: '600' }}>Menyinkronkan data santri dari Cloud Supabase...</div>
+          </div>
+        ) : (
+          <SantriList
+            santriList={santriList}
+            currentUser={currentUser}
+            onSelectInput={(s) => setInputSantri(s)}
+            onSelectPrint={(s, rank) => setPrintData({ santri: s, ranking: rank })}
+          />
+        )}
       </main>
 
       {/* Modal Input Nilai Tahfidz 30 Juz */}
@@ -120,9 +210,25 @@ export default function App() {
       {/* Modal Pratinjau & Cetak E-Rapor Format Asli */}
       {printData && (
         <PrintRaporModal
-          santri={printData.santri}
+          santri={santriList.find(s => s.id === printData.santri.id) || printData.santri}
           ranking={printData.ranking}
+          currentPeriod={currentPeriod}
           onClose={() => setPrintData(null)}
+        />
+      )}
+
+      {/* Modal Kelola Pengguna (Admin Saja) */}
+      {showManageUsers && (
+        <ManageUsersModal
+          onClose={() => setShowManageUsers(false)}
+        />
+      )}
+
+      {/* Modal Tambah Semester Baru (Admin Saja) */}
+      {showAddSemester && (
+        <SemesterModal
+          onClose={() => setShowAddSemester(false)}
+          onCreated={handleSemesterCreated}
         />
       )}
     </div>

@@ -4,9 +4,8 @@ import { getPredikat, hitungRapor, PREDIKAT_COLORS } from '../utils/tahfidzCalc'
 
 export default function InputNilaiModal({ santri, onClose, onSave }) {
   const [nilaiJuz, setNilaiJuz] = useState({ ...(santri.nilaiJuz || {}) });
-  const [catatan, setCatatan] = useState(
-    santri.catatan || "Alhamdulillah telah menyelesaikan evaluasi hafalan dengan tertib dan lancar. Pertahankan dan tingkatkan mutaba'ah ziyadah serta muroja'ah harian."
-  );
+  const [catatan, setCatatan] = useState(santri.catatan || '');
+  const [jumlahHafalan, setJumlahHafalan] = useState(santri.jumlahHafalan || '');
 
   const presetCatatan = [
     "Hafalan sangat lancar, tajwid dan makhraj huruf sangat baik. Pertahankan prestasinya.",
@@ -37,7 +36,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(santri.id, nilaiJuz, catatan);
+    onSave(santri.id, nilaiJuz, catatan, jumlahHafalan.trim());
     onClose();
   };
 
@@ -138,6 +137,66 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
                   {calc.predikatAkhir}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* INPUT JUMLAH HAFALAN (CUSTOM / FLEKSIBEL) */}
+          <div style={{
+            background: '#ffffff',
+            border: '1.5px solid var(--slate-300)',
+            borderRadius: '10px',
+            padding: '0.85rem 1.1rem',
+            marginBottom: '1.25rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1rem',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{ flex: '1', minWidth: '220px' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '0.88rem',
+                fontWeight: 700,
+                color: 'var(--slate-800)',
+                marginBottom: '0.2rem'
+              }}>
+                📖 Jumlah Hafalan Santriwati (عدد الحفظ):
+              </label>
+              <div style={{ fontSize: '0.78rem', color: 'var(--slate-500)' }}>
+                Isi jika ingin custom (contoh: <em>5 Juz</em>, <em>10 Juz</em>, atau <em>3 Juz Mutqin</em>). Kosongkan jika ingin otomatis sesuai jumlah juz yang dinilai ({calc.count} Juz).
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input
+                type="text"
+                value={jumlahHafalan}
+                onChange={(e) => setJumlahHafalan(e.target.value)}
+                placeholder={calc.count > 0 ? `${calc.count} Juz (Otomatis)` : 'Contoh: 5 Juz'}
+                style={{
+                  padding: '0.45rem 0.75rem',
+                  fontSize: '0.92rem',
+                  fontWeight: 700,
+                  border: '1.5px solid #047857',
+                  borderRadius: '6px',
+                  width: '180px',
+                  color: '#1b4332',
+                  outline: 'none',
+                  background: '#f0fdf4'
+                }}
+              />
+              {jumlahHafalan && (
+                <button
+                  type="button"
+                  onClick={() => setJumlahHafalan('')}
+                  className="btn btn-secondary btn-sm"
+                  title="Kembalikan ke hitungan otomatis"
+                  style={{ fontSize: '0.75rem', padding: '0.45rem 0.6rem' }}
+                >
+                  Reset Otomatis
+                </button>
+              )}
             </div>
           </div>
 

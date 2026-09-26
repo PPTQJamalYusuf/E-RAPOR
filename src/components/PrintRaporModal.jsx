@@ -8,17 +8,18 @@ import {
   PREDIKAT_LABEL_ID 
 } from '../utils/tahfidzCalc';
 
-export default function PrintRaporModal({ santri, ranking, onClose }) {
-  const [selectedSemester, setSelectedSemester] = useState(santri.semester || 'الأول');
+export default function PrintRaporModal({ santri, ranking, onClose, currentPeriod }) {
+  const initialSem = currentPeriod?.semester === 'Genap' ? 'الثاني' : (santri.semester || 'الأول');
+  const [selectedSemester, setSelectedSemester] = useState(initialSem);
   const calc = hitungRapor(santri.nilaiJuz || {});
 
-  // Hitung Tahun Pelajaran dinamis berdasarkan kalender akademik (Juli s/d Juni)
+  // Tahun Pelajaran dinamis dari periode aktif atau tanggal
   const now = new Date();
-  const currentMonth = now.getMonth(); // 0 = Jan, 6 = Jul
+  const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
   const startYear = currentMonth >= 6 ? currentYear : currentYear - 1;
   const defaultTahunPelajaran = `${startYear} / ${startYear + 1}`;
-  const tahunPelajaran = santri.tahunPelajaran || santri.tahun_pelajaran || defaultTahunPelajaran;
+  const tahunPelajaran = currentPeriod?.tahun_ajaran || santri.tahunPelajaran || santri.tahun_pelajaran || defaultTahunPelajaran;
 
   const handlePrint = () => {
     window.print();
@@ -27,6 +28,19 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
   const toArabicNum = (n) => {
     const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
     return n.toString().split('').map(d => arabicDigits[d] || d).join('');
+  };
+
+  const formatJumlahHafalan = (val, count) => {
+    if (val && String(val).trim() !== '') {
+      const trimmed = String(val).trim();
+      const matchNum = trimmed.match(/^(\d+)(\s*Juz)?$/i);
+      if (matchNum) {
+        const n = matchNum[1];
+        return `${n} Juz (${toArabicNum(n)} أجزاء)`;
+      }
+      return trimmed;
+    }
+    return count > 0 ? `${count} Juz (${toArabicNum(count)} أجزاء)` : 'Belum Diuji (—)';
   };
 
   // Render Tabel Vertikal: Juz startJuz s/d endJuz
@@ -144,17 +158,17 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
               />
             </div>
 
-            {/* SPASI 1: Setelah kop */}
-            <div className="spacer-2"></div>
+            {/* SPASI 1: Setelah kop (jarak proporsional agar judul tidak mepet ke header kop) */}
+            <div className="spacer-header-top"></div>
 
-            {/* 2. JUDUL DOKUMEN: ARAB DI ATAS, INDO "RAPOR TAHFIDZ" DI BAWAH */}
+            {/* 2. JUDUL DOKUMEN: KALIGRAFI ARAB DI ATAS, INDO "RAPOR TAHFIDZ" DI BAWAH */}
             <div className="doc-header-formal">
-              <div className="arabic title-ar">كشف درجات تحفيظ القرآن الكريم</div>
+              <div className="arabic title-ar">كَشْفُ دَرَجَاتِ تَحْفِيْظِ الْقُرْآنِ الْكَرِيْمِ</div>
               <h1 className="doc-title-formal title-rapor-tahfidz">Rapor Tahfidz</h1>
             </div>
 
-            {/* SPASI 2: Setelah judul */}
-            <div className="spacer-2"></div>
+            {/* SPASI 2: Setelah header (spasi 2 ke bawah lebih lapang) */}
+            <div className="spacer-header-bottom"></div>
 
             {/* 3. DATA SANTRI (Font Jelas 10.2pt & Rapi Tanpa Wrapping) */}
             <table className="student-info-formal-lg">
@@ -179,7 +193,7 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
                     Nomor Induk <span className="ar-label-inline">رقم القيد</span>
                   </td>
                   <td className="info-colon">:</td>
-                  <td className="info-val">{santri.id}</td>
+                  <td className="info-val">{santri.nis || santri.id}</td>
 
                   <td className="info-label">
                     Semester <span className="ar-label-inline">الفصل</span>
@@ -201,7 +215,7 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
                   </td>
                   <td className="info-colon">:</td>
                   <td className="info-val bold">
-                    {calc.count > 0 ? `${calc.count} Juz (${calc.count} أجزاء)` : 'Belum Diuji (—)'}
+                    {formatJumlahHafalan(santri.jumlahHafalan, calc.count)}
                   </td>
                 </tr>
               </tbody>
@@ -222,17 +236,15 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
               </div>
             </div>
 
-            {/* 5. RINGKASAN NILAI 4-KOLOM LAPANG */}
+            {/* 5. RINGKASAN HASIL BELAJAR & PERINGKAT (BAHASA INDONESIA) */}
             <div className="section-title-formal" style={{ marginTop: '2px' }}>
               <span>B. Ringkasan Hasil Belajar & Peringkat</span>
-              <span className="arabic" style={{ fontSize: '10.5pt', fontWeight: 'bold' }}>ب. خلاصة الدرجات والترتيب</span>
             </div>
 
             <div className="summary-cards-4col">
               <div className="summary-card-item">
                 <div className="summary-card-label">
                   <span>Total Nilai</span>
-                  <span className="arabic">المجموع الإجمالي</span>
                 </div>
                 <div className="summary-card-val">{calc.total}</div>
               </div>
@@ -240,7 +252,6 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
               <div className="summary-card-item">
                 <div className="summary-card-label">
                   <span>Nilai Rata-rata</span>
-                  <span className="arabic">التقدير رقما</span>
                 </div>
                 <div className="summary-card-val highlight-green">
                   {calc.count > 0 ? calc.rataRata : '—'}
@@ -250,19 +261,15 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
               <div className="summary-card-item">
                 <div className="summary-card-label">
                   <span>Predikat Akhir</span>
-                  <span className="arabic">التقدير لفظا</span>
                 </div>
-                <div className="summary-card-val" style={{ color: '#047857', fontSize: '12pt' }}>
-                  <span className="arabic">
-                    {calc.count > 0 ? (PREDIKAT_LABEL_ID[calc.predikatAkhir] ? `${calc.predikatAkhir} (${PREDIKAT_LABEL_ID[calc.predikatAkhir]})` : calc.predikatAkhir) : '—'}
-                  </span>
+                <div className="summary-card-val" style={{ color: '#047857', fontSize: '11pt', fontWeight: 800 }}>
+                  {calc.count > 0 ? (PREDIKAT_LABEL_ID[calc.predikatAkhir] || calc.predikatAkhir) : '—'}
                 </div>
               </div>
 
               <div className="summary-card-item">
                 <div className="summary-card-label">
                   <span>Peringkat Kelas</span>
-                  <span className="arabic">الترتيب في الفصل</span>
                 </div>
                 <div className="summary-card-val highlight-gold">
                   {ranking !== '-' ? `#${ranking}` : '—'}
@@ -284,14 +291,13 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
               </div>
             </div>
 
-            {/* 7. CATATAN PEMBINA (Diambil dari data santri saat input nilai) */}
+            {/* 7. CATATAN */}
             <div className="catatan-box-formal">
               <div className="catatan-title-formal">
-                <span>C. Catatan Pembina / Penanggung Jawab</span>
-                <span className="arabic">ج. ملاحظات المشرف</span>
+                <span>C. Catatan</span>
               </div>
-              <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5 }}>
-                {santri.catatan || "Alhamdulillah telah menyelesaikan evaluasi hafalan dengan tertib dan lancar. Pertahankan dan tingkatkan mutaba'ah ziyadah serta muroja'ah harian."}
+              <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px' }}>
+                {santri.catatan || ''}
               </div>
               <div className="catatan-dotted-line"></div>
             </div>
@@ -300,6 +306,7 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
             <div className="spacer-3"></div>
 
             {/* 8. TANDA TANGAN RESMI */}
+            {/* 8. TANDA TANGAN RESMI (SEJAJAR PRESISI) */}
             <div className="signature-container-formal">
               <div className="signature-col-formal">
                 <div className="sig-role-formal">
@@ -309,8 +316,11 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
                   Orang Tua / Wali Santri <span className="arabic">(ولي الطالبة)</span>
                 </div>
                 <div className="sig-space-formal"></div>
-                <div className="sig-line-formal">
-                  ( <span className="sig-solid-line"></span> )
+                <div className="sig-name-box">
+                  <div className="sig-name-ar-spacer">&nbsp;</div>
+                  <div className="sig-line-formal">
+                    ( <span className="sig-solid-line"></span> )
+                  </div>
                 </div>
               </div>
 
@@ -322,9 +332,9 @@ export default function PrintRaporModal({ santri, ranking, onClose }) {
                   Pembina Tahfidz <span className="arabic">(رئيسة قسم التحفيظ)</span>
                 </div>
                 <div className="sig-space-formal"></div>
-                <div className="sig-name-formal bold">
-                  <span className="arabic" style={{ fontSize: '12pt' }}>يينى رحمواتـى</span>
-                  <div style={{ fontSize: '10pt', marginTop: '2px' }}>YENI RAHMAWATI</div>
+                <div className="sig-name-box">
+                  <div className="arabic sig-name-ar">يينى رحمواتـى</div>
+                  <div className="sig-name-latin">YENI RAHMAWATI</div>
                 </div>
               </div>
             </div>

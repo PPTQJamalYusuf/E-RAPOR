@@ -2,9 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { Search, Edit3, Printer, Users, Award, BookCheck } from 'lucide-react';
 import { hitungRapor, hitungRanking, PREDIKAT_COLORS } from '../utils/tahfidzCalc';
 
-export default function SantriList({ santriList, onSelectInput, onSelectPrint }) {
+export default function SantriList({ santriList, onSelectInput, onSelectPrint, currentUser }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedKelas, setSelectedKelas] = useState('Semua');
+  const [selectedKelas, setSelectedKelas] = useState(() => {
+    if (currentUser?.role === 'guru' && currentUser?.kelas_binaan && currentUser?.kelas_binaan !== 'Semua') {
+      return currentUser.kelas_binaan;
+    }
+    return 'Semua';
+  });
 
   // Daftar kelas unik dari data santri
   const kelasList = ['Semua', 'الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس'];
@@ -32,8 +37,9 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint })
   const filteredSantri = useMemo(() => {
     return rankedSantriList.filter(s => {
       const matchesKelas = selectedKelas === 'Semua' || s.kelas === selectedKelas;
+      const searchStr = (s.nis || s.id || '').toString().toLowerCase();
       const matchesSearch = s.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            s.id.toLowerCase().includes(searchTerm.toLowerCase());
+                            searchStr.includes(searchTerm.toLowerCase());
       return matchesKelas && matchesSearch;
     });
   }, [rankedSantriList, selectedKelas, searchTerm]);
