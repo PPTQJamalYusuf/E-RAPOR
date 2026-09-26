@@ -154,12 +154,14 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, c
                 return (
                   <tr key={santri.id}>
                     <td style={{ color: 'var(--slate-400)', fontWeight: 600 }}>{idx + 1}</td>
-                    <td className="santri-nis">{santri.id}</td>
+                    <td className="santri-nis" style={{ fontWeight: '700', color: '#1e293b' }}>{santri.nis || santri.id}</td>
                     <td>
                       <div className="santri-name">{santri.nama}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--slate-400)' }}>
-                        Semester {santri.semester || 'الثاني'}
-                      </div>
+                      {santri.halqah && (
+                        <div style={{ fontSize: '0.75rem', color: 'var(--slate-400)' }}>
+                          {santri.halqah}
+                        </div>
+                      )}
                     </td>
                     <td>
                       <span className="arabic" style={{ fontWeight: 700, color: 'var(--primary)' }}>
