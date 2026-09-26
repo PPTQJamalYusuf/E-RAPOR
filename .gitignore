@@ -24,3 +24,19 @@ yarn-error.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# File Excel & dokumen lokal (tidak perlu di repo)
+*.xlsx
+*.xls
+*.PNG
+*.png.bak
+logo.png
+Kop Pondok.PNG
+
+# Template & script lama (sudah digantikan oleh komponen React)
+templates/
+scripts/
+
+# File backup lokal
+*.bak
+*.backup
