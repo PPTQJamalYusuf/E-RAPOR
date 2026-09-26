@@ -99,7 +99,7 @@ export default function LoginModal({ onLoginSuccess }) {
         </form>
 
         <div className="login-footer">
-          <span>Kulliyyatul Mu'allimat Al-Islamiyyah • Terkoneksi Cloud Database</span>
+          <span>PPTQ JAMAL YUSUF AL-HADDAD • Terkoneksi Cloud Database</span>
         </div>
       </div>
     </div>

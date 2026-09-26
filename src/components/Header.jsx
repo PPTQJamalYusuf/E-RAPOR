@@ -24,7 +24,7 @@ export default function Header({
           <div className="header-title-arabic">كشف درجات تحفيظ القرآن</div>
           <h1 className="header-title-latin">E-Rapor Tahfidz & Pengelolaan Pondok</h1>
           <p className="header-subtitle">
-            Kulliyyatul Mu'allimat Al-Islamiyyah • Sistem Cloud Terpusat
+            PPTQ JAMAL YUSUF AL-HADDAD • Sistem Cloud Terpusat
           </p>
         </div>
       </div>
