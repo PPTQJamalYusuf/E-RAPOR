@@ -92,7 +92,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
               Input Nilai Tahfidz & Catatan: {santri.nama}
             </h2>
             <div style={{ fontSize: '0.85rem', color: 'var(--slate-500)', marginTop: '0.2rem' }}>
-              NIS: <strong>{santri.nis || santri.id}</strong> • Kelas: <strong>{santri.kelas}</strong>
+              NIS: {santri.nis || santri.id} • Kelas: <strong>{santri.kelas}</strong>
             </div>
           </div>
           <button className="btn btn-secondary btn-sm" onClick={onClose}>

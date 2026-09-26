@@ -285,9 +285,10 @@ body {
 }
 
 .santri-nis {
-  font-size: 0.78rem;
-  color: var(--slate-400);
-  font-family: monospace;
+  font-size: 0.84rem;
+  color: var(--slate-600);
+  font-family: inherit;
+  font-weight: normal;
 }
 
 .predikat-pill {
