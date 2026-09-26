@@ -3,7 +3,7 @@ import { X, Calendar, Plus, Check } from 'lucide-react';
 import { addAcademicPeriod } from '../lib/supabase';
 
 export default function SemesterModal({ onClose, onCreated }) {
-  const [tahunAjaran, setTahunAjaran] = useState('2024/2025');
+  const [tahunAjaran, setTahunAjaran] = useState('2026/2027');
   const [semester, setSemester] = useState('Genap');
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -62,7 +62,7 @@ export default function SemesterModal({ onClose, onCreated }) {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Contoh: 2024/2025 atau 2025/2026"
+                placeholder="Contoh: 2026/2027 atau 2027/2028"
                 value={tahunAjaran}
                 onChange={(e) => setTahunAjaran(e.target.value)}
                 required

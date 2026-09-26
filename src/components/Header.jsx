@@ -30,43 +30,43 @@ export default function Header({
       </div>
 
       <div className="header-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-        {/* Semester Selector */}
-        <div className="period-selector-pill" style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          background: '#ffffff', 
-          border: '2px solid rgba(255, 255, 255, 0.6)', 
-          borderRadius: '10px', 
-          padding: '4px 10px', 
-          gap: '6px',
-          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.12)'
-        }}>
-          <Calendar size={16} style={{ color: '#047857' }} />
-          <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#047857' }}>Semester:</span>
-          <select
-            value={currentPeriod?.id || ''}
-            onChange={(e) => {
-              const selected = periods.find(p => p.id === e.target.value);
-              if (selected) onChangePeriod(selected);
-            }}
-            style={{
-              border: 'none',
-              background: 'transparent',
-              fontSize: '0.88rem',
-              fontWeight: '800',
-              color: '#0f172a',
-              cursor: 'pointer',
-              outline: 'none'
-            }}
-          >
-            {periods.map(p => (
-              <option key={p.id} value={p.id}>
-                {p.tahun_ajaran} - Semester {p.semester}
-              </option>
-            ))}
-          </select>
+        {/* Semester Selector / Display (Hanya Admin yang bisa ubah) */}
+        {isAdmin ? (
+          <div className="period-selector-pill" style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            background: '#ffffff', 
+            border: '2px solid rgba(255, 255, 255, 0.6)', 
+            borderRadius: '10px', 
+            padding: '4px 10px', 
+            gap: '6px',
+            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.12)'
+          }}>
+            <Calendar size={16} style={{ color: '#047857' }} />
+            <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#047857' }}>Atur Semester:</span>
+            <select
+              value={currentPeriod?.id || ''}
+              onChange={(e) => {
+                const selected = periods.find(p => p.id === e.target.value);
+                if (selected) onChangePeriod(selected);
+              }}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                fontSize: '0.88rem',
+                fontWeight: '800',
+                color: '#0f172a',
+                cursor: 'pointer',
+                outline: 'none'
+              }}
+            >
+              {periods.map(p => (
+                <option key={p.id} value={p.id}>
+                  {p.tahun_ajaran} - Semester {p.semester}
+                </option>
+              ))}
+            </select>
 
-          {isAdmin && (
             <button
               onClick={onOpenAddSemester}
               title="Tambah Semester Baru"
@@ -86,8 +86,25 @@ export default function Header({
             >
               <PlusCircle size={13} /> + Baru
             </button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="period-selector-pill" style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            background: '#ffffff', 
+            border: '2px solid rgba(255, 255, 255, 0.6)', 
+            borderRadius: '10px', 
+            padding: '5px 14px', 
+            gap: '8px',
+            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.12)'
+          }}>
+            <Calendar size={16} style={{ color: '#047857' }} />
+            <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#047857' }}>Periode:</span>
+            <span style={{ fontSize: '0.88rem', fontWeight: '800', color: '#0f172a' }}>
+              {currentPeriod?.tahun_ajaran || '2026/2027'} - Semester {currentPeriod?.semester || 'Ganjil'}
+            </span>
+          </div>
+        )}
 
         {/* Cloud Status */}
         <span className="badge-free" style={{ background: 'rgba(255, 255, 255, 0.18)', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.35)', fontWeight: '600' }}>

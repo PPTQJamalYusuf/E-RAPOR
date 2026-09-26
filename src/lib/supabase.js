@@ -43,12 +43,32 @@ export async function getAcademicPeriods() {
 }
 
 /**
- * Menambahkan periode semester baru
+ * Menambahkan periode semester baru (Khusus Admin)
  */
-export async function addAcademicPeriod(tahunAjaran, semester) {
+export async function addAcademicPeriod(tahunAjaran, semester, setActive = true) {
+  if (setActive) {
+    // Nonaktifkan semua periode lain
+    await supabase.from('academic_periods').update({ is_active: false }).neq('id', '00000000-0000-0000-0000-000000000000');
+  }
   const { data, error } = await supabase
     .from('academic_periods')
-    .insert([{ tahun_ajaran: tahunAjaran, semester: semester, is_active: false }])
+    .insert([{ tahun_ajaran: tahunAjaran, semester: semester, is_active: setActive }])
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Mengubah periode aktif sekolah (Khusus Admin)
+ * Periode yang diaktifkan Admin otomatis diikuti oleh semua akun guru
+ */
+export async function setActiveAcademicPeriod(periodId) {
+  await supabase.from('academic_periods').update({ is_active: false }).neq('id', '00000000-0000-0000-0000-000000000000');
+  const { data, error } = await supabase
+    .from('academic_periods')
+    .update({ is_active: true })
+    .eq('id', periodId)
     .select()
     .single();
   if (error) throw error;

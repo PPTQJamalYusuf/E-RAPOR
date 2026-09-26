@@ -9,7 +9,8 @@ import SemesterModal from './components/SemesterModal';
 import { 
   getAcademicPeriods, 
   getSantriWithGrades, 
-  saveSantriRapor 
+  saveSantriRapor,
+  setActiveAcademicPeriod
 } from './lib/supabase';
 import initialSantriData from './data/initialSantri.json';
 
@@ -69,7 +70,7 @@ export default function App() {
           setCurrentPeriod(active);
         } else {
           // Fallback periode default
-          const defaultP = { id: 'default', tahun_ajaran: '2024/2025', semester: 'Ganjil' };
+          const defaultP = { id: 'default', tahun_ajaran: '2026/2027', semester: 'Ganjil', is_active: true };
           setPeriods([defaultP]);
           setCurrentPeriod(defaultP);
         }
@@ -142,8 +143,21 @@ export default function App() {
 
   // Handler penambahan semester baru
   const handleSemesterCreated = (newPeriod) => {
-    setPeriods(prev => [newPeriod, ...prev]);
+    setPeriods(prev => [newPeriod, ...prev.map(p => ({ ...p, is_active: false }))]);
     setCurrentPeriod(newPeriod);
+  };
+
+  // Handler ganti periode aktif oleh Admin (guru otomatis mengikuti)
+  const handleChangePeriod = async (selectedPeriod) => {
+    setCurrentPeriod(selectedPeriod);
+    if (currentUser?.role === 'admin' && selectedPeriod?.id && selectedPeriod.id !== 'default') {
+      try {
+        await setActiveAcademicPeriod(selectedPeriod.id);
+        setPeriods(prev => prev.map(p => ({ ...p, is_active: p.id === selectedPeriod.id })));
+      } catch (err) {
+        console.error('Gagal update periode aktif di DB:', err);
+      }
+    }
   };
 
   // Handler ekspor file cadangan JSON semester aktif
@@ -177,7 +191,7 @@ export default function App() {
         onOpenManageUsers={() => setShowManageUsers(true)}
         periods={periods}
         currentPeriod={currentPeriod}
-        onChangePeriod={(p) => setCurrentPeriod(p)}
+        onChangePeriod={handleChangePeriod}
         onOpenAddSemester={() => setShowAddSemester(true)}
         onExportSemester={handleExportSemester}
       />
