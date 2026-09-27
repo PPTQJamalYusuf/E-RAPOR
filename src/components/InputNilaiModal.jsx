@@ -188,7 +188,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
               className={`juz-nav-tab ${activeTab === '21-30' ? 'active' : ''}`}
               onClick={() => setActiveTab('21-30')}
             >
-              Juz 21–30 (Juz 'Amma)
+              Juz 21–30
             </button>
           </div>
 
