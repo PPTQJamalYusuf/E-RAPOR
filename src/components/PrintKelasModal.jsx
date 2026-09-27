@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { X, Printer, Users, BookOpen, Award, CheckCircle2 } from 'lucide-react';
+import { X, Printer, Users, BookOpen, Award, CheckCircle2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { 
   getPredikat, 
   hitungRapor, 
@@ -37,6 +37,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
   
   const [selectedKelas, setSelectedKelas] = useState(validInitialKelas);
   const [printMode, setPrintMode] = useState('batch'); // 'batch' (seluruh rapor) atau 'leger' (rekap nilai)
+  const [zoom, setZoom] = useState(1);
 
   const initialSem = currentPeriod?.semester === 'Genap' ? 'الثاني' : 'الأول';
   const [selectedSemester, setSelectedSemester] = useState(initialSem);
@@ -160,68 +161,24 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content print-modal-container" onClick={(e) => e.stopPropagation()}>
-        {/* Toolbar Aksi (Disembunyikan saat dicetak) */}
+        {/* Toolbar Aksi Header Modern & Sleek */}
         <div className="modal-header print-modal-header no-print">
           <div className="print-modal-title-box">
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--slate-900)' }}>
+            <div className="print-header-top-row">
+              <span className="print-badge-pill admin">
+                👑 Mode Cetak Admin
+              </span>
+              <span className="print-student-info-chip">
+                Kelas: {KELAS_BILINGUAL[selectedKelas] || selectedKelas} • {santriKelas.length} Santriwati
+              </span>
+            </div>
+            <h2 className="print-modal-heading">
               CETAK PER KELAS — PPTQ JAMAL YUSUF
             </h2>
-            <p className="print-modal-subtitle" style={{ fontSize: '0.82rem', color: 'var(--slate-500)' }}>
-              Cetak massal seluruh lembar rapor santriwati atau cetak rekapitulasi leger nilai se-kelas.
-            </p>
           </div>
 
-          <div className="print-modal-actions" style={{ flexWrap: 'wrap', gap: '8px' }}>
-            {/* Pilihan Kelas */}
-            <div className="print-semester-select">
-              <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--slate-700)' }}>
-                Kelas:
-              </label>
-              <select
-                value={selectedKelas}
-                onChange={(e) => setSelectedKelas(e.target.value)}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  fontSize: '0.85rem',
-                  fontWeight: 800,
-                  color: '#047857',
-                  cursor: 'pointer',
-                  outline: 'none'
-                }}
-              >
-                {kelasList.map(k => (
-                  <option key={k} value={k}>
-                    {KELAS_BILINGUAL[k] || `Kelas ${k}`} ({santriList.filter(s => s.kelas === k).length} Santri)
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Pilihan Semester */}
-            <div className="print-semester-select">
-              <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--slate-700)' }}>
-                Semester:
-              </label>
-              <select
-                value={selectedSemester}
-                onChange={(e) => setSelectedSemester(e.target.value)}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  color: '#166534',
-                  cursor: 'pointer',
-                  outline: 'none'
-                }}
-              >
-                <option value="الأول">Ganjil 1 (الأول)</option>
-                <option value="الثاني">Genap 2 (الثاني)</option>
-              </select>
-            </div>
-
-            {/* Pilihan Mode Cetak */}
+          <div className="print-modal-actions">
+            {/* Pilihan Mode Cetak (Segmented Tabs) */}
             <div className="print-mode-toggle-group">
               <button
                 type="button"
@@ -229,7 +186,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                 onClick={() => setPrintMode('batch')}
                 title="Cetak seluruh lembar rapor A4 santriwati dalam kelas ini"
               >
-                <BookOpen size={14} /> Rapor Santri ({santriKelas.length} Lembar)
+                <BookOpen size={14} /> Rapor Santri ({santriKelas.length})
               </button>
               <button
                 type="button"
@@ -237,12 +194,70 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                 onClick={() => setPrintMode('leger')}
                 title="Cetak tabel rekapitulasi nilai dan ranking 1 kelas"
               >
-                <Award size={14} /> Leger Nilai Kelas
+                <Award size={14} /> Leger Nilai
               </button>
             </div>
 
+            {/* Zoom / Scale Controls */}
+            <div className="print-zoom-controls">
+              <button 
+                type="button" 
+                className="btn-zoom" 
+                onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))} 
+                title="Perkecil Ukuran Lembar"
+              >
+                <ZoomOut size={14} />
+              </button>
+              <span className="zoom-label">{Math.round(zoom * 100)}%</span>
+              <button 
+                type="button" 
+                className="btn-zoom" 
+                onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))} 
+                title="Perbesar Ukuran Lembar"
+              >
+                <ZoomIn size={14} />
+              </button>
+              {zoom !== 1 && (
+                <button 
+                  type="button" 
+                  className="btn-zoom-reset" 
+                  onClick={() => setZoom(1)} 
+                  title="Kembalikan ke 100%"
+                >
+                  <RotateCcw size={12} />
+                </button>
+              )}
+            </div>
+
+            {/* Pilihan Kelas */}
+            <div className="print-semester-select">
+              <label>Kelas:</label>
+              <select
+                value={selectedKelas}
+                onChange={(e) => setSelectedKelas(e.target.value)}
+              >
+                {kelasList.map(k => (
+                  <option key={k} value={k}>
+                    {KELAS_BILINGUAL[k] || `Kelas ${k}`} ({santriList.filter(s => s.kelas === k).length})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Pilihan Semester */}
+            <div className="print-semester-select">
+              <label>Semester:</label>
+              <select
+                value={selectedSemester}
+                onChange={(e) => setSelectedSemester(e.target.value)}
+              >
+                <option value="الأول">Ganjil 1 (الأول)</option>
+                <option value="الثاني">Genap 2 (الثاني)</option>
+              </select>
+            </div>
+
             <button className="btn btn-primary btn-print-main" onClick={handlePrint}>
-              <Printer size={16} /> Cetak {printMode === 'batch' ? `Seluruh Rapor (${santriKelas.length} Lembar)` : 'Rekap Nilai'}
+              <Printer size={16} /> Cetak {printMode === 'batch' ? `Rapor (${santriKelas.length} Hal)` : 'Leger Nilai'}
             </button>
             
             <button className="btn btn-secondary btn-sm btn-print-close" onClick={onClose} title="Tutup">
@@ -251,8 +266,21 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
           </div>
         </div>
 
+        {/* Tips Cetak Rapi Banner */}
+        <div className="print-tips-banner no-print">
+          <span>💡 <strong>Tips Cetak {printMode === 'batch' ? 'Massal' : 'Leger'}:</strong> {printMode === 'batch' ? 'Setiap lembar rapor santriwati otomatis terpisah 1 lembar A4 per anak. Pastikan ukuran kertas A4 dan centang Background Graphics.' : 'Tabel rekapitulasi leger siap dicetak untuk arsip pondok. Pastikan Background Graphics aktif.'}</span>
+        </div>
+
         {/* Isi Modal Cetak */}
         <div className="modal-body print-modal-body">
+          <div 
+            className="print-paper-wrapper"
+            style={{ 
+              transform: zoom !== 1 ? `scale(${zoom})` : 'none',
+              transformOrigin: 'top center',
+              transition: 'transform 0.15s ease-out'
+            }}
+          >
           {santriKelas.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem', color: '#64748b', background: '#fff', borderRadius: '12px' }}>
               Belum ada data santriwati yang terdaftar di kelas <strong>{selectedKelas}</strong>.
@@ -553,8 +581,18 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
 
                     return (
                       <tr key={santri.id}>
-                        <td style={{ textAlign: 'center', fontWeight: 800, color: santri.ranking === 1 ? '#d97706' : 'inherit' }}>
-                          {santri.ranking !== '-' ? `#${santri.ranking}` : idx + 1}
+                        <td style={{ textAlign: 'center', fontWeight: 800 }}>
+                          {santri.ranking === 1 ? (
+                            <span className="rank-badge rank-gold">🥇 1</span>
+                          ) : santri.ranking === 2 ? (
+                            <span className="rank-badge rank-silver">🥈 2</span>
+                          ) : santri.ranking === 3 ? (
+                            <span className="rank-badge rank-bronze">🥉 3</span>
+                          ) : (
+                            <span className="rank-badge-normal">
+                              {santri.ranking !== '-' ? `#${santri.ranking}` : idx + 1}
+                            </span>
+                          )}
                         </td>
                         <td style={{ fontSize: '8.5pt' }}>{santri.nis || santri.id}</td>
                         <td style={{ fontWeight: 600 }}>{santri.nama}</td>
@@ -626,6 +664,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
     </div>

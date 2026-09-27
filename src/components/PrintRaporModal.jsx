@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Printer } from 'lucide-react';
+import { X, Printer, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { 
   getPredikat, 
   hitungRapor, 
@@ -11,6 +11,7 @@ import {
 export default function PrintRaporModal({ santri, ranking, onClose, currentPeriod, currentUser }) {
   const initialSem = currentPeriod?.semester === 'Genap' ? 'الثاني' : (santri.semester || 'الأول');
   const [selectedSemester, setSelectedSemester] = useState(initialSem);
+  const [zoom, setZoom] = useState(1);
   const calc = hitungRapor(santri.nilaiJuz || {});
   const isAdmin = currentUser?.role === 'admin';
 
@@ -96,41 +97,66 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content print-modal-container" onClick={(e) => e.stopPropagation()}>
-        {/* Toolbar Aksi (Disembunyikan saat dicetak) */}
+        {/* Toolbar Aksi Header Modern & Sleek */}
         <div className="modal-header print-modal-header no-print">
           <div className="print-modal-title-box">
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--slate-900)' }}>
-              {isAdmin ? 'RAPOR TAHFIDZ (A4 Formal Bersama Kop)' : 'PRATINJAU RAPOR TAHFIDZ'}
+            <div className="print-header-top-row">
+              <span className={`print-badge-pill ${isAdmin ? 'admin' : 'guru'}`}>
+                {isAdmin ? '👑 Mode Cetak Admin' : '👩‍🏫 Pratinjau Ustadzah'}
+              </span>
+              <span className="print-student-info-chip">
+                {santri.nama} • {KELAS_BILINGUAL[santri.kelas] || santri.kelas} {ranking !== '-' && `• Peringkat #${ranking}`}
+              </span>
+            </div>
+            <h2 className="print-modal-heading">
+              {isAdmin ? 'RAPOR TAHFIDZ (A4 Formal Bersama Kop)' : 'PRATINJAU DOKUMEN RAPOR TAHFIDZ'}
             </h2>
-            <p className="print-modal-subtitle" style={{ fontSize: '0.82rem', color: 'var(--slate-500)' }}>
-              {isAdmin 
-                ? 'Format resmi dwibahasa 2 Kolom Vertikal (Juz 1–30 presisi 1 lembar A4).' 
-                : 'Pratinjau lembar rapor tahfidz santriwati. Hanya admin yang memiliki otorisasi cetak resmi.'}
-            </p>
           </div>
 
           <div className="print-modal-actions">
+            {/* Zoom / Scale Controls */}
+            <div className="print-zoom-controls">
+              <button 
+                type="button" 
+                className="btn-zoom" 
+                onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))} 
+                title="Perkecil Ukuran Lembar"
+              >
+                <ZoomOut size={14} />
+              </button>
+              <span className="zoom-label">{Math.round(zoom * 100)}%</span>
+              <button 
+                type="button" 
+                className="btn-zoom" 
+                onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))} 
+                title="Perbesar Ukuran Lembar"
+              >
+                <ZoomIn size={14} />
+              </button>
+              {zoom !== 1 && (
+                <button 
+                  type="button" 
+                  className="btn-zoom-reset" 
+                  onClick={() => setZoom(1)} 
+                  title="Kembalikan ke 100%"
+                >
+                  <RotateCcw size={12} />
+                </button>
+              )}
+            </div>
+
+            {/* Semester Selector */}
             <div className="print-semester-select">
-              <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--slate-700)' }}>
-                Semester:
-              </label>
+              <label>Semester:</label>
               <select
                 value={selectedSemester}
                 onChange={(e) => setSelectedSemester(e.target.value)}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  color: '#166534',
-                  cursor: 'pointer',
-                  outline: 'none'
-                }}
               >
                 <option value="الأول">Ganjil 1 (الأول)</option>
                 <option value="الثاني">Genap 2 (الثاني)</option>
               </select>
             </div>
+
             {isAdmin ? (
               <button className="btn btn-primary btn-print-main" onClick={handlePrint}>
                 <Printer size={16} /> Cetak Dokumen (A4)
@@ -140,15 +166,29 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                 <Printer size={16} /> Cetak / PDF
               </button>
             )}
+
             <button className="btn btn-secondary btn-sm btn-print-close" onClick={onClose} title="Tutup Pratinjau">
               <X size={16} />
             </button>
           </div>
         </div>
 
+        {/* Tips Cetak Rapi Banner */}
+        <div className="print-tips-banner no-print">
+          <span>💡 <strong>Tips Cetak:</strong> Pada browser printer, pilih ukuran kertas <em>A4</em>, Margins <em>'None'</em> / <em>'Default'</em>, dan centang <em>'Background Graphics'</em> agar kop dan warna tabel tampil sempurna.</span>
+        </div>
+
         {/* Dokumen Rapor Siap Cetak A4 */}
         <div className="modal-body print-modal-body">
-          <div className="rapor-a4-formal">
+          <div 
+            className="print-paper-wrapper"
+            style={{ 
+              transform: zoom !== 1 ? `scale(${zoom})` : 'none',
+              transformOrigin: 'top center',
+              transition: 'transform 0.15s ease-out'
+            }}
+          >
+            <div className="rapor-a4-formal">
             {/* 1. KOP PONDOK RESMI */}
             <div className="letterhead-wrapper">
               <img
@@ -344,6 +384,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
               <span>E-Rapor Tahfidz PPTQ Jamal Yusuf Al-Haddad Tahun {new Date().getFullYear()}</span>
             </div>
 
+            </div>
           </div>
         </div>
       </div>
