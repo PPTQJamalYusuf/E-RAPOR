@@ -979,17 +979,17 @@ body {
   flex-wrap: wrap;
 }
 
-/* Tombol X ESC di Ujung Kanan Header */
+/* Tombol X Merah Background Putih di Ujung Kanan Header */
 .btn-modal-close-corner {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0.42rem 0.7rem;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-md);
-  border: 1.5px solid var(--slate-300);
+  border: 1.5px solid #fecaca;
   background: #ffffff;
-  color: var(--slate-600);
+  color: #dc2626;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -997,15 +997,15 @@ body {
 }
 
 .btn-modal-close-corner:hover {
-  background: #fee2e2;
-  border-color: #fca5a5;
-  color: #dc2626;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(220, 38, 38, 0.15);
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #b91c1c;
+  transform: scale(1.06);
+  box-shadow: 0 3px 8px rgba(220, 38, 38, 0.2);
 }
 
 .btn-modal-close-corner:active {
-  transform: translateY(0);
+  transform: scale(0.95);
 }
 
 .btn-modal-close-corner svg {
@@ -1014,27 +1014,6 @@ body {
 
 .btn-modal-close-corner:hover svg {
   transform: rotate(90deg);
-}
-
-.esc-key-badge {
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  background: #f1f5f9;
-  color: var(--slate-600);
-  padding: 2px 5px;
-  border-radius: 4px;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 1px 0 #94a3b8;
-  line-height: 1;
-  transition: all 0.2s ease;
-}
-
-.btn-modal-close-corner:hover .esc-key-badge {
-  background: #fecaca;
-  color: #991b1b;
-  border-color: #f87171;
-  box-shadow: 0 1px 0 #ef4444;
 }
 
 /* Zoom Controls Pill */

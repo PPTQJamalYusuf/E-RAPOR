@@ -273,16 +273,15 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
               </button>
             </div>
 
-            {/* Tombol X ESC di Ujung Kanan */}
+            {/* Tombol X Merah Background Putih di Ujung Kanan */}
             <button 
               type="button" 
               className="btn-modal-close-corner" 
               onClick={onClose} 
-              title="Tutup (Esc)"
+              title="Tutup"
               aria-label="Tutup Modal"
             >
               <X size={18} />
-              <span className="esc-key-badge">ESC</span>
             </button>
           </div>
         </div>

@@ -180,16 +180,15 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
               )}
             </div>
 
-            {/* Tombol X ESC di Ujung Kanan */}
+            {/* Tombol X Merah Background Putih di Ujung Kanan */}
             <button 
               type="button" 
               className="btn-modal-close-corner" 
               onClick={onClose} 
-              title="Tutup (Esc)"
-              aria-label="Tutup Pratinjau"
+              title="Tutup"
+              aria-label="Tutup"
             >
               <X size={18} />
-              <span className="esc-key-badge">ESC</span>
             </button>
           </div>
         </div>
