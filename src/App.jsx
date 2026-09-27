@@ -3,6 +3,7 @@ import Header from './components/Header';
 import SantriList from './components/SantriList';
 import InputNilaiModal from './components/InputNilaiModal';
 import PrintRaporModal from './components/PrintRaporModal';
+import PrintKelasModal from './components/PrintKelasModal';
 import LoginModal from './components/LoginModal';
 import ManageUsersModal from './components/ManageUsersModal';
 import SemesterModal from './components/SemesterModal';
@@ -36,6 +37,7 @@ export default function App() {
   // 3. Modals State
   const [inputSantri, setInputSantri] = useState(null);
   const [printData, setPrintData] = useState(null);
+  const [printKelasData, setPrintKelasData] = useState(null);
   const [showManageUsers, setShowManageUsers] = useState(false);
   const [showAddSemester, setShowAddSemester] = useState(false);
 
@@ -208,6 +210,7 @@ export default function App() {
             currentUser={currentUser}
             onSelectInput={(s) => setInputSantri(s)}
             onSelectPrint={(s, rank) => setPrintData({ santri: s, ranking: rank })}
+            onSelectPrintClass={(kelas) => setPrintKelasData({ kelas })}
           />
         )}
       </main>
@@ -229,6 +232,16 @@ export default function App() {
           currentPeriod={currentPeriod}
           currentUser={currentUser}
           onClose={() => setPrintData(null)}
+        />
+      )}
+
+      {/* Modal Cetak Per Kelas (Batch Rapor Santriwati & Rekap Nilai Leger) */}
+      {printKelasData && (
+        <PrintKelasModal
+          santriList={santriList}
+          initialKelas={printKelasData.kelas}
+          currentPeriod={currentPeriod}
+          onClose={() => setPrintKelasData(null)}
         />
       )}
 

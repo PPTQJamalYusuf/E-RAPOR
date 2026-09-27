@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Search, Edit3, Printer, Users, Award, BookCheck, Eye } from 'lucide-react';
 import { hitungRapor, hitungRanking, PREDIKAT_COLORS } from '../utils/tahfidzCalc';
 
-export default function SantriList({ santriList, onSelectInput, onSelectPrint, currentUser }) {
+export default function SantriList({ santriList, onSelectInput, onSelectPrint, onSelectPrintClass, currentUser }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedKelas, setSelectedKelas] = useState(() => {
     if (currentUser?.role === 'guru' && currentUser?.kelas_binaan && currentUser?.kelas_binaan !== 'Semua') {
@@ -106,20 +106,33 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, c
           </div>
         </div>
 
-        {/* Filter Tombol Kelas Arab */}
-        <div className="class-filters">
-          <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--slate-500)', marginRight: '0.5rem' }}>
-            Pilih Kelas:
-          </span>
-          {kelasList.map(k => (
+        {/* Filter Tombol Kelas & Tombol Cetak Per Kelas untuk Admin */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <div className="class-filters">
+            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--slate-500)', marginRight: '0.5rem' }}>
+              Pilih Kelas:
+            </span>
+            {kelasList.map(k => (
+              <button
+                key={k}
+                className={`filter-btn ${selectedKelas === k ? 'active' : ''}`}
+                onClick={() => setSelectedKelas(k)}
+              >
+                {k === 'Semua' ? 'Semua Kelas' : `Kelas ${k}`}
+              </button>
+            ))}
+          </div>
+
+          {currentUser?.role === 'admin' && (
             <button
-              key={k}
-              className={`filter-btn ${selectedKelas === k ? 'active' : ''}`}
-              onClick={() => setSelectedKelas(k)}
+              className="btn btn-gold btn-print-class"
+              onClick={() => onSelectPrintClass && onSelectPrintClass(selectedKelas !== 'Semua' ? selectedKelas : 'الأول')}
+              title="Cetak seluruh lembar rapor A4 santriwati atau rekap nilai per kelas"
+              style={{ padding: '0.45rem 0.95rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
             >
-              {k === 'Semua' ? 'Semua Kelas' : `Kelas ${k}`}
+              <Printer size={15} /> Cetak Per Kelas {selectedKelas !== 'Semua' ? `(${selectedKelas})` : ''}
             </button>
-          ))}
+          )}
         </div>
       </div>
 
