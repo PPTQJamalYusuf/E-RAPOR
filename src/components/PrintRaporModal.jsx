@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Printer, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { 
   getPredikat, 
@@ -14,6 +14,17 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
   const [zoom, setZoom] = useState(1);
   const calc = hitungRapor(santri.nilaiJuz || {});
   const isAdmin = currentUser?.role === 'admin';
+
+  // Listener keyboard ESC untuk menutup modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   // Tahun Pelajaran dinamis dari periode aktif atau tanggal
   const now = new Date();
@@ -113,69 +124,74 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             </h2>
           </div>
 
-          <div className="print-modal-actions">
-            {/* Zoom / Scale Controls */}
-            <div className="print-zoom-controls">
-              <button 
-                type="button" 
-                className="btn-zoom" 
-                onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))} 
-                title="Perkecil Ukuran Lembar"
-              >
-                <ZoomOut size={14} />
-              </button>
-              <span className="zoom-label">{Math.round(zoom * 100)}%</span>
-              <button 
-                type="button" 
-                className="btn-zoom" 
-                onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))} 
-                title="Perbesar Ukuran Lembar"
-              >
-                <ZoomIn size={14} />
-              </button>
-              {zoom !== 1 && (
+          <div className="print-modal-right-section">
+            <div className="print-modal-actions">
+              {/* Zoom / Scale Controls */}
+              <div className="print-zoom-controls">
                 <button 
                   type="button" 
-                  className="btn-zoom-reset" 
-                  onClick={() => setZoom(1)} 
-                  title="Kembalikan ke 100%"
+                  className="btn-zoom" 
+                  onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))} 
+                  title="Perkecil Ukuran Lembar"
                 >
-                  <RotateCcw size={12} />
+                  <ZoomOut size={14} />
+                </button>
+                <span className="zoom-label">{Math.round(zoom * 100)}%</span>
+                <button 
+                  type="button" 
+                  className="btn-zoom" 
+                  onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))} 
+                  title="Perbesar Ukuran Lembar"
+                >
+                  <ZoomIn size={14} />
+                </button>
+                {zoom !== 1 && (
+                  <button 
+                    type="button" 
+                    className="btn-zoom-reset" 
+                    onClick={() => setZoom(1)} 
+                    title="Kembalikan ke 100%"
+                  >
+                    <RotateCcw size={12} />
+                  </button>
+                )}
+              </div>
+
+              {/* Semester Selector */}
+              <div className="print-semester-select">
+                <label>Semester:</label>
+                <select
+                  value={selectedSemester}
+                  onChange={(e) => setSelectedSemester(e.target.value)}
+                >
+                  <option value="الأول">Ganjil 1 (الأول)</option>
+                  <option value="الثاني">Genap 2 (الثاني)</option>
+                </select>
+              </div>
+
+              {isAdmin ? (
+                <button className="btn btn-primary btn-print-main" onClick={handlePrint}>
+                  <Printer size={16} /> Cetak Dokumen (A4)
+                </button>
+              ) : (
+                <button className="btn btn-info btn-print-main" onClick={handlePrint} title="Cetak salinan atau simpan PDF pratinjau">
+                  <Printer size={16} /> Cetak / PDF
                 </button>
               )}
             </div>
 
-            {/* Semester Selector */}
-            <div className="print-semester-select">
-              <label>Semester:</label>
-              <select
-                value={selectedSemester}
-                onChange={(e) => setSelectedSemester(e.target.value)}
-              >
-                <option value="الأول">Ganjil 1 (الأول)</option>
-                <option value="الثاني">Genap 2 (الثاني)</option>
-              </select>
-            </div>
-
-            {isAdmin ? (
-              <button className="btn btn-primary btn-print-main" onClick={handlePrint}>
-                <Printer size={16} /> Cetak Dokumen (A4)
-              </button>
-            ) : (
-              <button className="btn btn-info btn-print-main" onClick={handlePrint} title="Cetak salinan atau simpan PDF pratinjau">
-                <Printer size={16} /> Cetak / PDF
-              </button>
-            )}
-
-            <button className="btn btn-secondary btn-sm btn-print-close" onClick={onClose} title="Tutup Pratinjau">
-              <X size={16} />
+            {/* Tombol X ESC di Ujung Kanan */}
+            <button 
+              type="button" 
+              className="btn-modal-close-corner" 
+              onClick={onClose} 
+              title="Tutup (Esc)"
+              aria-label="Tutup Pratinjau"
+            >
+              <X size={18} />
+              <span className="esc-key-badge">ESC</span>
             </button>
           </div>
-        </div>
-
-        {/* Tips Cetak Rapi Banner */}
-        <div className="print-tips-banner no-print">
-          <span>💡 <strong>Tips Cetak:</strong> Pada browser printer, pilih ukuran kertas <em>A4</em>, Margins <em>'None'</em> / <em>'Default'</em>, dan centang <em>'Background Graphics'</em> agar kop dan warna tabel tampil sempurna.</span>
         </div>
 
         {/* Dokumen Rapor Siap Cetak A4 */}

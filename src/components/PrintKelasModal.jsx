@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { X, Printer, Users, BookOpen, Award, CheckCircle2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { 
   getPredikat, 
@@ -11,6 +11,17 @@ import {
 } from '../utils/tahfidzCalc';
 
 export default function PrintKelasModal({ santriList, initialKelas, currentPeriod, onClose }) {
+  // Listener keyboard ESC untuk menutup modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const kelasList = useMemo(() => {
     const set = new Set();
     // Prioritas urutan kelas standar pondok
@@ -177,98 +188,103 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
             </h2>
           </div>
 
-          <div className="print-modal-actions">
-            {/* Pilihan Mode Cetak (Segmented Tabs) */}
-            <div className="print-mode-toggle-group">
-              <button
-                type="button"
-                className={`print-mode-btn ${printMode === 'batch' ? 'active' : ''}`}
-                onClick={() => setPrintMode('batch')}
-                title="Cetak seluruh lembar rapor A4 santriwati dalam kelas ini"
-              >
-                <BookOpen size={14} /> Rapor Santri ({santriKelas.length})
-              </button>
-              <button
-                type="button"
-                className={`print-mode-btn ${printMode === 'leger' ? 'active' : ''}`}
-                onClick={() => setPrintMode('leger')}
-                title="Cetak tabel rekapitulasi nilai dan ranking 1 kelas"
-              >
-                <Award size={14} /> Leger Nilai
-              </button>
-            </div>
+          <div className="print-modal-right-section">
+            <div className="print-modal-actions">
+              {/* Pilihan Mode Cetak (Segmented Tabs) */}
+              <div className="print-mode-toggle-group">
+                <button
+                  type="button"
+                  className={`print-mode-btn ${printMode === 'batch' ? 'active' : ''}`}
+                  onClick={() => setPrintMode('batch')}
+                  title="Cetak seluruh lembar rapor A4 santriwati dalam kelas ini"
+                >
+                  <BookOpen size={14} /> Rapor Santri ({santriKelas.length})
+                </button>
+                <button
+                  type="button"
+                  className={`print-mode-btn ${printMode === 'leger' ? 'active' : ''}`}
+                  onClick={() => setPrintMode('leger')}
+                  title="Cetak tabel rekapitulasi nilai dan ranking 1 kelas"
+                >
+                  <Award size={14} /> Leger Nilai
+                </button>
+              </div>
 
-            {/* Zoom / Scale Controls */}
-            <div className="print-zoom-controls">
-              <button 
-                type="button" 
-                className="btn-zoom" 
-                onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))} 
-                title="Perkecil Ukuran Lembar"
-              >
-                <ZoomOut size={14} />
-              </button>
-              <span className="zoom-label">{Math.round(zoom * 100)}%</span>
-              <button 
-                type="button" 
-                className="btn-zoom" 
-                onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))} 
-                title="Perbesar Ukuran Lembar"
-              >
-                <ZoomIn size={14} />
-              </button>
-              {zoom !== 1 && (
+              {/* Zoom / Scale Controls */}
+              <div className="print-zoom-controls">
                 <button 
                   type="button" 
-                  className="btn-zoom-reset" 
-                  onClick={() => setZoom(1)} 
-                  title="Kembalikan ke 100%"
+                  className="btn-zoom" 
+                  onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))} 
+                  title="Perkecil Ukuran Lembar"
                 >
-                  <RotateCcw size={12} />
+                  <ZoomOut size={14} />
                 </button>
-              )}
+                <span className="zoom-label">{Math.round(zoom * 100)}%</span>
+                <button 
+                  type="button" 
+                  className="btn-zoom" 
+                  onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))} 
+                  title="Perbesar Ukuran Lembar"
+                >
+                  <ZoomIn size={14} />
+                </button>
+                {zoom !== 1 && (
+                  <button 
+                    type="button" 
+                    className="btn-zoom-reset" 
+                    onClick={() => setZoom(1)} 
+                    title="Kembalikan ke 100%"
+                  >
+                    <RotateCcw size={12} />
+                  </button>
+                )}
+              </div>
+
+              {/* Pilihan Kelas */}
+              <div className="print-semester-select">
+                <label>Kelas:</label>
+                <select
+                  value={selectedKelas}
+                  onChange={(e) => setSelectedKelas(e.target.value)}
+                >
+                  {kelasList.map(k => (
+                    <option key={k} value={k}>
+                      {KELAS_BILINGUAL[k] || `Kelas ${k}`} ({santriList.filter(s => s.kelas === k).length})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Pilihan Semester */}
+              <div className="print-semester-select">
+                <label>Semester:</label>
+                <select
+                  value={selectedSemester}
+                  onChange={(e) => setSelectedSemester(e.target.value)}
+                >
+                  <option value="الأول">Ganjil 1 (الأول)</option>
+                  <option value="الثاني">Genap 2 (الثاني)</option>
+                </select>
+              </div>
+
+              <button className="btn btn-primary btn-print-main" onClick={handlePrint}>
+                <Printer size={16} /> Cetak {printMode === 'batch' ? `Rapor (${santriKelas.length} Hal)` : 'Leger Nilai'}
+              </button>
             </div>
 
-            {/* Pilihan Kelas */}
-            <div className="print-semester-select">
-              <label>Kelas:</label>
-              <select
-                value={selectedKelas}
-                onChange={(e) => setSelectedKelas(e.target.value)}
-              >
-                {kelasList.map(k => (
-                  <option key={k} value={k}>
-                    {KELAS_BILINGUAL[k] || `Kelas ${k}`} ({santriList.filter(s => s.kelas === k).length})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Pilihan Semester */}
-            <div className="print-semester-select">
-              <label>Semester:</label>
-              <select
-                value={selectedSemester}
-                onChange={(e) => setSelectedSemester(e.target.value)}
-              >
-                <option value="الأول">Ganjil 1 (الأول)</option>
-                <option value="الثاني">Genap 2 (الثاني)</option>
-              </select>
-            </div>
-
-            <button className="btn btn-primary btn-print-main" onClick={handlePrint}>
-              <Printer size={16} /> Cetak {printMode === 'batch' ? `Rapor (${santriKelas.length} Hal)` : 'Leger Nilai'}
-            </button>
-            
-            <button className="btn btn-secondary btn-sm btn-print-close" onClick={onClose} title="Tutup">
-              <X size={16} />
+            {/* Tombol X ESC di Ujung Kanan */}
+            <button 
+              type="button" 
+              className="btn-modal-close-corner" 
+              onClick={onClose} 
+              title="Tutup (Esc)"
+              aria-label="Tutup Modal"
+            >
+              <X size={18} />
+              <span className="esc-key-badge">ESC</span>
             </button>
           </div>
-        </div>
-
-        {/* Tips Cetak Rapi Banner */}
-        <div className="print-tips-banner no-print">
-          <span>💡 <strong>Tips Cetak {printMode === 'batch' ? 'Massal' : 'Leger'}:</strong> {printMode === 'batch' ? 'Setiap lembar rapor santriwati otomatis terpisah 1 lembar A4 per anak. Pastikan ukuran kertas A4 dan centang Background Graphics.' : 'Tabel rekapitulasi leger siap dicetak untuk arsip pondok. Pastikan Background Graphics aktif.'}</span>
         </div>
 
         {/* Isi Modal Cetak */}
