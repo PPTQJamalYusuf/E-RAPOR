@@ -227,6 +227,7 @@ export default function App() {
           santri={santriList.find(s => s.id === printData.santri.id) || printData.santri}
           ranking={printData.ranking}
           currentPeriod={currentPeriod}
+          currentUser={currentUser}
           onClose={() => setPrintData(null)}
         />
       )}

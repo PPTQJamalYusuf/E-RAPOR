@@ -6,6 +6,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
   const [nilaiJuz, setNilaiJuz] = useState({ ...(santri.nilaiJuz || {}) });
   const [catatan, setCatatan] = useState(santri.catatan || '');
   const [jumlahHafalan, setJumlahHafalan] = useState(santri.jumlahHafalan || '');
+  const [activeTab, setActiveTab] = useState('all');
 
   const handleScoreChange = (juz, val) => {
     if (val === '') {
@@ -159,10 +160,42 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
             </div>
           </div>
 
+          {/* TAB PINTAS NAVIGASI JUZ (MEMUDAHKAN GURU DI HP & TABLET) */}
+          <div className="juz-nav-tabs">
+            <button
+              type="button"
+              className={`juz-nav-tab ${activeTab === 'all' ? 'active' : ''}`}
+              onClick={() => setActiveTab('all')}
+            >
+              Semua Juz (1–30)
+            </button>
+            <button
+              type="button"
+              className={`juz-nav-tab ${activeTab === '1-10' ? 'active' : ''}`}
+              onClick={() => setActiveTab('1-10')}
+            >
+              Juz 1–10
+            </button>
+            <button
+              type="button"
+              className={`juz-nav-tab ${activeTab === '11-20' ? 'active' : ''}`}
+              onClick={() => setActiveTab('11-20')}
+            >
+              Juz 11–20
+            </button>
+            <button
+              type="button"
+              className={`juz-nav-tab ${activeTab === '21-30' ? 'active' : ''}`}
+              onClick={() => setActiveTab('21-30')}
+            >
+              Juz 21–30 (Juz 'Amma)
+            </button>
+          </div>
+
           {/* 3 Blok Juz format angka Latin */}
-          {renderJuzSection('Kelompok Juz 1 s/d 10', 1, 10)}
-          {renderJuzSection('Kelompok Juz 11 s/d 20', 11, 20)}
-          {renderJuzSection('Kelompok Juz 21 s/d 30', 21, 30)}
+          {(activeTab === 'all' || activeTab === '1-10') && renderJuzSection('Kelompok Juz 1 s/d 10', 1, 10)}
+          {(activeTab === 'all' || activeTab === '11-20') && renderJuzSection('Kelompok Juz 11 s/d 20', 11, 20)}
+          {(activeTab === 'all' || activeTab === '21-30') && renderJuzSection('Kelompok Juz 21 s/d 30', 21, 30)}
 
           {/* FORM INPUT CATATAN USTADZAH */}
           <div className="catatan-pembina-box">

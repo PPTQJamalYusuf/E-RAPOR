@@ -8,10 +8,11 @@ import {
   PREDIKAT_LABEL_ID 
 } from '../utils/tahfidzCalc';
 
-export default function PrintRaporModal({ santri, ranking, onClose, currentPeriod }) {
+export default function PrintRaporModal({ santri, ranking, onClose, currentPeriod, currentUser }) {
   const initialSem = currentPeriod?.semester === 'Genap' ? 'الثاني' : (santri.semester || 'الأول');
   const [selectedSemester, setSelectedSemester] = useState(initialSem);
   const calc = hitungRapor(santri.nilaiJuz || {});
+  const isAdmin = currentUser?.role === 'admin';
 
   // Tahun Pelajaran dinamis dari periode aktif atau tanggal
   const now = new Date();
@@ -99,10 +100,12 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
         <div className="modal-header print-modal-header no-print">
           <div className="print-modal-title-box">
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--slate-900)' }}>
-              RAPOR TAHFIDZ (A4 Formal Bersama Kop)
+              {isAdmin ? 'RAPOR TAHFIDZ (A4 Formal Bersama Kop)' : 'PRATINJAU RAPOR TAHFIDZ'}
             </h2>
             <p className="print-modal-subtitle" style={{ fontSize: '0.82rem', color: 'var(--slate-500)' }}>
-              Format resmi dwibahasa 2 Kolom Vertikal (Juz 1–30 presisi 1 lembar A4).
+              {isAdmin 
+                ? 'Format resmi dwibahasa 2 Kolom Vertikal (Juz 1–30 presisi 1 lembar A4).' 
+                : 'Pratinjau lembar rapor tahfidz santriwati. Hanya admin yang memiliki otorisasi cetak resmi.'}
             </p>
           </div>
 
@@ -128,9 +131,15 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                 <option value="الثاني">Genap 2 (الثاني)</option>
               </select>
             </div>
-            <button className="btn btn-primary btn-print-main" onClick={handlePrint}>
-              <Printer size={16} /> Cetak Dokumen (A4)
-            </button>
+            {isAdmin ? (
+              <button className="btn btn-primary btn-print-main" onClick={handlePrint}>
+                <Printer size={16} /> Cetak Dokumen (A4)
+              </button>
+            ) : (
+              <button className="btn btn-info btn-print-main" onClick={handlePrint} title="Cetak salinan atau simpan PDF pratinjau">
+                <Printer size={16} /> Cetak / PDF
+              </button>
+            )}
             <button className="btn btn-secondary btn-sm btn-print-close" onClick={onClose} title="Tutup Pratinjau">
               <X size={16} />
             </button>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Edit3, Printer, Users, Award, BookCheck } from 'lucide-react';
+import { Search, Edit3, Printer, Users, Award, BookCheck, Eye } from 'lucide-react';
 import { hitungRapor, hitungRanking, PREDIKAT_COLORS } from '../utils/tahfidzCalc';
 
 export default function SantriList({ santriList, onSelectInput, onSelectPrint, currentUser }) {
@@ -123,7 +123,7 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, c
         </div>
       </div>
 
-      {/* Tabel Santri */}
+      {/* 1. Tampilan Desktop: Tabel Santri */}
       <div className="table-container">
         <table className="santri-table">
           <thead>
@@ -136,7 +136,7 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, c
               <th style={{ width: '90px' }}>Rata-rata</th>
               <th style={{ width: '120px' }}>Predikat</th>
               <th style={{ width: '80px' }}>Ranking</th>
-              <th style={{ width: currentUser?.role === 'admin' ? '190px' : '90px', textAlign: 'center' }}>Aksi</th>
+              <th style={{ width: '180px', textAlign: 'center' }}>Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -204,13 +204,21 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, c
                         >
                           <Edit3 size={13} /> Nilai
                         </button>
-                        {currentUser?.role === 'admin' && (
+                        {currentUser?.role === 'admin' ? (
                           <button
                             className="btn btn-gold btn-sm"
                             onClick={() => onSelectPrint && onSelectPrint(santri, santri.ranking)}
                             title="Pratinjau & Cetak E-Rapor format resmi (Khusus Admin)"
                           >
                             <Printer size={13} /> Cetak
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-info btn-sm"
+                            onClick={() => onSelectPrint && onSelectPrint(santri, santri.ranking)}
+                            title="Lihat Pratinjau Dokumen Rapor"
+                          >
+                            <Eye size={13} /> Pratinjau
                           </button>
                         )}
                       </div>
@@ -221,6 +229,93 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, c
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* 2. Tampilan Khusus Mobile: Kartu Santriwati (Tanpa Scroll Horizontal) */}
+      <div className="santri-mobile-cards">
+        {filteredSantri.length === 0 ? (
+          <div className="empty-state-mobile-card">
+            Tidak ada santriwati yang sesuai dengan pencarian.
+          </div>
+        ) : (
+          filteredSantri.map((santri, idx) => {
+            const calc = hitungRapor(santri.nilaiJuz || {});
+            const colorInfo = PREDIKAT_COLORS[calc.predikatAkhir] || PREDIKAT_COLORS['-'];
+
+            return (
+              <div key={santri.id} className="santri-mobile-card">
+                <div className="mobile-card-header">
+                  <div className="mobile-card-identity">
+                    <div className="mobile-card-rank">
+                      {santri.ranking !== '-' ? `#${santri.ranking}` : `#${idx + 1}`}
+                    </div>
+                    <div>
+                      <div className="mobile-card-name">{santri.nama}</div>
+                      <div className="mobile-card-meta">
+                        NIS: <strong>{santri.nis || santri.id}</strong> • Kelas <span className="arabic">{santri.kelas}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span
+                    className="predikat-pill arabic"
+                    style={{
+                      background: colorInfo.bg,
+                      color: colorInfo.text,
+                      border: `1px solid ${colorInfo.border}`
+                    }}
+                  >
+                    {calc.predikatAkhir}
+                  </span>
+                </div>
+
+                <div className="mobile-card-stats-grid">
+                  <div className="mobile-stat-col">
+                    <div className="mobile-stat-label">Hafalan Diuji</div>
+                    <div className="mobile-stat-value">
+                      {calc.count > 0 ? `${calc.count} Juz` : '—'}
+                    </div>
+                  </div>
+                  <div className="mobile-stat-col">
+                    <div className="mobile-stat-label">Rata-rata</div>
+                    <div className="mobile-stat-value" style={{ color: calc.count > 0 ? '#15803d' : '#94a3b8' }}>
+                      {calc.count > 0 ? calc.rataRata : '—'}
+                    </div>
+                  </div>
+                  <div className="mobile-stat-col">
+                    <div className="mobile-stat-label">Ranking</div>
+                    <div className="mobile-stat-value" style={{ color: '#d97706' }}>
+                      {santri.ranking !== '-' ? `#${santri.ranking}` : '—'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mobile-card-actions">
+                  <button
+                    className="btn btn-secondary btn-mobile-action"
+                    onClick={() => onSelectInput(santri)}
+                  >
+                    <Edit3 size={15} /> Nilai
+                  </button>
+                  {currentUser?.role === 'admin' ? (
+                    <button
+                      className="btn btn-gold btn-mobile-action"
+                      onClick={() => onSelectPrint && onSelectPrint(santri, santri.ranking)}
+                    >
+                      <Printer size={15} /> Cetak
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-info btn-mobile-action"
+                      onClick={() => onSelectPrint && onSelectPrint(santri, santri.ranking)}
+                    >
+                      <Eye size={15} /> Pratinjau
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );
