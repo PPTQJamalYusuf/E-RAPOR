@@ -594,12 +594,14 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                     Mengetahui, <span className="arabic">(معرفة)</span>
                   </div>
                   <div className="sig-role-formal bold">
-                    Pengasuh Pondok Pesantren
+                    Mudir
                   </div>
                   <div className="sig-space-formal"></div>
                   <div className="sig-name-box">
-                    <div className="arabic sig-name-ar">جمال يوسف الحـداد</div>
-                    <div className="sig-name-latin">UST. JAMAL YUSUF AL-HADDAD</div>
+                    <div className="sig-name-ar-spacer">&nbsp;</div>
+                    <div className="sig-line-formal">
+                      ( <span className="sig-solid-line"></span> )
+                    </div>
                   </div>
                 </div>
 
