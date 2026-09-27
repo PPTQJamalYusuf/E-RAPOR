@@ -789,22 +789,19 @@ body {
   min-height: 14px;
 }
 
-/* 1. Kop Pondok (Dikecilkan proporsional 92% & presisi di tengah) */
+/* 1. Kop Pondok (Lebar pas rata kanan kiri 100%, height dikecilkan 70%) */
 .letterhead-wrapper {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin: 0 0 4px 0;
   padding: 0;
 }
 
 .letterhead-img {
-  width: 92%;
-  max-width: 92%;
-  height: auto;
+  width: 100%;
+  max-width: 100%;
+  height: 75px; /* Dikecilkan ~70% dari tinggi normal ~108px */
+  object-fit: fill;
   display: block;
-  margin: 0 auto;
 }
 
 /* 2. Judul Dokumen Dwibahasa */
@@ -1319,19 +1316,16 @@ body {
 
   .letterhead-wrapper {
     width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
     margin: 0 0 2mm 0 !important;
     padding: 0 !important;
   }
 
   .letterhead-img {
-    width: 92% !important;
-    max-width: 92% !important;
-    height: auto !important;
-    max-height: none !important;
-    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 20mm !important; /* Dikecilkan 70% dari tinggi normal 28.8mm */
+    max-height: 20mm !important;
+    object-fit: fill !important;
     display: block !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -2293,17 +2287,14 @@ body {
 
   .letterhead-wrapper {
     width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
     margin-bottom: 2px !important;
   }
 
   .letterhead-img {
-    width: 93% !important;
-    max-width: 93% !important;
-    height: auto !important;
-    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 52px !important;
+    object-fit: fill !important;
     display: block !important;
   }
 
