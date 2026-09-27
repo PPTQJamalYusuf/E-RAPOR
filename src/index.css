@@ -405,52 +405,336 @@ body {
   background: #f8fafc;
 }
 
+/* ========================================================================== */
+/* MODAL INPUT NILAI & JUZ GRID INPUTS (RESPONSIF MODERN)                    */
+/* ========================================================================== */
+
+.input-nilai-modal-content {
+  max-width: 880px;
+}
+
+.modal-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.modal-title-main {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--slate-900);
+  word-break: break-word;
+}
+
+.modal-subtitle-nis {
+  font-size: 0.84rem;
+  color: var(--slate-500);
+  margin-top: 0.2rem;
+}
+
+.btn-modal-close {
+  flex-shrink: 0;
+}
+
+/* Banner Ringkasan Realtime */
+.nilai-summary-banner {
+  border-radius: 12px;
+  padding: 0.9rem 1.25rem;
+  margin-bottom: 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nilai-summary-primary {
+  flex: 1;
+  min-width: 220px;
+}
+
+.summary-status-tag {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+.summary-main-count {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-top: 0.15rem;
+}
+
+.nilai-summary-metrics {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.summary-metric-card {
+  text-align: center;
+}
+
+.metric-lbl {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.metric-val {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+/* Input Jumlah Hafalan Custom */
+.hafalan-custom-box {
+  background: #ffffff;
+  border: 1.5px solid var(--slate-300);
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hafalan-custom-info {
+  flex: 1;
+  min-width: 260px;
+}
+
+.hafalan-custom-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--slate-800);
+  margin-bottom: 0.2rem;
+}
+
+.hafalan-custom-desc {
+  font-size: 0.78rem;
+  color: var(--slate-500);
+  line-height: 1.4;
+}
+
+.hafalan-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hafalan-input-field {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border: 1.5px solid #047857;
+  border-radius: 6px;
+  width: 170px;
+  color: #1b4332;
+  outline: none;
+  background: #f0fdf4;
+}
+
+.hafalan-input-field:focus {
+  box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.2);
+}
+
+.btn-reset-hafalan {
+  font-size: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  white-space: nowrap;
+}
+
 /* Juz Grid Inputs */
+.juz-section-block {
+  margin-bottom: 1.35rem;
+}
+
 .juz-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--primary);
   margin-bottom: 0.75rem;
 }
 
+.juz-section-icon {
+  font-size: 1.05rem;
+}
+
+.juz-section-text {
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.juz-section-ar {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #047857;
+}
+
 .juz-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.65rem;
+  margin-bottom: 0.5rem;
 }
 
 .juz-card-input {
-  background: #f8fafc;
-  border: 1px solid var(--slate-200);
-  border-radius: 8px;
-  padding: 0.6rem;
+  background: #ffffff;
+  border: 1.5px solid var(--slate-200);
+  border-radius: 9px;
+  padding: 0.6rem 0.4rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: all 0.15s ease-in-out;
+}
+
+.juz-card-input:hover {
+  border-color: var(--slate-300);
+  background: #f8fafc;
+}
+
+.juz-card-input:focus-within {
+  border-color: #047857;
+  background: #f0fdf4;
+  box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.15);
 }
 
 .juz-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--slate-700);
   margin-bottom: 0.35rem;
+  white-space: nowrap;
+}
+
+.juz-num-id {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.juz-num-ar {
+  font-size: 0.85rem;
+  color: #047857;
+  font-weight: 700;
 }
 
 .juz-input-field {
   width: 100%;
   text-align: center;
-  font-size: 1.1rem;
-  font-weight: 700;
-  padding: 0.35rem;
-  border: 1px solid var(--slate-300);
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding: 0.35rem 0.2rem;
+  border: 1.5px solid var(--slate-300);
   border-radius: 6px;
   outline: none;
+  background: #ffffff;
+  color: #0f172a;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.juz-input-field:focus {
+  border-color: #047857;
+  background: #ffffff;
 }
 
 .juz-predikat-badge {
   margin-top: 0.35rem;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-family: var(--font-arabic);
   font-weight: 700;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Catatan Pembina Box */
+.catatan-pembina-box {
+  margin-top: 1.35rem;
+  background: #f8fafc;
+  border: 1.5px solid var(--slate-300);
+  border-radius: 10px;
+  padding: 1.1rem;
+}
+
+.catatan-pembina-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--slate-800);
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.catatan-pembina-textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--slate-300);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  line-height: 1.45;
+  resize: vertical;
+  outline: none;
+}
+
+.catatan-pembina-textarea:focus {
+  border-color: #047857;
+  box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.15);
+}
+
+.catatan-preset-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.catatan-preset-label {
+  font-size: 0.78rem;
+  color: var(--slate-500);
+  font-weight: 600;
+}
+
+.btn-preset-chip {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #e2e8f0;
+  color: var(--slate-700);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-preset-chip:hover {
+  background: #cbd5e1;
+  color: var(--slate-900);
+}
+
+.input-nilai-modal-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: #ffffff;
+  border-top: 1.5px solid var(--slate-200);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
 }
 
 /* ========================================================================== */
@@ -703,11 +987,17 @@ body {
   white-space: nowrap;
 }
 
+.cell-split-juz .juz-latin-lbl {
+  font-weight: 700;
+  color: #111827;
+}
+
 .cell-split-juz .ar-juz-tag {
   font-family: 'Amiri', serif;
-  font-size: 10.5pt;
-  color: #2d6a4f;
-  margin-left: 5px;
+  font-size: 10pt;
+  color: #047857;
+  margin-left: 4px;
+  font-weight: 700;
 }
 
 .cell-split-nilai {
@@ -1476,23 +1766,42 @@ body {
     padding: 0.75rem 1rem;
   }
 
-  /* Juz grid — 3 kolom di tablet */
+  /* Juz grid — 5 kolom rapi di tablet (2 baris x 5 cards) */
   .juz-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.45rem;
   }
 
   .juz-card-input {
-    padding: 0.5rem;
+    padding: 0.45rem 0.35rem;
   }
 
   .juz-number {
-    font-size: 0.72rem;
+    font-size: 0.74rem;
+    gap: 0.25rem;
+  }
+
+  .juz-num-ar {
+    font-size: 0.78rem;
   }
 
   .juz-input-field {
-    font-size: 1rem;
-    padding: 0.3rem;
+    font-size: 1.05rem;
+    padding: 0.3rem 0.2rem;
+    height: 38px;
+  }
+
+  .nilai-summary-banner {
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .summary-main-count {
+    font-size: 1.15rem;
+  }
+
+  .metric-val {
+    font-size: 1.35rem;
   }
 
   /* Print modal di tablet */
@@ -1678,32 +1987,190 @@ body {
     padding: 0.65rem 0.75rem;
   }
 
-  /* Juz grid — 2 kolom di HP */
-  .juz-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.4rem;
+  /* ========================================================================
+     MODAL INPUT NILAI TAHFIDZ — TAMPILAN RESPONSIF HP PENUH
+     ======================================================================== */
+  .input-nilai-modal-content {
+    max-width: 100vw !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 
-  .juz-card-input {
-    padding: 0.4rem;
+  .modal-title-main {
+    font-size: 1rem !important;
+    line-height: 1.25 !important;
   }
 
-  .juz-number {
-    font-size: 0.68rem;
+  .modal-subtitle-nis {
+    font-size: 0.78rem !important;
   }
 
-  .juz-input-field {
-    font-size: 0.95rem;
-    padding: 0.25rem;
-    height: 38px;
+  /* Ringkasan Banner di HP */
+  .nilai-summary-banner {
+    padding: 0.75rem 0.85rem !important;
+    border-radius: 10px !important;
+    margin-bottom: 1rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.65rem !important;
   }
 
-  .juz-predikat-badge {
-    font-size: 0.68rem;
+  .nilai-summary-primary {
+    text-align: center !important;
+    min-width: 100% !important;
+  }
+
+  .summary-status-tag {
+    font-size: 0.72rem !important;
+  }
+
+  .summary-main-count {
+    font-size: 1.1rem !important;
+  }
+
+  .nilai-summary-metrics {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    padding: 0.5rem !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+  }
+
+  .metric-lbl {
+    font-size: 0.7rem !important;
+  }
+
+  .metric-val {
+    font-size: 1.3rem !important;
+  }
+
+  /* Jumlah Hafalan Custom di HP */
+  .hafalan-custom-box {
+    padding: 0.75rem !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.65rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hafalan-custom-info {
+    min-width: 100% !important;
+  }
+
+  .hafalan-custom-label {
+    font-size: 0.82rem !important;
+  }
+
+  .hafalan-custom-desc {
+    font-size: 0.74rem !important;
+  }
+
+  .hafalan-input-group {
+    width: 100% !important;
+    display: flex !important;
+    gap: 0.4rem !important;
+  }
+
+  .hafalan-input-field {
+    width: 100% !important;
+    font-size: 16px !important; /* Mencegah auto-zoom iOS */
+    height: 40px !important;
+  }
+
+  .btn-reset-hafalan {
+    height: 40px !important;
+    padding: 0 0.65rem !important;
+  }
+
+  /* Juz Section & Grid — 2 Kolom Sempurna di HP (5 baris x 2) */
+  .juz-section-block {
+    margin-bottom: 1.1rem !important;
   }
 
   .juz-section-title {
-    font-size: 0.85rem;
+    font-size: 0.84rem !important;
+    margin-bottom: 0.5rem !important;
+    gap: 0.3rem !important;
+  }
+
+  .juz-section-ar {
+    font-size: 0.84rem !important;
+  }
+
+  .juz-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.45rem !important;
+  }
+
+  .juz-card-input {
+    padding: 0.45rem 0.35rem !important;
+    border-radius: 8px !important;
+  }
+
+  .juz-number {
+    font-size: 0.74rem !important;
+    gap: 0.25rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .juz-num-id {
+    font-size: 0.74rem !important;
+  }
+
+  .juz-num-ar {
+    font-size: 0.78rem !important;
+  }
+
+  .juz-input-field {
+    font-size: 16px !important; /* Wajib 16px di mobile agar tidak zoom */
+    padding: 0.25rem 0.2rem !important;
+    height: 42px !important; /* Nyaman disentuh jari */
+  }
+
+  .juz-predikat-badge {
+    font-size: 0.72rem !important;
+    min-height: 18px !important;
+  }
+
+  /* Catatan Pembina di HP */
+  .catatan-pembina-box {
+    padding: 0.75rem !important;
+    margin-top: 1rem !important;
+  }
+
+  .catatan-pembina-title {
+    font-size: 0.82rem !important;
+  }
+
+  .catatan-pembina-textarea {
+    font-size: 16px !important; /* Mencegah auto-zoom iOS */
+  }
+
+  .btn-preset-chip {
+    padding: 0.4rem 0.6rem !important;
+    min-height: 34px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Modal Footer Sticky di HP */
+  .input-nilai-modal-footer {
+    padding: 0.65rem 0.75rem !important;
+    display: flex !important;
+    gap: 0.5rem !important;
+  }
+
+  .input-nilai-modal-footer .btn {
+    flex: 1 !important;
+    height: 42px !important;
+    justify-content: center !important;
+    font-size: 0.85rem !important;
   }
 
   /* ========================================================================
@@ -1878,8 +2345,12 @@ body {
     padding-left: 2px !important;
   }
 
+  .cell-split-juz .juz-latin-lbl {
+    font-size: 7.2pt !important;
+  }
+
   .cell-split-juz .ar-juz-tag {
-    font-size: 8.5pt !important;
+    font-size: 7.8pt !important;
     margin-left: 2px !important;
   }
 

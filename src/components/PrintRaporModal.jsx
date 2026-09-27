@@ -36,11 +36,11 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
       const matchNum = trimmed.match(/^(\d+)(\s*Juz)?$/i);
       if (matchNum) {
         const n = matchNum[1];
-        return `${n} Juz (${toArabicNum(n)} أجزاء)`;
+        return `Juz ${toArabicNum(n)}`;
       }
       return trimmed;
     }
-    return count > 0 ? `${count} Juz (${toArabicNum(count)} أجزاء)` : 'Belum Diuji (—)';
+    return count > 0 ? `Juz ${toArabicNum(count)}` : 'Belum Diuji (—)';
   };
 
   // Render Tabel Vertikal: Juz startJuz s/d endJuz
@@ -76,8 +76,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             return (
               <tr key={j}>
                 <td className="cell-split-juz">
-                  <span>Juz {j}</span>
-                  <span className="ar-juz-tag">{toArabicNum(j)}</span>
+                  Juz {toArabicNum(j)}
                 </td>
                 <td className={`cell-split-nilai ${hasVal ? 'has-val' : 'is-empty'}`}>
                   {hasVal ? val : '—'}

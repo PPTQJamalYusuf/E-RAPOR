@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { X, Save, MessageSquare, Sparkles } from 'lucide-react';
 import { getPredikat, hitungRapor, PREDIKAT_COLORS } from '../utils/tahfidzCalc';
 
+const toArabicNum = (n) => {
+  if (n === null || n === undefined || n === '') return '';
+  const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return n.toString().split('').map(d => arabicDigits[d] || d).join('');
+};
+
 export default function InputNilaiModal({ santri, onClose, onSave }) {
   const [nilaiJuz, setNilaiJuz] = useState({ ...(santri.nilaiJuz || {}) });
   const [catatan, setCatatan] = useState(santri.catatan || '');
@@ -40,16 +46,19 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
     onClose();
   };
 
-  const renderJuzSection = (title, startJuz, endJuz) => {
+  const renderJuzSection = (titleIndo, startJuz, endJuz) => {
     const list = [];
     for (let j = startJuz; j <= endJuz; j++) {
       list.push(j);
     }
 
     return (
-      <div style={{ marginBottom: '1.25rem' }}>
+      <div className="juz-section-block">
         <div className="juz-section-title">
-          <span>📖</span> {title}
+          <span className="juz-section-icon">📖</span>
+          <span className="juz-section-text">
+            Kelompok Juz {toArabicNum(startJuz)} s/d {toArabicNum(endJuz)}
+          </span>
         </div>
         <div className="juz-grid">
           {list.map(j => {
@@ -59,9 +68,10 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
 
             return (
               <div key={j} className="juz-card-input">
-                <div className="juz-number">Juz {j} (الجزء {j})</div>
+                <div className="juz-number">Juz {toArabicNum(j)}</div>
                 <input
                   type="number"
+                  inputMode="numeric"
                   min="0"
                   max="100"
                   placeholder="-"
@@ -85,55 +95,50 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content input-nilai-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <div>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--slate-900)' }}>
+          <div className="modal-header-info">
+            <h2 className="modal-title-main">
               Input Nilai Tahfidz & Catatan: {santri.nama}
             </h2>
-            <div style={{ fontSize: '0.85rem', color: 'var(--slate-500)', marginTop: '0.2rem' }}>
+            <div className="modal-subtitle-nis">
               NIS: {santri.nis || santri.id} • Kelas: <strong>{santri.kelas}</strong>
             </div>
           </div>
-          <button className="btn btn-secondary btn-sm" onClick={onClose}>
+          <button className="btn btn-secondary btn-sm btn-modal-close" onClick={onClose} title="Tutup">
             <X size={16} />
           </button>
         </div>
 
-        <div className="modal-body">
-          {/* Ringkasan Nilai Realtime */}
-          <div style={{
-            background: colorInfo.bg,
-            border: `1.5px solid ${colorInfo.border}`,
-            borderRadius: '12px',
-            padding: '1rem 1.25rem',
-            marginBottom: '1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1rem'
-          }}>
-            <div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 600, color: colorInfo.text }}>
+        <div className="modal-body input-nilai-modal-body">
+          {/* Ringkasan Nilai Realtime Responsif */}
+          <div
+            className="nilai-summary-banner"
+            style={{
+              background: colorInfo.bg,
+              border: `1.5px solid ${colorInfo.border}`
+            }}
+          >
+            <div className="nilai-summary-primary">
+              <div className="summary-status-tag" style={{ color: colorInfo.text }}>
                 STATUS PENILAIAN TAHFIDZ
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: colorInfo.text }}>
-                {calc.count} Juz Diuji • Total Nilai: {calc.total}
+              <div className="summary-main-count" style={{ color: colorInfo.text }}>
+                {toArabicNum(calc.count)} Juz Diuji ({calc.count}) • Total: {calc.total}
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '0.78rem', color: colorInfo.text }}>Rata-rata (الدرجة)</div>
-                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: colorInfo.text }}>
+            <div className="nilai-summary-metrics">
+              <div className="summary-metric-card">
+                <div className="metric-lbl" style={{ color: colorInfo.text }}>Rata-rata (الدرجة)</div>
+                <div className="metric-val" style={{ color: colorInfo.text }}>
                   {calc.count > 0 ? calc.rataRata : '-'}
                 </div>
               </div>
 
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '0.78rem', color: colorInfo.text }}>Predikat (التقدير)</div>
-                <div className="arabic" style={{ fontSize: '1.6rem', fontWeight: 700, color: colorInfo.text }}>
+              <div className="summary-metric-card">
+                <div className="metric-lbl" style={{ color: colorInfo.text }}>Predikat (التقدير)</div>
+                <div className="metric-val arabic" style={{ color: colorInfo.text }}>
                   {calc.predikatAkhir}
                 </div>
               </div>
@@ -141,60 +146,30 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
           </div>
 
           {/* INPUT JUMLAH HAFALAN (CUSTOM / FLEKSIBEL) */}
-          <div style={{
-            background: '#ffffff',
-            border: '1.5px solid var(--slate-300)',
-            borderRadius: '10px',
-            padding: '0.85rem 1.1rem',
-            marginBottom: '1.25rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '1rem',
-            flexWrap: 'wrap',
-            overflow: 'hidden'
-          }}>
-            <div style={{ flex: '1', minWidth: '0' }}>
-              <label style={{
-                display: 'block',
-                fontSize: '0.88rem',
-                fontWeight: 700,
-                color: 'var(--slate-800)',
-                marginBottom: '0.2rem'
-              }}>
+          <div className="hafalan-custom-box">
+            <div className="hafalan-custom-info">
+              <label className="hafalan-custom-label">
                 📖 Jumlah Hafalan Santriwati (عدد الحفظ):
               </label>
-              <div style={{ fontSize: '0.78rem', color: 'var(--slate-500)' }}>
-                Isi jika ingin custom (contoh: <em>5 Juz</em>, <em>10 Juz</em>, atau <em>3 Juz Mutqin</em>). Kosongkan jika ingin otomatis sesuai jumlah juz yang dinilai ({calc.count} Juz).
+              <div className="hafalan-custom-desc">
+                Isi jika ingin custom (contoh: <em>{toArabicNum(5)} Juz</em>, <em>{toArabicNum(10)} Juz</em>, atau <em>{toArabicNum(3)} Juz Mutqin</em>). Kosongkan jika ingin otomatis sesuai jumlah juz yang dinilai ({toArabicNum(calc.count)} Juz).
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div className="hafalan-input-group">
               <input
                 type="text"
                 value={jumlahHafalan}
                 onChange={(e) => setJumlahHafalan(e.target.value)}
-                placeholder={calc.count > 0 ? `${calc.count} Juz (Otomatis)` : 'Contoh: 5 Juz'}
-                style={{
-                  padding: '0.45rem 0.75rem',
-                  fontSize: '0.92rem',
-                  fontWeight: 700,
-                  border: '1.5px solid #047857',
-                  borderRadius: '6px',
-                  width: '100%',
-                  maxWidth: '180px',
-                  color: '#1b4332',
-                  outline: 'none',
-                  background: '#f0fdf4'
-                }}
+                placeholder={calc.count > 0 ? `${toArabicNum(calc.count)} Juz (${calc.count} Otomatis)` : `Contoh: ${toArabicNum(5)} Juz`}
+                className="hafalan-input-field"
               />
               {jumlahHafalan && (
                 <button
                   type="button"
                   onClick={() => setJumlahHafalan('')}
-                  className="btn btn-secondary btn-sm"
+                  className="btn btn-secondary btn-sm btn-reset-hafalan"
                   title="Kembalikan ke hitungan otomatis"
-                  style={{ fontSize: '0.75rem', padding: '0.45rem 0.6rem' }}
                 >
                   Reset Otomatis
                 </button>
@@ -202,20 +177,14 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
             </div>
           </div>
 
-          {/* 3 Blok Juz sesuai template Excel pondok */}
+          {/* 3 Blok Juz format angka Arab */}
           {renderJuzSection('Kelompok Juz 1 s/d 10', 1, 10)}
           {renderJuzSection('Kelompok Juz 11 s/d 20', 11, 20)}
           {renderJuzSection('Kelompok Juz 21 s/d 30', 21, 30)}
 
           {/* FORM INPUT CATATAN PEMBINA DI DALAM MODAL NILAI */}
-          <div style={{
-            marginTop: '1.5rem',
-            background: '#f8fafc',
-            border: '1.5px solid var(--slate-300)',
-            borderRadius: '10px',
-            padding: '1.1rem'
-          }}>
-            <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--slate-800)', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <div className="catatan-pembina-box">
+            <div className="catatan-pembina-title">
               <MessageSquare size={16} color="#2d6a4f" />
               <span>Catatan Pembina / Ustadzah untuk Rapor:</span>
             </div>
@@ -224,19 +193,10 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
               value={catatan}
               onChange={(e) => setCatatan(e.target.value)}
               placeholder="Tulis catatan evaluasi hafalan santri di sini..."
-              style={{
-                width: '100%',
-                padding: '0.65rem 0.85rem',
-                border: '1px solid var(--slate-300)',
-                borderRadius: '6px',
-                fontSize: '0.9rem',
-                fontFamily: 'inherit',
-                lineHeight: 1.4,
-                resize: 'vertical'
-              }}
+              className="catatan-pembina-textarea"
             />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
-              <span style={{ fontSize: '0.78rem', color: 'var(--slate-500)', fontWeight: 600 }}>
+            <div className="catatan-preset-wrapper">
+              <span className="catatan-preset-label">
                 <Sparkles size={13} style={{ display: 'inline', verticalAlign: 'middle' }} /> Pilihan Cepat:
               </span>
               {presetCatatan.map((p, idx) => (
@@ -247,14 +207,14 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
                   onClick={() => setCatatan(p)}
                   title={p}
                 >
-                  Opsi {idx + 1}
+                  Opsi {toArabicNum(idx + 1)} ({idx + 1})
                 </button>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="modal-footer">
+        <div className="modal-footer input-nilai-modal-footer">
           <button type="button" className="btn btn-secondary" onClick={onClose}>
             Batal
           </button>
