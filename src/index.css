@@ -789,17 +789,22 @@ body {
   min-height: 14px;
 }
 
-/* 1. Kop Pondok */
+/* 1. Kop Pondok (Dikecilkan proporsional 92% & presisi di tengah) */
 .letterhead-wrapper {
   width: 100%;
-  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 4px 0;
   padding: 0;
 }
 
 .letterhead-img {
-  width: 100%;
+  width: 92%;
+  max-width: 92%;
   height: auto;
   display: block;
+  margin: 0 auto;
 }
 
 /* 2. Judul Dokumen Dwibahasa */
@@ -1312,10 +1317,22 @@ body {
     break-inside: avoid !important;
   }
 
-  .letterhead-img {
+  .letterhead-wrapper {
     width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 0 2mm 0 !important;
+    padding: 0 !important;
+  }
+
+  .letterhead-img {
+    width: 92% !important;
+    max-width: 92% !important;
     height: auto !important;
     max-height: none !important;
+    margin: 0 auto !important;
+    display: block !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -2275,7 +2292,19 @@ body {
   }
 
   .letterhead-wrapper {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     margin-bottom: 2px !important;
+  }
+
+  .letterhead-img {
+    width: 93% !important;
+    max-width: 93% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
   }
 
   .spacer-header-top {
