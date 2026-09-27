@@ -789,21 +789,16 @@ body {
   min-height: 14px;
 }
 
-/* 1. Kop Pondok (Height tetap ringkas, rasio asli terjaga agar tidak tertarik) */
+/* 1. Kop Pondok (Ukuran awal: rasio tetap dan pas kanan kiri 100%) */
 .letterhead-wrapper {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 0 4px 0;
+  margin: 0;
   padding: 0;
 }
 
 .letterhead-img {
-  width: auto;
-  max-width: 100%;
-  height: 75px;
-  object-fit: contain;
+  width: 100%;
+  height: auto;
   display: block;
 }
 
@@ -1317,22 +1312,10 @@ body {
     break-inside: avoid !important;
   }
 
-  .letterhead-wrapper {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    margin: 0 0 2mm 0 !important;
-    padding: 0 !important;
-  }
-
   .letterhead-img {
-    width: auto !important;
-    max-width: 100% !important;
-    height: 20mm !important;
-    max-height: 20mm !important;
-    object-fit: contain !important;
-    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -2292,19 +2275,7 @@ body {
   }
 
   .letterhead-wrapper {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
     margin-bottom: 2px !important;
-  }
-
-  .letterhead-img {
-    width: auto !important;
-    max-width: 100% !important;
-    height: 52px !important;
-    object-fit: contain !important;
-    display: block !important;
   }
 
   .spacer-header-top {
