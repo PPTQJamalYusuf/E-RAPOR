@@ -95,7 +95,15 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                   {hasVal ? val : '—'}
                 </td>
                 <td className={`cell-split-pred ${hasVal ? '' : 'is-empty'}`}>
-                  {hasVal ? pred : '—'}
+                  {hasVal ? (
+                    <span>
+                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold' }}>{pred}</span>
+                      {' '}
+                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#166534' }}>
+                        ({PREDIKAT_LABEL_ID[pred] || pred})
+                      </span>
+                    </span>
+                  ) : '—'}
                 </td>
               </tr>
             );
@@ -318,8 +326,14 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                 </div>
                 <div className="summary-card-val" style={{ color: '#047857', fontSize: '11pt', fontWeight: 800 }}>
                   {calc.count > 0 ? (
-                    <span className="arabic" style={{ fontSize: '12.5pt', fontWeight: 'bold' }}>
-                      {calc.predikatAkhir}
+                    <span>
+                      <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold' }}>
+                        {calc.predikatAkhir}
+                      </span>
+                      {' '}
+                      <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#047857', fontFamily: 'Calibri, sans-serif' }}>
+                        ({PREDIKAT_LABEL_ID[calc.predikatAkhir] || calc.predikatAkhir})
+                      </span>
                     </span>
                   ) : '—'}
                 </div>
