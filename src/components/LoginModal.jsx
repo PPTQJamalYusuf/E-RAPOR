@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Lock, User, LogIn, AlertCircle } from 'lucide-react';
 import { authenticateUser } from '../lib/supabase';
+
+// Karakter utuh berharakat tersusun rapi untuk animasi typing
+const ARABIC_AHALAN_CHARS = [
+  'أَ', 'هْ', 'لً', 'ا', ' ', 
+  'وَ', 'سَ', 'هْ', 'لً', 'ا', ' ', 
+  'وَ', 'مَ', 'رْ', 'حَ', 'بً', 'ا', ' ', 
+  'بِ', 'كُ', 'مْ'
+];
+const FULL_ARABIC_TEXT = ARABIC_AHALAN_CHARS.join('');
 
 export default function LoginModal({ onLoginSuccess }) {
   const [username, setUsername] = useState('');
@@ -9,26 +18,16 @@ export default function LoginModal({ onLoginSuccess }) {
   const [errorMsg, setErrorMsg] = useState('');
 
   // Animasi Typing Elegan Tulisan Arab
-  const fullArabicText = 'أَهْلًا وَسَهْلًا وَمَرْحَبًا بِكُمْ';
   const [typedArabic, setTypedArabic] = useState('');
   const [typingComplete, setTypingComplete] = useState(false);
 
   useEffect(() => {
-    // Segmentasi per grapheme agar harakat Arab tetap menyatu sempurna saat diketik
-    const segmenter = typeof Intl !== 'undefined' && Intl.Segmenter 
-      ? new Intl.Segmenter('ar', { granularity: 'grapheme' })
-      : null;
-
-    const graphemes = segmenter 
-      ? Array.from(segmenter.segment(fullArabicText), s => s.segment)
-      : fullArabicText.split('');
-
     let currentIndex = 0;
     const interval = setInterval(() => {
       currentIndex++;
-      setTypedArabic(graphemes.slice(0, currentIndex).join(''));
+      setTypedArabic(ARABIC_AHALAN_CHARS.slice(0, currentIndex).join(''));
 
-      if (currentIndex >= graphemes.length) {
+      if (currentIndex >= ARABIC_AHALAN_CHARS.length) {
         clearInterval(interval);
         setTypingComplete(true);
       }
@@ -68,7 +67,7 @@ export default function LoginModal({ onLoginSuccess }) {
           <div className="login-logo-container">
             <img src="/logo.png" alt="Logo Pondok Pesantren" className="login-logo-img" />
           </div>
-          <div className="login-arabic" dir="rtl" aria-label={fullArabicText}>
+          <div className="login-arabic" dir="rtl" aria-label={FULL_ARABIC_TEXT}>
             <span>{typedArabic}</span>
             <span 
               className="login-typing-cursor"
