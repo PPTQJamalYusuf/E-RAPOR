@@ -105,7 +105,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
         if (parseFloat(calc.rataRata) > nilaiTertinggi) {
           nilaiTertinggi = parseFloat(calc.rataRata);
         }
-        if (parseFloat(calc.rataRata) >= 80) {
+        if (calc.predikatAkhir !== 'راسب') {
           tuntasCount++;
         }
       }

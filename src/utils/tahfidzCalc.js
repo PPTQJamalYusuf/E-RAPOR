@@ -87,10 +87,11 @@ export function getPredikat(nilai) {
   if (nilai === null || nilai === undefined || nilai === '') return '';
   const num = Number(nilai);
   if (isNaN(num)) return '';
-  if (num >= 95) return 'ممتاز';
-  if (num >= 90) return 'جيّد جدا';
-  if (num >= 85) return 'جيّد';
-  if (num >= 80) return 'مقبول';
+  const rounded = Math.round(num);
+  if (rounded >= 95) return 'ممتاز';
+  if (rounded >= 90) return 'جيّد جدا';
+  if (rounded >= 85) return 'جيّد';
+  if (rounded >= 80) return 'مقبول';
   return 'راسب';
 }
 

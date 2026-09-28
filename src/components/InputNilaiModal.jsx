@@ -57,7 +57,8 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
                 <div className="juz-number">Juz {j}</div>
                 <input
                   type="number"
-                  inputMode="numeric"
+                  inputMode="decimal"
+                  step="any"
                   min="0"
                   max="100"
                   placeholder="-"
