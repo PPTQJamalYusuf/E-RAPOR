@@ -35,8 +35,22 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
   const tahunPelajaran = currentPeriod?.tahun_ajaran || santri.tahunPelajaran || santri.tahun_pelajaran || defaultTahunPelajaran;
 
   const handlePrint = () => {
+    if (!isAdmin) return;
     window.print();
   };
+
+  // Cegah pintasan cetak Ctrl+P jika akun Guru (Hanya Lihat)
+  useEffect(() => {
+    if (isAdmin) return;
+    const preventPrint = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    window.addEventListener('keydown', preventPrint, true);
+    return () => window.removeEventListener('keydown', preventPrint, true);
+  }, [isAdmin]);
 
   const toArabicNum = (n) => {
     const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -115,20 +129,20 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content print-modal-container" onClick={(e) => e.stopPropagation()}>
+      <div className={`modal-content print-modal-container ${!isAdmin ? 'guru-view-only-lock' : ''}`} onClick={(e) => e.stopPropagation()}>
         {/* Toolbar Aksi Header Modern & Sleek */}
         <div className="modal-header print-modal-header no-print">
           <div className="print-modal-title-box">
             <div className="print-header-top-row">
               <span className={`print-badge-pill ${isAdmin ? 'admin' : 'guru'}`}>
-                {isAdmin ? '👑 Mode Cetak Admin' : '👩‍🏫 Pratinjau Ustadzah'}
+                {isAdmin ? '👑 Mode Cetak Admin' : '👁️ Pratinjau Guru (Hanya Lihat)'}
               </span>
               <span className="print-student-info-chip">
                 {santri.nama} • {KELAS_BILINGUAL[santri.kelas] || santri.kelas} {ranking !== '-' && `• Peringkat #${ranking}`}
               </span>
             </div>
             <h2 className="print-modal-heading">
-              {isAdmin ? 'RAPOR TAHFIDZ (A4 Formal Bersama Kop)' : 'PRATINJAU DOKUMEN RAPOR TAHFIDZ'}
+              {isAdmin ? 'RAPOR TAHFIDZ (A4 Formal Bersama Kop)' : 'PRATINJAU RAPOR TAHFIDZ (HANYA LIHAT)'}
             </h2>
           </div>
 
@@ -182,9 +196,24 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                   <Printer size={16} /> Cetak Dokumen (A4)
                 </button>
               ) : (
-                <button className="btn btn-info btn-print-main" onClick={handlePrint} title="Cetak salinan atau simpan PDF pratinjau">
-                  <Printer size={16} /> Cetak / PDF
-                </button>
+                <div 
+                  className="guru-view-only-badge"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '6px 12px',
+                    background: '#f8fafc',
+                    border: '1.5px solid #cbd5e1',
+                    borderRadius: '8px',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    color: '#64748b'
+                  }}
+                  title="Akses cetak fisik rapor resmi hanya dimiliki oleh Admin"
+                >
+                  <span>🔒 Hanya Lihat (Cetak oleh Admin)</span>
+                </div>
               )}
             </div>
 

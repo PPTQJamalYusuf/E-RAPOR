@@ -1745,7 +1745,8 @@ body {
   .app-header,
   .stats-grid,
   .toolbar-card,
-  .table-container {
+  .table-container,
+  .guru-view-only-lock {
     display: none !important;
   }
 
