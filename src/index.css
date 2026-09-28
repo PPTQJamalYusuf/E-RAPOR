@@ -1984,34 +1984,30 @@ body {
   object-fit: contain;
 }
 
-.login-arabic {
+.login-arabic-fade {
   font-family: 'Amiri', serif;
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   font-weight: 700;
   color: #047857 !important;
   direction: rtl;
-  margin-bottom: 0.25rem;
-  line-height: 1.35;
-  min-height: 2.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
+  margin-bottom: 0.35rem;
+  line-height: 1.4;
+  text-align: center;
+  animation: smoothFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  letter-spacing: 0.5px;
 }
 
-.login-typing-cursor {
-  display: inline-block;
-  width: 2.5px;
-  height: 1.25em;
-  background-color: #047857;
-  border-radius: 1px;
-  vertical-align: middle;
-  animation: typingBlink 0.85s infinite;
-}
-
-@keyframes typingBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+@keyframes smoothFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }
 
 .login-title {
