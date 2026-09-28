@@ -16,13 +16,25 @@ import {
 import initialSantriData from './data/initialSantri.json';
 
 const USER_SESSION_KEY = 'pondok_erapot_auth_user';
+const USER_SESSION_TIMESTAMP_KEY = 'pondok_erapot_auth_time';
+const SESSION_TIMEOUT_MS = 4 * 60 * 60 * 1000; // 4 Jam Tidak Aktif
 
 export default function App() {
   // 1. Auth State
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem(USER_SESSION_KEY);
-      return savedUser ? JSON.parse(savedUser) : null;
+      const savedTime = localStorage.getItem(USER_SESSION_TIMESTAMP_KEY);
+      if (!savedUser) return null;
+      if (savedTime) {
+        const elapsed = Date.now() - parseInt(savedTime, 10);
+        if (elapsed > SESSION_TIMEOUT_MS) {
+          localStorage.removeItem(USER_SESSION_KEY);
+          localStorage.removeItem(USER_SESSION_TIMESTAMP_KEY);
+          return null;
+        }
+      }
+      return JSON.parse(savedUser);
     } catch (e) {
       return null;
     }
@@ -87,11 +99,65 @@ export default function App() {
     };
   }, [isAnyModalOpen]);
 
+  // Sesi Otomatis Logout setelah 4 jam tidak aktif
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const recordActivity = () => {
+      try {
+        localStorage.setItem(USER_SESSION_TIMESTAMP_KEY, Date.now().toString());
+      } catch (e) {}
+    };
+
+    // Update timestamp aktivitas saat pertama render / login
+    recordActivity();
+
+    // Throttled event listener (update timestamp paling sering setiap 30 detik saat ada interaksi)
+    let lastRecorded = Date.now();
+    const handleActivity = () => {
+      const now = Date.now();
+      if (now - lastRecorded > 30000) {
+        lastRecorded = now;
+        recordActivity();
+      }
+    };
+
+    window.addEventListener('mousedown', handleActivity);
+    window.addEventListener('keydown', handleActivity);
+    window.addEventListener('touchstart', handleActivity);
+    window.addEventListener('scroll', handleActivity);
+
+    // Cek berkala setiap 1 menit apakah waktu tidak aktif sudah melebihi 4 jam
+    const intervalId = setInterval(() => {
+      try {
+        const savedTime = localStorage.getItem(USER_SESSION_TIMESTAMP_KEY);
+        if (savedTime) {
+          const elapsed = Date.now() - parseInt(savedTime, 10);
+          if (elapsed > SESSION_TIMEOUT_MS) {
+            alert('Sesi Anda telah berakhir karena tidak ada aktivitas selama 4 jam. Silakan login kembali.');
+            setCurrentUser(null);
+            localStorage.removeItem(USER_SESSION_KEY);
+            localStorage.removeItem(USER_SESSION_TIMESTAMP_KEY);
+          }
+        }
+      } catch (e) {}
+    }, 60000);
+
+    return () => {
+      window.removeEventListener('mousedown', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      window.removeEventListener('touchstart', handleActivity);
+      window.removeEventListener('scroll', handleActivity);
+      clearInterval(intervalId);
+    };
+  }, [currentUser]);
+
   // Handle Login & Logout
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);
     try {
       localStorage.setItem(USER_SESSION_KEY, JSON.stringify(user));
+      localStorage.setItem(USER_SESSION_TIMESTAMP_KEY, Date.now().toString());
     } catch (e) {}
   };
 
@@ -100,6 +166,7 @@ export default function App() {
       setCurrentUser(null);
       try {
         localStorage.removeItem(USER_SESSION_KEY);
+        localStorage.removeItem(USER_SESSION_TIMESTAMP_KEY);
       } catch (e) {}
     }
   };

@@ -202,7 +202,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '6px',
-                    padding: '6px 12px',
+                    padding: '6px 14px',
                     background: '#f8fafc',
                     border: '1.5px solid #cbd5e1',
                     borderRadius: '8px',
@@ -212,7 +212,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                   }}
                   title="Akses cetak fisik rapor resmi hanya dimiliki oleh Admin"
                 >
-                  <span>🔒 Hanya Lihat (Cetak oleh Admin)</span>
+                  <span>🔒 Hanya Lihat</span>
                 </div>
               )}
             </div>
