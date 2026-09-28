@@ -279,7 +279,6 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             {/* 4. TABEL 2 KOLOM VERTIKAL: JUZ 1-15 (KIRI) & JUZ 16-30 (KANAN) */}
             <div className="section-title-formal">
               <span>A. Capaian Hafalan Al-Qur'an 30 Juz</span>
-              <span className="arabic" style={{ fontSize: '10.5pt', fontWeight: 'bold' }}>أ. درجات حفظ ثلاثين جزءا</span>
             </div>
 
             <div className="tabel-split-vertical-wrapper">
@@ -318,7 +317,11 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                   <span>Predikat Akhir</span>
                 </div>
                 <div className="summary-card-val" style={{ color: '#047857', fontSize: '11pt', fontWeight: 800 }}>
-                  {calc.count > 0 ? (PREDIKAT_LABEL_ID[calc.predikatAkhir] || calc.predikatAkhir) : '—'}
+                  {calc.count > 0 ? (
+                    <span className="arabic" style={{ fontSize: '12.5pt', fontWeight: 'bold' }}>
+                      {calc.predikatAkhir}
+                    </span>
+                  ) : '—'}
                 </div>
               </div>
 

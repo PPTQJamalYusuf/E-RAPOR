@@ -41,6 +41,52 @@ export default function App() {
   const [showManageUsers, setShowManageUsers] = useState(false);
   const [showAddSemester, setShowAddSemester] = useState(false);
 
+  // Status apakah ada modal yang sedang terbuka
+  const isAnyModalOpen = Boolean(inputSantri || printData || printKelasData || showManageUsers || showAddSemester);
+
+  // Tangani tombol Back di browser/HP & tombol ESC keyboard untuk menutup modal
+  useEffect(() => {
+    if (!isAnyModalOpen) return;
+
+    // Titipkan 1 history state ke browser
+    window.history.pushState({ modalOpen: true }, '');
+    let closedByPopstate = false;
+
+    // Saat user memencet tombol Back di HP / browser
+    const handlePopState = () => {
+      closedByPopstate = true;
+      setInputSantri(null);
+      setPrintData(null);
+      setPrintKelasData(null);
+      setShowManageUsers(false);
+      setShowAddSemester(false);
+    };
+
+    // Saat user menekan tombol Escape di keyboard
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setInputSantri(null);
+        setPrintData(null);
+        setPrintKelasData(null);
+        setShowManageUsers(false);
+        setShowAddSemester(false);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('keydown', handleKeyDown);
+      // Jika modal ditutup BUKAN oleh tombol Back (misal klik tombol X atau Simpan),
+      // hapus history state dummy agar riwayat browser tetap bersih
+      if (!closedByPopstate) {
+        window.history.back();
+      }
+    };
+  }, [isAnyModalOpen]);
+
   // Handle Login & Logout
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);

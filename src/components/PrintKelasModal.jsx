@@ -385,7 +385,6 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                       {/* 4. TABEL 2 KOLOM VERTIKAL: JUZ 1-15 & 16-30 */}
                       <div className="section-title-formal">
                         <span>A. Capaian Hafalan Al-Qur'an 30 Juz</span>
-                        <span className="arabic" style={{ fontSize: '10.5pt', fontWeight: 'bold' }}>أ. درجات حفظ ثلاثين جزءا</span>
                       </div>
 
                       <div className="tabel-split-vertical-wrapper">
@@ -424,7 +423,11 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                             <span>Predikat Akhir</span>
                           </div>
                           <div className="summary-card-val" style={{ color: '#047857', fontSize: '11pt', fontWeight: 800 }}>
-                            {calc.count > 0 ? (PREDIKAT_LABEL_ID[calc.predikatAkhir] || calc.predikatAkhir) : '—'}
+                            {calc.count > 0 ? (
+                              <span className="arabic" style={{ fontSize: '12.5pt', fontWeight: 'bold' }}>
+                                {calc.predikatAkhir}
+                              </span>
+                            ) : '—'}
                           </div>
                         </div>
 
@@ -580,13 +583,12 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
               <table className="rekap-table-formal">
                 <thead>
                   <tr>
-                    <th style={{ width: '40px' }}>Rank</th>
-                    <th style={{ width: '85px' }}>NIS</th>
+                    <th style={{ width: '50px' }}>Rank</th>
+                    <th style={{ width: '100px' }}>NIS</th>
                     <th>Nama Santriwati</th>
-                    <th style={{ width: '100px' }}>Hafalan Teruji</th>
-                    <th style={{ width: '80px' }}>Rata-rata</th>
-                    <th style={{ width: '110px' }}>Predikat</th>
-                    <th>Catatan Pembina / Evaluasi</th>
+                    <th style={{ width: '110px' }}>Hafalan Teruji</th>
+                    <th style={{ width: '90px' }}>Rata-rata</th>
+                    <th style={{ width: '120px' }}>Predikat</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -630,9 +632,6 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                           >
                             {calc.predikatAkhir}
                           </span>
-                        </td>
-                        <td style={{ fontSize: '8pt', color: '#475569', fontStyle: santri.catatan ? 'normal' : 'italic' }}>
-                          {santri.catatan || 'Belum ada catatan.'}
                         </td>
                       </tr>
                     );
