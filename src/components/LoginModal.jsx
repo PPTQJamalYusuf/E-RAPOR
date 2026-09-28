@@ -8,6 +8,35 @@ export default function LoginModal({ onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Animasi Typing Elegan Tulisan Arab
+  const fullArabicText = 'أَهْلًا وَسَهْلًا وَمَرْحَبًا بِكُمْ';
+  const [typedArabic, setTypedArabic] = useState('');
+  const [typingComplete, setTypingComplete] = useState(false);
+
+  useEffect(() => {
+    // Segmentasi per grapheme agar harakat Arab tetap menyatu sempurna saat diketik
+    const segmenter = typeof Intl !== 'undefined' && Intl.Segmenter 
+      ? new Intl.Segmenter('ar', { granularity: 'grapheme' })
+      : null;
+
+    const graphemes = segmenter 
+      ? Array.from(segmenter.segment(fullArabicText), s => s.segment)
+      : fullArabicText.split('');
+
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      currentIndex++;
+      setTypedArabic(graphemes.slice(0, currentIndex).join(''));
+
+      if (currentIndex >= graphemes.length) {
+        clearInterval(interval);
+        setTypingComplete(true);
+      }
+    }, 85);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username.trim() || !password) {
@@ -39,7 +68,13 @@ export default function LoginModal({ onLoginSuccess }) {
           <div className="login-logo-container">
             <img src="/logo.png" alt="Logo Pondok Pesantren" className="login-logo-img" />
           </div>
-          <div className="login-arabic">كشف درجات تحفيظ القرآن</div>
+          <div className="login-arabic" dir="rtl" aria-label={fullArabicText}>
+            <span>{typedArabic}</span>
+            <span 
+              className="login-typing-cursor"
+              style={{ opacity: typingComplete ? 0.35 : 1 }}
+            />
+          </div>
           <h2 className="login-title">E-Rapor Tahfidz Pondok</h2>
           <p className="login-subtitle">Masuk untuk mengelola dan menginput nilai santriwati</p>
         </div>
