@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Save, MessageSquare } from 'lucide-react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { X, Save, MessageSquare, AlertTriangle } from 'lucide-react';
 import { getPredikat, hitungRapor, PREDIKAT_COLORS } from '../utils/tahfidzCalc';
 
 export default function InputNilaiModal({ santri, onClose, onSave }) {
@@ -7,6 +7,78 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
   const [catatan, setCatatan] = useState(santri.catatan || '');
   const [jumlahHafalan, setJumlahHafalan] = useState(santri.jumlahHafalan || '');
   const [activeTab, setActiveTab] = useState('all');
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
+
+  // Deteksi apakah ada nilai atau catatan yang telah diubah dari data awal (Dirty State)
+  const isDirty = useMemo(() => {
+    // 1. Cek perubahan catatan
+    if ((catatan || '') !== (santri.catatan || '')) return true;
+
+    // 2. Cek perubahan jumlah hafalan
+    if ((jumlahHafalan || '').trim() !== (santri.jumlahHafalan || '').trim()) return true;
+
+    // 3. Cek perubahan nilai juz
+    const initialJuz = santri.nilaiJuz || {};
+    const initialKeys = Object.keys(initialJuz);
+    const currentKeys = Object.keys(nilaiJuz);
+
+    if (initialKeys.length !== currentKeys.length) return true;
+
+    for (const k of currentKeys) {
+      if (!(k in initialJuz)) return true;
+      if (Number(nilaiJuz[k]) !== Number(initialJuz[k])) return true;
+    }
+
+    return false;
+  }, [nilaiJuz, catatan, jumlahHafalan, santri]);
+
+  // Handler permintaan tutup modal (dengan konfirmasi jika ada perubahan belum disimpan)
+  const handleRequestClose = useCallback(() => {
+    if (isDirty) {
+      setShowConfirmClose(true);
+    } else {
+      onClose();
+    }
+  }, [isDirty, onClose]);
+
+  // Tangani klik pada area luar modal (backdrop / overlay)
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleRequestClose();
+    }
+  };
+
+  // Tangani tombol ESC keyboard (Capture phase agar dicegat sebelum handler modal global di App.jsx)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (showConfirmClose) {
+          setShowConfirmClose(false);
+        } else {
+          handleRequestClose();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [handleRequestClose, showConfirmClose]);
+
+  // Peringatan native browser jika tab ditutup / direfresh saat data belum disimpan
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty]);
 
   const handleScoreChange = (juz, val) => {
     if (val === '') {
@@ -81,7 +153,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-content input-nilai-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div className="modal-header-info">
@@ -92,7 +164,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
               NIS: {santri.nis || santri.id} • Kelas: <strong>{santri.kelas}</strong>
             </div>
           </div>
-          <button className="btn btn-secondary btn-sm btn-modal-close" onClick={onClose} title="Tutup">
+          <button className="btn btn-secondary btn-sm btn-modal-close" onClick={handleRequestClose} title="Tutup">
             <X size={16} />
           </button>
         </div>
@@ -215,7 +287,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
         </div>
 
         <div className="modal-footer input-nilai-modal-footer">
-          <button type="button" className="btn btn-secondary" onClick={onClose}>
+          <button type="button" className="btn btn-secondary" onClick={handleRequestClose}>
             Batal
           </button>
           <button type="button" className="btn btn-primary" onClick={handleSubmit}>
@@ -223,6 +295,45 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
           </button>
         </div>
       </div>
+
+      {/* Dialog Konfirmasi Keluar saat ada Perubahan Belum Disimpan */}
+      {showConfirmClose && (
+        <div 
+          className="confirm-dialog-overlay"
+          onClick={() => setShowConfirmClose(false)}
+        >
+          <div className="confirm-dialog-box" onClick={(e) => e.stopPropagation()}>
+            <div className="confirm-dialog-header">
+              <div className="confirm-dialog-icon-wrapper">
+                <AlertTriangle size={24} />
+              </div>
+              <div className="confirm-dialog-text-group">
+                <h3 className="confirm-dialog-title">Perubahan Belum Disimpan</h3>
+                <p className="confirm-dialog-text">
+                  Ada nilai atau catatan santri <strong>{santri.nama}</strong> yang belum disimpan. Yakin ingin keluar dan membuang perubahan?
+                </p>
+              </div>
+            </div>
+            <div className="confirm-dialog-actions">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setShowConfirmClose(false)}
+                autoFocus
+              >
+                Lanjut Mengedit
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger-soft"
+                onClick={onClose}
+              >
+                Buang & Keluar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
