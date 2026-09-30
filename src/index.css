@@ -1071,6 +1071,7 @@ body {
   align-items: center;
   gap: 0.85rem;
   flex-wrap: wrap;
+  margin-left: auto;
 }
 
 .print-modal-actions {
@@ -1078,6 +1079,32 @@ body {
   align-items: center;
   gap: 0.55rem;
   flex-wrap: wrap;
+}
+
+/* Header Khusus Cetak Per Kelas (2 Baris: Judul + X di Atas, Aksi di Bawah) */
+.print-kelas-header {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  padding: 0.95rem 1.25rem !important;
+}
+
+.print-header-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.print-kelas-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--slate-200);
 }
 
 /* Tombol X Merah Background Putih di Ujung Kanan Header */
