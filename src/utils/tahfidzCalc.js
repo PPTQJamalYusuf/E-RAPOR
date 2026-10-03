@@ -13,6 +13,37 @@ export const KELAS_BILINGUAL = {
   'السادس': 'Kelas 6 (السادس)'
 };
 
+/**
+ * Format tampilan nama kelas: 'Kelas 1' s/d 'Kelas 6', dan 'Alumni' untuk alumni
+ */
+export const formatNamaKelas = (k) => {
+  if (!k || k === 'Semua') return 'Semua Kelas';
+  const clean = String(k).trim();
+  if (clean.toLowerCase() === 'alumni') return 'Alumni';
+  const map = {
+    'الأول': 'Kelas 1',
+    'الاول': 'Kelas 1',
+    '1': 'Kelas 1',
+    'Kelas 1': 'Kelas 1',
+    'الثاني': 'Kelas 2',
+    '2': 'Kelas 2',
+    'Kelas 2': 'Kelas 2',
+    'الثالث': 'Kelas 3',
+    '3': 'Kelas 3',
+    'Kelas 3': 'Kelas 3',
+    'الرابع': 'Kelas 4',
+    '4': 'Kelas 4',
+    'Kelas 4': 'Kelas 4',
+    'الخامس': 'Kelas 5',
+    '5': 'Kelas 5',
+    'Kelas 5': 'Kelas 5',
+    'السادس': 'Kelas 6',
+    '6': 'Kelas 6',
+    'Kelas 6': 'Kelas 6'
+  };
+  return map[clean] || (clean.startsWith('Kelas') ? clean : `Kelas ${clean}`);
+};
+
 export const SEMESTER_BILINGUAL = {
   'الأول': 'Ganjil (الأول)',
   'الاول': 'Ganjil (الأول)',

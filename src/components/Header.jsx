@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, Download, Users, LogOut, PlusCircle, Cloud } from 'lucide-react';
-import { KELAS_BILINGUAL } from '../utils/tahfidzCalc';
+import { KELAS_BILINGUAL, formatNamaKelas } from '../utils/tahfidzCalc';
 
 export default function Header({
   currentUser,
@@ -162,7 +162,7 @@ export default function Header({
               {isAdmin ? '👑 ' : '👩‍🏫 '}{currentUser?.nama || 'Pengguna'}
             </div>
             <div style={{ fontSize: '0.78rem', fontWeight: '700', color: '#fef08a' }}>
-              {isAdmin ? 'Administrator' : (currentUser?.kelas_binaan === 'Semua' ? 'Semua Kelas' : KELAS_BILINGUAL[currentUser?.kelas_binaan] || currentUser?.kelas_binaan)}
+              {isAdmin ? 'Administrator' : (currentUser?.kelas_binaan === 'Semua' ? 'Semua Kelas' : formatNamaKelas(currentUser?.kelas_binaan))}
             </div>
           </div>
           <button

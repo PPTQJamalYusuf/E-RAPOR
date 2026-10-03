@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Edit3, Printer, Users, Award, BookCheck, Eye } from 'lucide-react';
-import { hitungRapor, hitungRanking, PREDIKAT_COLORS } from '../utils/tahfidzCalc';
+import { hitungRapor, hitungRanking, PREDIKAT_COLORS, formatNamaKelas } from '../utils/tahfidzCalc';
 
 export default function SantriList({ santriList, onSelectInput, onSelectPrint, onSelectPrintClass, currentUser }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,8 +11,13 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
     return 'Semua';
   });
 
-  // Daftar kelas unik dari data santri
-  const kelasList = ['Semua', 'الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس'];
+  // Daftar kelas menu: Semua, Kelas 1 s/d 6, serta Alumni jika ada
+  const kelasList = useMemo(() => {
+    const list = ['Semua', 'الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس'];
+    const hasAlumni = santriList.some(s => s.kelas === 'Alumni' || s.kelas === 'alumni' || s.status === 'alumni');
+    if (hasAlumni) list.push('Alumni');
+    return list;
+  }, [santriList]);
 
   // Hitung ranking per kelas
   const rankedSantriList = useMemo(() => {
@@ -36,7 +41,14 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
   // Filter santri berdasarkan kelas & search query
   const filteredSantri = useMemo(() => {
     return rankedSantriList.filter(s => {
-      const matchesKelas = selectedKelas === 'Semua' || s.kelas === selectedKelas;
+      let matchesKelas = false;
+      if (selectedKelas === 'Semua') {
+        matchesKelas = true;
+      } else if (selectedKelas === 'Alumni' || selectedKelas === 'alumni') {
+        matchesKelas = s.kelas === 'Alumni' || s.kelas === 'alumni' || s.status === 'alumni';
+      } else {
+        matchesKelas = s.kelas === selectedKelas;
+      }
       const searchStr = (s.nis || s.id || '').toString().toLowerCase();
       const matchesSearch = s.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             searchStr.includes(searchTerm.toLowerCase());
@@ -118,7 +130,7 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                 className={`filter-btn ${selectedKelas === k ? 'active' : ''}`}
                 onClick={() => setSelectedKelas(k)}
               >
-                {k === 'Semua' ? 'Semua Kelas' : `Kelas ${k}`}
+                {formatNamaKelas(k)}
               </button>
             ))}
           </div>
@@ -130,7 +142,7 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
               title="Cetak seluruh lembar rapor A4 santriwati atau rekap nilai per kelas"
               style={{ padding: '0.45rem 0.95rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
             >
-              <Printer size={15} /> Cetak Per Kelas {selectedKelas !== 'Semua' ? `(${selectedKelas})` : ''}
+              <Printer size={15} /> Cetak Per Kelas {selectedKelas !== 'Semua' ? `(${formatNamaKelas(selectedKelas)})` : ''}
             </button>
           )}
         </div>
@@ -177,8 +189,8 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                       )}
                     </td>
                     <td>
-                      <span className="arabic" style={{ fontWeight: 700, color: 'var(--primary)' }}>
-                        {santri.kelas}
+                      <span style={{ fontWeight: 700, color: 'var(--primary)' }}>
+                        {formatNamaKelas(santri.kelas)}
                       </span>
                     </td>
                     <td>
@@ -265,7 +277,7 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                     <div>
                       <div className="mobile-card-name">{santri.nama}</div>
                       <div className="mobile-card-meta">
-                        NIS: <strong>{santri.nis || santri.id}</strong> • Kelas <span className="arabic">{santri.kelas}</span>
+                        NIS: <strong>{santri.nis || santri.id}</strong> • <strong>{formatNamaKelas(santri.kelas)}</strong>
                       </div>
                     </div>
                   </div>

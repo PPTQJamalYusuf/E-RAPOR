@@ -10,18 +10,35 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
  */
 export async function authenticateUser(username, password) {
   try {
-    const { data, error } = await supabase
-      .from('app_users')
-      .select('id, username, nama, role, kelas_binaan, is_active')
-      .eq('username', username.trim().toLowerCase())
-      .eq('password_hash', password)
-      .eq('is_active', true)
-      .single();
+    const cleanUsername = username.trim().toLowerCase();
+    
+    // 1. Coba lewat RPC login_user (Metode Aman dengan RLS)
+    const { data: rpcUser, error: rpcError } = await supabase.rpc('login_user', {
+      p_username: cleanUsername,
+      p_password: password
+    });
 
-    if (error || !data) {
-      return { success: false, error: 'Username atau password keliru!' };
+    if (!rpcError && rpcUser) {
+      return { success: true, user: rpcUser };
     }
-    return { success: true, user: data };
+
+    // 2. Fallback query langsung jika RPC belum dipasang di Supabase
+    if (rpcError && (rpcError.code === '42883' || rpcError.message?.includes('function login_user'))) {
+      const { data, error } = await supabase
+        .from('app_users')
+        .select('id, username, nama, role, kelas_binaan, is_active')
+        .eq('username', cleanUsername)
+        .eq('password_hash', password)
+        .eq('is_active', true)
+        .single();
+
+      if (error || !data) {
+        return { success: false, error: 'Username atau password keliru!' };
+      }
+      return { success: true, user: data };
+    }
+
+    return { success: false, error: 'Username atau password keliru!' };
   } catch (err) {
     return { success: false, error: err.message || 'Terjadi kesalahan sistem' };
   }
@@ -142,6 +159,13 @@ export async function saveSantriRapor(periodId, santriId, nilaiJuz, catatan, jum
  * Manajemen Pengguna (Admin)
  */
 export async function getAppUsers() {
+  // Coba lewat RPC get_all_users
+  const { data: rpcData, error: rpcError } = await supabase.rpc('get_all_users');
+  if (!rpcError && rpcData) {
+    return rpcData;
+  }
+
+  // Fallback query tabel langsung
   const { data, error } = await supabase
     .from('app_users')
     .select('id, username, nama, role, kelas_binaan, is_active, created_at')
@@ -151,12 +175,29 @@ export async function getAppUsers() {
 }
 
 export async function createAppUser({ username, password, nama, role, kelas_binaan }) {
+  const cleanUsername = username.trim().toLowerCase();
+  const cleanNama = nama.trim();
+
+  // Coba lewat RPC create_app_user
+  const { data: rpcUser, error: rpcError } = await supabase.rpc('create_app_user', {
+    p_username: cleanUsername,
+    p_password: password,
+    p_nama: cleanNama,
+    p_role: role || 'guru',
+    p_kelas_binaan: kelas_binaan || 'Semua'
+  });
+
+  if (!rpcError && rpcUser) {
+    return rpcUser;
+  }
+
+  // Fallback insert langsung
   const { data, error } = await supabase
     .from('app_users')
     .insert([{
-      username: username.trim().toLowerCase(),
+      username: cleanUsername,
       password_hash: password,
-      nama: nama.trim(),
+      nama: cleanNama,
       role: role || 'guru',
       kelas_binaan: kelas_binaan || 'Semua',
       is_active: true
@@ -168,6 +209,17 @@ export async function createAppUser({ username, password, nama, role, kelas_bina
 }
 
 export async function updateAppUser(id, updates) {
+  // Coba lewat RPC update_app_user
+  const { data: rpcUser, error: rpcError } = await supabase.rpc('update_app_user', {
+    p_id: id,
+    p_updates: updates
+  });
+
+  if (!rpcError && rpcUser) {
+    return rpcUser;
+  }
+
+  // Fallback update langsung
   const payload = { ...updates };
   if (payload.password) {
     payload.password_hash = payload.password;
@@ -184,6 +236,16 @@ export async function updateAppUser(id, updates) {
 }
 
 export async function deleteAppUser(id) {
+  // Coba lewat RPC delete_app_user
+  const { data: rpcSuccess, error: rpcError } = await supabase.rpc('delete_app_user', {
+    p_id: id
+  });
+
+  if (!rpcError && rpcSuccess !== undefined) {
+    return true;
+  }
+
+  // Fallback delete langsung
   const { error } = await supabase
     .from('app_users')
     .delete()

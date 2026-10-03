@@ -5,6 +5,7 @@ import {
   hitungRapor, 
   hitungRanking, 
   KELAS_BILINGUAL, 
+  formatNamaKelas,
   SEMESTER_BILINGUAL,
   PREDIKAT_LABEL_ID,
   PREDIKAT_COLORS
@@ -272,7 +273,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
               >
                 {kelasList.map(k => (
                   <option key={k} value={k}>
-                    {KELAS_BILINGUAL[k] || `Kelas ${k}`} ({santriList.filter(s => s.kelas === k).length})
+                    {formatNamaKelas(k)} ({santriList.filter(s => s.kelas === k).length})
                   </option>
                 ))}
               </select>
