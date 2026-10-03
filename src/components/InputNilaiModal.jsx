@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { X, Save, MessageSquare, AlertTriangle } from 'lucide-react';
+import { X, Save, MessageSquare, AlertTriangle, Volume2 } from 'lucide-react';
 import { 
   getPredikat, 
   hitungRapor, 
@@ -195,17 +195,9 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
           <div className="modal-header-info">
             <h2 className="modal-title-main">
               Input Nilai & Catatan: {santri.nama}
-              {santri.is_tahsin && (
-                <span className="badge-tahsin-pill" style={{ marginLeft: '8px', verticalAlign: 'middle', fontSize: '0.78rem' }}>
-                  Tahsin
-                </span>
-              )}
             </h2>
             <div className="modal-subtitle-nis">
               NIS: {santri.nis || santri.id} • Kelas: <strong>{santri.kelas}</strong>
-              {santri.is_tahsin && (
-                <span className="keterangan-tahsin-text"> • Keterangan: <strong style={{ color: '#0369a1' }}>Tahsin</strong></span>
-              )}
             </div>
           </div>
           <button className="btn btn-secondary btn-sm btn-modal-close" onClick={handleRequestClose} title="Tutup">
@@ -229,6 +221,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
                 className={`program-mode-btn ${activeProgramMode === 'tahsin' ? 'active' : ''}`}
                 onClick={() => setActiveProgramMode('tahsin')}
               >
+                <Volume2 size={15} style={{ marginRight: '4px' }} />
                 Tahsin
               </button>
             </div>

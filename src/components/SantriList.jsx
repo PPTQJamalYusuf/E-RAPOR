@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Edit3, Printer, Users, Award, BookCheck, Eye } from 'lucide-react';
+import { Search, Edit3, Printer, Users, Award, BookCheck, Eye, Volume2 } from 'lucide-react';
 import { hitungRapor, hitungRanking, PREDIKAT_COLORS, formatNamaKelas } from '../utils/tahfidzCalc';
 
 export default function SantriList({ santriList, onSelectInput, onSelectPrint, onSelectPrintClass, currentUser, onToggleTahsin }) {
@@ -190,11 +190,13 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                             onClick={() => onToggleTahsin && onToggleTahsin(santri.id, !santri.is_tahsin)}
                             title={santri.is_tahsin ? 'Program Tahsin Aktif (Klik untuk nonaktifkan)' : 'Jadikan Santri Program Tahsin (Klik untuk aktifkan)'}
                           >
+                            {santri.is_tahsin && <Volume2 size={12} />}
                             {santri.is_tahsin ? 'Tahsin' : '+ Tahsin'}
                           </button>
                         ) : (
                           santri.is_tahsin && (
                             <span className="badge-tahsin-pill" title="Santri Mengikuti Program Tahsin">
+                              <Volume2 size={12} />
                               Tahsin
                             </span>
                           )
@@ -243,9 +245,9 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                         <button
                           className="btn btn-secondary btn-sm"
                           onClick={() => onSelectInput(santri)}
-                          title={santri.is_tahsin ? "Input nilai Tahfidz & Tahsin" : "Input nilai Juz 1 s/d 30"}
+                          title="Input nilai Juz 1 s/d 30"
                         >
-                          <Edit3 size={13} /> Nilai {santri.is_tahsin && <span className="btn-tag-tahsin">Tahsin</span>}
+                          <Edit3 size={13} /> Nilai
                         </button>
                         {currentUser?.role === 'admin' ? (
                           <button
@@ -302,11 +304,13 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                             onClick={() => onToggleTahsin && onToggleTahsin(santri.id, !santri.is_tahsin)}
                             title={santri.is_tahsin ? 'Program Tahsin Aktif (Klik untuk nonaktifkan)' : 'Jadikan Santri Program Tahsin (Klik untuk aktifkan)'}
                           >
+                            {santri.is_tahsin && <Volume2 size={12} />}
                             {santri.is_tahsin ? 'Tahsin' : '+ Tahsin'}
                           </button>
                         ) : (
                           santri.is_tahsin && (
                             <span className="badge-tahsin-pill">
+                              <Volume2 size={12} />
                               Tahsin
                             </span>
                           )
@@ -355,7 +359,7 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                     className="btn btn-secondary btn-mobile-action"
                     onClick={() => onSelectInput(santri)}
                   >
-                    <Edit3 size={15} /> Nilai {santri.is_tahsin && <span className="btn-tag-tahsin">Tahsin</span>}
+                    <Edit3 size={15} /> Nilai
                   </button>
                   {currentUser?.role === 'admin' ? (
                     <button
