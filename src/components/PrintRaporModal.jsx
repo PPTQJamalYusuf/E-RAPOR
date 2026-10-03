@@ -83,15 +83,20 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
     }
 
     return (
-      <table className="tabel-split-vertical">
+      <table className="table-split-vertical">
         <thead>
           <tr>
-            <th className="th-juz" style={{ width: '22%' }}>Juz</th>
-            <th className="th-nilai" style={{ width: '38%' }}>
-              Nilai <span className="ar-th-tag">الدرجة</span>
+            <th style={{ width: '38%' }}>
+              <span>Juz</span>
+              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '4px' }}>الجزء</span>
             </th>
-            <th className="th-pred" style={{ width: '40%' }}>
-              Predikat <span className="ar-th-tag">التقدير</span>
+            <th style={{ width: '28%' }}>
+              <span>Nilai</span>
+              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '4px' }}>الدرجة</span>
+            </th>
+            <th style={{ width: '34%' }}>
+              <span>Predikat</span>
+              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '4px' }}>التقدير</span>
             </th>
           </tr>
         </thead>
