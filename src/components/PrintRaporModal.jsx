@@ -423,15 +423,21 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
       <table className="tahsin-formal-table">
         <thead>
           <tr>
-            <th style={{ width: '45px' }}>No</th>
+            <th style={{ width: '45px', textAlign: 'center' }}>
+              <span>No</span>
+              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '4px' }}>الرقم</span>
+            </th>
             <th style={{ textAlign: 'left', paddingLeft: '14px' }}>
-              Aspek Penilaian <span className="ar-label-inline arabic">(معايير التقييم)</span>
+              <span>Aspek Penilaian</span>
+              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '6px' }}>معايير التقييم</span>
             </th>
-            <th style={{ width: '135px' }}>
-              Nilai Angka <span className="ar-label-inline arabic">(الدرجة)</span>
+            <th style={{ width: '135px', textAlign: 'center' }}>
+              <span>Nilai</span>
+              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '4px' }}>الدرجة</span>
             </th>
-            <th style={{ width: '185px' }}>
-              Predikat <span className="ar-label-inline arabic">(التقدير)</span>
+            <th style={{ width: '185px', textAlign: 'center' }}>
+              <span>Predikat</span>
+              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '4px' }}>التقدير</span>
             </th>
           </tr>
         </thead>
@@ -446,7 +452,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                 <td className="cell-num">{idx + 1}</td>
                 <td className="cell-aspek">
                   <span className="aspek-id bold">{k.labelId}</span>
-                  <span className="aspek-ar arabic" style={{ fontSize: '11pt', marginLeft: '8px', color: '#047857' }}>
+                  <span className="aspek-ar arabic" style={{ fontSize: '10.5pt', marginLeft: '8px', color: '#166534', fontWeight: 600 }}>
                     {k.labelAr}
                   </span>
                 </td>
@@ -456,9 +462,9 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                 <td className={`cell-tahsin-pred ${hasVal ? '' : 'is-empty'}`}>
                   {hasVal ? (
                     <span>
-                      <span className="arabic" style={{ fontSize: '11pt', fontWeight: 'bold' }}>{pred}</span>
+                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold' }}>{pred}</span>
                       {' '}
-                      <span style={{ fontSize: '8pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#166534' }}>
+                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#166534' }}>
                         ({PREDIKAT_LABEL_ID[pred] || pred})
                       </span>
                     </span>

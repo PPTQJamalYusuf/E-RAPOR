@@ -1973,7 +1973,8 @@ body {
   }
 
   .table-split-vertical th,
-  .tabel-split-vertical th {
+  .tabel-split-vertical th,
+  .tahsin-formal-table th {
     background-color: #1b4332 !important;
     color: #ffffff !important;
     border: 1px solid #000000 !important;
@@ -1982,13 +1983,7 @@ body {
   }
 
   .table-split-vertical td,
-  .tabel-split-vertical td {
-    border: 1px solid #000000 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .tahsin-formal-table th,
+  .tabel-split-vertical td,
   .tahsin-formal-table td {
     border: 1px solid #000000 !important;
     -webkit-print-color-adjust: exact !important;
@@ -2012,6 +2007,7 @@ body {
   .student-info-formal-lg,
   .tabel-split-vertical-wrapper,
   .table-split-vertical,
+  .tahsin-formal-table,
   .summary-cards-4col,
   .legenda-kriteria-horizontal,
   .catatan-box-formal,
@@ -3086,19 +3082,22 @@ body {
   }
 
   .table-split-vertical,
-  .tabel-split-vertical {
+  .tabel-split-vertical,
+  .tahsin-formal-table {
     font-size: 7.2pt !important;
   }
 
   .table-split-vertical th,
-  .tabel-split-vertical th {
+  .tabel-split-vertical th,
+  .tahsin-formal-table th {
     font-size: 7pt !important;
     padding: 2px 2px !important;
     border: 1px solid #000000 !important;
   }
 
   .table-split-vertical td,
-  .tabel-split-vertical td {
+  .tabel-split-vertical td,
+  .tahsin-formal-table td {
     padding: 1.5px 2px !important;
     font-size: 7.2pt !important;
     border: 1px solid #000000 !important;
@@ -3490,52 +3489,82 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Tabel Rapor Tahsin Formal A4 */
+/* Tabel Rapor Tahsin Formal A4 (Disamakan dengan Tabel Tahfidz) */
 .tahsin-formal-table {
   width: 100%;
   border-collapse: collapse;
+  border: 1px solid #111827 !important;
+  background: #ffffff;
+  font-size: 9pt;
   margin-top: 4px;
   margin-bottom: 6px;
 }
 
 .tahsin-formal-table th {
-  background: #f0fdf4 !important;
-  color: #166534 !important;
-  font-size: 9.5pt;
-  font-weight: 800;
+  background-color: #1b4332 !important;
+  color: #ffffff !important;
+  font-weight: bold;
+  font-size: 8.8pt;
+  padding: 4px 6px;
+  border: 1px solid #111827 !important;
   text-align: center;
-  padding: 6px 8px;
-  border: 1.5px solid #86efac;
+}
+
+.tahsin-formal-table th .arabic {
+  font-family: 'Amiri', serif;
+  font-size: 10pt;
+  margin-left: 4px;
+  color: #ffffff !important;
 }
 
 .tahsin-formal-table td {
-  padding: 6px 10px;
-  border: 1px solid #cbd5e1;
+  padding: 3px 6px;
+  border: 1px solid #111827 !important;
+  vertical-align: middle;
   text-align: center;
-  font-size: 10pt;
+  font-size: 9pt;
+}
+
+.tahsin-formal-table tr:hover {
+  background-color: #f0fdf4;
 }
 
 .tahsin-formal-table .cell-num {
   font-weight: 700;
-  color: #64748b;
+  color: #111827;
+  text-align: center;
 }
 
 .tahsin-formal-table .cell-aspek {
   text-align: left !important;
-  padding-left: 14px !important;
+  padding-left: 12px !important;
+  color: #111827;
 }
 
 .tahsin-formal-table .cell-tahsin-val {
   font-size: 11pt !important;
   font-weight: 800 !important;
+  color: #1b4332 !important;
+  letter-spacing: 0.3px;
 }
 
 .tahsin-formal-table .cell-tahsin-val.has-val {
   color: #15803d !important;
 }
 
+.tahsin-formal-table .cell-tahsin-val.is-empty {
+  color: #9ca3af !important;
+  font-weight: normal !important;
+}
+
 .tahsin-formal-table .cell-tahsin-pred {
   font-weight: 700;
+  font-size: 9pt;
+}
+
+.tahsin-formal-table .cell-tahsin-pred.is-empty {
+  color: #9ca3af !important;
+  font-weight: normal !important;
 }
 
 /* Page break saat cetak fisik 2 halaman */
