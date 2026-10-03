@@ -424,8 +424,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
         <thead>
           <tr>
             <th style={{ width: '45px', textAlign: 'center' }}>
-              <span>No</span>
-              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '4px' }}>الرقم</span>
+              No
             </th>
             <th style={{ textAlign: 'left', paddingLeft: '14px' }}>
               <span>Aspek Penilaian</span>
