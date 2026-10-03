@@ -185,3 +185,51 @@ export function hitungRanking(santriList) {
     };
   });
 }
+
+/**
+ * 7 Kriteria Penilaian Rapor Tahsin Al-Qur'an (Sesuai Master Excel Pondok)
+ */
+export const KRITERIA_TAHSIN = [
+  { id: 'makharij', labelAr: 'مخارج الحروف', labelId: 'Makharijul Huruf' },
+  { id: 'mad', labelAr: 'مدّ', labelId: 'Mad' },
+  { id: 'ghunnah', labelAr: 'غنة', labelId: 'Ghunnah' },
+  { id: 'idzhar', labelAr: 'إظهار', labelId: 'Idzhar' },
+  { id: 'idgham', labelAr: 'إدغام', labelId: 'Idgham' },
+  { id: 'ikhfa', labelAr: 'إخفاء', labelId: "Ikhfa'" },
+  { id: 'harakat', labelAr: 'حركات', labelId: 'Harakat' }
+];
+
+/**
+ * Hitung kalkulasi nilai Tahsin (Total, Rata-rata, Predikat Akhir, & Predikat per Aspek)
+ */
+export function hitungRaporTahsin(nilaiTahsin = {}) {
+  let total = 0;
+  let count = 0;
+  const details = {};
+
+  KRITERIA_TAHSIN.forEach(k => {
+    const val = nilaiTahsin?.[k.id];
+    if (val !== undefined && val !== null && val !== '') {
+      const num = Number(val);
+      if (!isNaN(num)) {
+        total += num;
+        count += 1;
+        details[k.id] = {
+          nilai: num,
+          predikat: getPredikat(num)
+        };
+      }
+    }
+  });
+
+  const rataRata = count > 0 ? Number((total / count).toFixed(2)) : 0;
+  const predikatAkhir = count > 0 ? getPredikat(Math.round(rataRata)) : '-';
+
+  return {
+    total,
+    count,
+    rataRata,
+    predikatAkhir,
+    details
+  };
+}

@@ -3228,3 +3228,278 @@ body {
   }
 }
 
+/* ==============================================================================
+   PROGRAM TAHSIN & DOKUMEN CETAK TAHSIN
+   ============================================================================== */
+
+/* Badge Toggle Tahsin di Tabel */
+.badge-tahsin-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.2;
+}
+
+.badge-tahsin-toggle.idle {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px dashed #cbd5e1;
+}
+
+.badge-tahsin-toggle.idle:hover {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #7dd3fc;
+}
+
+.badge-tahsin-toggle.active {
+  background: #0284c7;
+  color: #ffffff;
+  border: 1px solid #0369a1;
+  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.35);
+}
+
+.badge-tahsin-toggle.active:hover {
+  background: #0369a1;
+}
+
+.badge-tahsin-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 6px;
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+/* Switcher Mode Tab di Input Nilai Modal */
+.program-mode-switcher {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1rem;
+  background: #f8fafc;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1.5px solid #e2e8f0;
+}
+
+.program-mode-btn {
+  flex: 1;
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  color: #64748b;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.program-mode-btn:hover {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.program-mode-btn.active {
+  background: #ffffff;
+  color: #047857;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid #a7f3d0;
+}
+
+/* Form Input 7 Kriteria Nilai Tahsin */
+.tahsin-criteria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-top: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.tahsin-card-item {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.tahsin-card-item:focus-within {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+}
+
+.tahsin-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tahsin-idx {
+  font-weight: 800;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.tahsin-names {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex: 1;
+}
+
+.tahsin-label-id {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #1e293b;
+}
+
+.tahsin-label-ar {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #047857;
+}
+
+.tahsin-input-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tahsin-input-box {
+  width: 100px;
+  height: 40px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-align: center;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  color: #0f172a;
+}
+
+.tahsin-input-box:focus {
+  border-color: #0284c7;
+}
+
+.tahsin-pred-badge {
+  flex: 1;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+}
+
+/* Selector Dokumen Cetak Tahsin di Header Print Modal */
+.print-doc-type-selector {
+  display: inline-flex;
+  align-items: center;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.btn-doc-pill {
+  border: none;
+  background: transparent;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-doc-pill:hover {
+  color: #0f172a;
+}
+
+.btn-doc-pill.active {
+  background: #ffffff;
+  color: #0284c7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabel Rapor Tahsin Formal A4 */
+.tahsin-formal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.tahsin-formal-table th {
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+  font-size: 9.5pt;
+  font-weight: 800;
+  text-align: center;
+  padding: 6px 8px;
+  border: 1.5px solid #86efac;
+}
+
+.tahsin-formal-table td {
+  padding: 6px 10px;
+  border: 1px solid #cbd5e1;
+  text-align: center;
+  font-size: 10pt;
+}
+
+.tahsin-formal-table .cell-num {
+  font-weight: 700;
+  color: #64748b;
+}
+
+.tahsin-formal-table .cell-aspek {
+  text-align: left !important;
+  padding-left: 14px !important;
+}
+
+.tahsin-formal-table .cell-tahsin-val {
+  font-size: 11pt !important;
+  font-weight: 800 !important;
+}
+
+.tahsin-formal-table .cell-tahsin-val.has-val {
+  color: #15803d !important;
+}
+
+.tahsin-formal-table .cell-tahsin-pred {
+  font-weight: 700;
+}
+
+/* Page break saat cetak fisik 2 halaman */
+@media print {
+  .page-break-print {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+}
+

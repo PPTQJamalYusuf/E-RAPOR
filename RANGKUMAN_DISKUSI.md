@@ -56,12 +56,7 @@ Dokumen ini merangkum seluruh poin pembahasan, arsitektur, dan rencana pengemban
 
 ---
 
-## 6. Kasus Khusus: Santri Program Tahsin
-* **Tantangan:** Ada beberapa santri yang mengikuti program perbaikan bacaan (Tahsin) dengan kriteria nilai serupa, namun jangan sampai membingungkan ustadz yang menilai santri Tahfidz reguler.
-* **Solusi Terbaik:**
-  - Beri tanda/label di profil santri: `[Tahsin]`.
-  - Sistem otomatis menyesuaikan: jika santri Tahsin dibuka, form input dan lembar cetak otomatis berformat **Rapor Tahsin**.
-  - 95% santri Tahfidz reguler tidak akan terpengaruh sama sekali.
+
 
 ---
 

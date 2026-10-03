@@ -128,7 +128,9 @@ export async function getSantriWithGrades(periodId) {
       nama: s.nama,
       kelas: s.kelas,
       halqah: s.halqah,
+      is_tahsin: Boolean(s.is_tahsin),
       nilaiJuz: rapor.nilai_juz || {},
+      nilaiTahsin: rapor.nilai_tahsin || {},
       catatan: rapor.catatan || '',
       jumlahHafalan: rapor.jumlah_hafalan || ''
     };
@@ -136,23 +138,51 @@ export async function getSantriWithGrades(periodId) {
 }
 
 /**
- * Menyimpan / memperbarui nilai rapor santri ke Supabase
+ * Menyimpan / memperbarui nilai rapor santri ke Supabase (termasuk nilai tahsin jika ada)
  */
-export async function saveSantriRapor(periodId, santriId, nilaiJuz, catatan, jumlahHafalan) {
+export async function saveSantriRapor(periodId, santriId, nilaiJuz, catatan, jumlahHafalan, nilaiTahsin) {
+  const payload = {
+    period_id: periodId,
+    santri_id: santriId,
+    nilai_juz: nilaiJuz || {},
+    catatan: catatan || '',
+    jumlah_hafalan: jumlahHafalan || '',
+    updated_at: new Date().toISOString()
+  };
+
+  if (nilaiTahsin !== undefined) {
+    payload.nilai_tahsin = nilaiTahsin || {};
+  }
+
   const { data, error } = await supabase
     .from('rapor_tahfidz')
-    .upsert({
-      period_id: periodId,
-      santri_id: santriId,
-      nilai_juz: nilaiJuz || {},
-      catatan: catatan || '',
-      jumlah_hafalan: jumlahHafalan || '',
-      updated_at: new Date().toISOString()
-    }, { onConflict: 'period_id,santri_id' })
+    .upsert(payload, { onConflict: 'period_id,santri_id' })
     .select();
 
   if (error) throw error;
   return data;
+}
+
+/**
+ * Mengubah status program Tahsin santri (Khusus Admin)
+ */
+export async function toggleSantriTahsin(santriId, isTahsin) {
+  // Coba lewat RPC toggle_santri_tahsin
+  const { error: rpcError } = await supabase.rpc('toggle_santri_tahsin', {
+    p_santri_id: santriId,
+    p_is_tahsin: isTahsin
+  });
+
+  if (!rpcError) return true;
+
+  // Fallback update langsung tabel santri
+  const { error } = await supabase
+    .from('santri')
+    .update({ is_tahsin: isTahsin })
+    .eq('id', santriId);
+
+  if (error) throw error;
+  return true;
 }
 
 /**

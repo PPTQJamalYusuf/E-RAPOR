@@ -11,7 +11,8 @@ import {
   getAcademicPeriods, 
   getSantriWithGrades, 
   saveSantriRapor,
-  setActiveAcademicPeriod
+  setActiveAcademicPeriod,
+  toggleSantriTahsin
 } from './lib/supabase';
 import initialSantriData from './data/initialSantri.json';
 
@@ -222,8 +223,8 @@ export default function App() {
     loadSantriData();
   }, [currentUser, currentPeriod]);
 
-  // Handler simpan nilai, catatan, dan jumlah hafalan ke Supabase
-  const handleSaveNilai = async (santriId, newNilaiJuz, newCatatan, newJumlahHafalan) => {
+  // Handler simpan nilai, catatan, jumlah hafalan, dan nilai tahsin ke Supabase
+  const handleSaveNilai = async (santriId, newNilaiJuz, newCatatan, newJumlahHafalan, newNilaiTahsin) => {
     // 1. Optimistic Update di UI lokal
     setSantriList(prev =>
       prev.map(s => {
@@ -231,6 +232,7 @@ export default function App() {
           return {
             ...s,
             nilaiJuz: newNilaiJuz,
+            nilaiTahsin: newNilaiTahsin !== undefined ? newNilaiTahsin : s.nilaiTahsin,
             catatan: newCatatan !== undefined ? newCatatan : s.catatan,
             jumlahHafalan: newJumlahHafalan !== undefined ? newJumlahHafalan : s.jumlahHafalan
           };
@@ -247,12 +249,28 @@ export default function App() {
           santriId,
           newNilaiJuz,
           newCatatan,
-          newJumlahHafalan
+          newJumlahHafalan,
+          newNilaiTahsin
         );
       } catch (err) {
         console.error('Gagal menyimpan nilai ke Supabase:', err);
         alert('Peringatan: Nilai belum tersimpan ke Cloud Supabase. Periksa koneksi internet Anda.');
       }
+    }
+  };
+
+  // Handler toggle program Tahsin oleh Admin
+  const handleToggleTahsin = async (santriId, newStatus) => {
+    // Optimistic Update
+    setSantriList(prev => prev.map(s => s.id === santriId ? { ...s, is_tahsin: newStatus } : s));
+
+    try {
+      await toggleSantriTahsin(santriId, newStatus);
+    } catch (err) {
+      console.error('Gagal mengubah status Tahsin santri:', err);
+      // Revert if error
+      setSantriList(prev => prev.map(s => s.id === santriId ? { ...s, is_tahsin: !newStatus } : s));
+      alert('Gagal memperbarui status Tahsin ke server. Periksa koneksi internet.');
     }
   };
 
@@ -324,6 +342,7 @@ export default function App() {
             onSelectInput={(s) => setInputSantri(s)}
             onSelectPrint={(s, rank) => setPrintData({ santri: s, ranking: rank })}
             onSelectPrintClass={(kelas) => setPrintKelasData({ kelas })}
+            onToggleTahsin={handleToggleTahsin}
           />
         )}
       </main>

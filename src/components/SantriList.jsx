@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Search, Edit3, Printer, Users, Award, BookCheck, Eye } from 'lucide-react';
 import { hitungRapor, hitungRanking, PREDIKAT_COLORS, formatNamaKelas } from '../utils/tahfidzCalc';
 
-export default function SantriList({ santriList, onSelectInput, onSelectPrint, onSelectPrintClass, currentUser }) {
+export default function SantriList({ santriList, onSelectInput, onSelectPrint, onSelectPrintClass, currentUser, onToggleTahsin }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedKelas, setSelectedKelas] = useState(() => {
     if (currentUser?.role === 'guru' && currentUser?.kelas_binaan && currentUser?.kelas_binaan !== 'Semua') {
@@ -181,7 +181,25 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                     <td style={{ color: 'var(--slate-400)', fontWeight: 600 }}>{idx + 1}</td>
                     <td className="santri-nis">{santri.nis || santri.id}</td>
                     <td>
-                      <div className="santri-name">{santri.nama}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <span className="santri-name">{santri.nama}</span>
+                        {currentUser?.role === 'admin' ? (
+                          <button
+                            type="button"
+                            className={`badge-tahsin-toggle ${santri.is_tahsin ? 'active' : 'idle'}`}
+                            onClick={() => onToggleTahsin && onToggleTahsin(santri.id, !santri.is_tahsin)}
+                            title={santri.is_tahsin ? 'Program Tahsin Aktif (Klik untuk nonaktifkan)' : 'Jadikan Santri Program Tahsin (Klik untuk aktifkan)'}
+                          >
+                            {santri.is_tahsin ? '✨ Tahsin' : '+ Tahsin'}
+                          </button>
+                        ) : (
+                          santri.is_tahsin && (
+                            <span className="badge-tahsin-pill" title="Santri Mengikuti Program Tahsin">
+                              ✨ Tahsin
+                            </span>
+                          )
+                        )}
+                      </div>
                       {santri.halqah && (
                         <div style={{ fontSize: '0.75rem', color: 'var(--slate-400)' }}>
                           {santri.halqah}
@@ -275,7 +293,25 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                       {santri.ranking !== '-' ? `#${santri.ranking}` : `#${idx + 1}`}
                     </div>
                     <div>
-                      <div className="mobile-card-name">{santri.nama}</div>
+                      <div className="mobile-card-name" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <span>{santri.nama}</span>
+                        {currentUser?.role === 'admin' ? (
+                          <button
+                            type="button"
+                            className={`badge-tahsin-toggle ${santri.is_tahsin ? 'active' : 'idle'}`}
+                            onClick={() => onToggleTahsin && onToggleTahsin(santri.id, !santri.is_tahsin)}
+                            title={santri.is_tahsin ? 'Program Tahsin Aktif (Klik untuk nonaktifkan)' : 'Jadikan Santri Program Tahsin (Klik untuk aktifkan)'}
+                          >
+                            {santri.is_tahsin ? '✨ Tahsin' : '+ Tahsin'}
+                          </button>
+                        ) : (
+                          santri.is_tahsin && (
+                            <span className="badge-tahsin-pill">
+                              ✨ Tahsin
+                            </span>
+                          )
+                        )}
+                      </div>
                       <div className="mobile-card-meta">
                         NIS: <strong>{santri.nis || santri.id}</strong> • <strong>{formatNamaKelas(santri.kelas)}</strong>
                       </div>

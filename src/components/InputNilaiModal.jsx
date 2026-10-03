@@ -1,11 +1,19 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { X, Save, MessageSquare, AlertTriangle } from 'lucide-react';
-import { getPredikat, hitungRapor, PREDIKAT_COLORS } from '../utils/tahfidzCalc';
+import { 
+  getPredikat, 
+  hitungRapor, 
+  hitungRaporTahsin, 
+  KRITERIA_TAHSIN, 
+  PREDIKAT_COLORS 
+} from '../utils/tahfidzCalc';
 
 export default function InputNilaiModal({ santri, onClose, onSave }) {
   const [nilaiJuz, setNilaiJuz] = useState({ ...(santri.nilaiJuz || {}) });
+  const [nilaiTahsin, setNilaiTahsin] = useState({ ...(santri.nilaiTahsin || {}) });
   const [catatan, setCatatan] = useState(santri.catatan || '');
   const [jumlahHafalan, setJumlahHafalan] = useState(santri.jumlahHafalan || '');
+  const [activeProgramMode, setActiveProgramMode] = useState(santri.is_tahsin ? 'tahsin' : 'tahfidz');
   const [activeTab, setActiveTab] = useState('all');
   const [showConfirmClose, setShowConfirmClose] = useState(false);
 
@@ -29,8 +37,16 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
       if (Number(nilaiJuz[k]) !== Number(initialJuz[k])) return true;
     }
 
+    // 4. Cek perubahan nilai tahsin jika santri tahsin
+    if (santri.is_tahsin) {
+      const initialTahsin = santri.nilaiTahsin || {};
+      for (const k of KRITERIA_TAHSIN) {
+        if ((nilaiTahsin[k.id] ?? '') !== (initialTahsin[k.id] ?? '')) return true;
+      }
+    }
+
     return false;
-  }, [nilaiJuz, catatan, jumlahHafalan, santri]);
+  }, [nilaiJuz, nilaiTahsin, catatan, jumlahHafalan, santri]);
 
   // Handler permintaan tutup modal (dengan konfirmasi jika ada perubahan belum disimpan)
   const handleRequestClose = useCallback(() => {
@@ -97,12 +113,32 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
     }
   };
 
+  const handleTahsinScoreChange = (kriteriaId, val) => {
+    if (val === '') {
+      const updated = { ...nilaiTahsin };
+      delete updated[kriteriaId];
+      setNilaiTahsin(updated);
+      return;
+    }
+
+    const num = Number(val);
+    if (!isNaN(num) && num >= 0 && num <= 100) {
+      setNilaiTahsin(prev => ({
+        ...prev,
+        [kriteriaId]: num
+      }));
+    }
+  };
+
   const calc = hitungRapor(nilaiJuz);
   const colorInfo = PREDIKAT_COLORS[calc.predikatAkhir] || PREDIKAT_COLORS['-'];
 
+  const calcTahsin = hitungRaporTahsin(nilaiTahsin);
+  const colorTahsin = PREDIKAT_COLORS[calcTahsin.predikatAkhir] || PREDIKAT_COLORS['-'];
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(santri.id, nilaiJuz, catatan, jumlahHafalan.trim());
+    onSave(santri.id, nilaiJuz, catatan, jumlahHafalan.trim(), nilaiTahsin);
     onClose();
   };
 
@@ -170,105 +206,208 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
         </div>
 
         <div className="modal-body input-nilai-modal-body">
-          {/* Ringkasan Nilai Realtime Responsif */}
-          <div
-            className="nilai-summary-banner"
-            style={{
-              background: colorInfo.bg,
-              border: `1.5px solid ${colorInfo.border}`
-            }}
-          >
-            <div className="nilai-summary-primary">
-              <div className="summary-status-tag" style={{ color: colorInfo.text }}>
-                STATUS PENILAIAN TAHFIDZ
-              </div>
-              <div className="summary-main-count" style={{ color: colorInfo.text }}>
-                {calc.count} Juz Diuji • Total Nilai: {calc.total}
-              </div>
+          {/* Switcher Tab Khusus Santri Program Tahsin */}
+          {santri.is_tahsin && (
+            <div className="program-mode-switcher">
+              <button
+                type="button"
+                className={`program-mode-btn ${activeProgramMode === 'tahfidz' ? 'active' : ''}`}
+                onClick={() => setActiveProgramMode('tahfidz')}
+              >
+                📖 Nilai Hafalan Tahfidz (30 Juz)
+              </button>
+              <button
+                type="button"
+                className={`program-mode-btn ${activeProgramMode === 'tahsin' ? 'active' : ''}`}
+                onClick={() => setActiveProgramMode('tahsin')}
+              >
+                🗣️ Nilai Kualitas Bacaan Tahsin (7 Aspek)
+              </button>
             </div>
+          )}
 
-            <div className="nilai-summary-metrics">
-              <div className="summary-metric-card">
-                <div className="metric-lbl" style={{ color: colorInfo.text }}>Rata-rata (الدرجة)</div>
-                <div className="metric-val" style={{ color: colorInfo.text }}>
-                  {calc.count > 0 ? calc.rataRata : '-'}
+          {(!santri.is_tahsin || activeProgramMode === 'tahfidz') ? (
+            <>
+              {/* Ringkasan Nilai Realtime Responsif */}
+              <div
+                className="nilai-summary-banner"
+                style={{
+                  background: colorInfo.bg,
+                  border: `1.5px solid ${colorInfo.border}`
+                }}
+              >
+                <div className="nilai-summary-primary">
+                  <div className="summary-status-tag" style={{ color: colorInfo.text }}>
+                    STATUS PENILAIAN TAHFIDZ
+                  </div>
+                  <div className="summary-main-count" style={{ color: colorInfo.text }}>
+                    {calc.count} Juz Diuji • Total Nilai: {calc.total}
+                  </div>
+                </div>
+
+                <div className="nilai-summary-metrics">
+                  <div className="summary-metric-card">
+                    <div className="metric-lbl" style={{ color: colorInfo.text }}>Rata-rata (الدرجة)</div>
+                    <div className="metric-val" style={{ color: colorInfo.text }}>
+                      {calc.count > 0 ? calc.rataRata : '-'}
+                    </div>
+                  </div>
+
+                  <div className="summary-metric-card">
+                    <div className="metric-lbl" style={{ color: colorInfo.text }}>Predikat (التقدير)</div>
+                    <div className="metric-val arabic" style={{ color: colorInfo.text }}>
+                      {calc.predikatAkhir}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="summary-metric-card">
-                <div className="metric-lbl" style={{ color: colorInfo.text }}>Predikat (التقدير)</div>
-                <div className="metric-val arabic" style={{ color: colorInfo.text }}>
-                  {calc.predikatAkhir}
+              {/* INPUT JUMLAH HAFALAN (CUSTOM / FLEKSIBEL) */}
+              <div className="hafalan-custom-box">
+                <div className="hafalan-custom-info">
+                  <label className="hafalan-custom-label">
+                    📖 Jumlah Hafalan Santriwati (عدد الحفظ):
+                  </label>
+                </div>
+
+                <div className="hafalan-input-group">
+                  <input
+                    type="text"
+                    value={jumlahHafalan}
+                    onChange={(e) => setJumlahHafalan(e.target.value)}
+                    placeholder={calc.count > 0 ? `${calc.count} Juz (Otomatis)` : 'Contoh: 5 Juz'}
+                    className="hafalan-input-field"
+                  />
+                  {jumlahHafalan && (
+                    <button
+                      type="button"
+                      onClick={() => setJumlahHafalan('')}
+                      className="btn btn-secondary btn-sm btn-reset-hafalan"
+                      title="Kembalikan ke hitungan otomatis"
+                    >
+                      Reset Otomatis
+                    </button>
+                  )}
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* INPUT JUMLAH HAFALAN (CUSTOM / FLEKSIBEL) */}
-          <div className="hafalan-custom-box">
-            <div className="hafalan-custom-info">
-              <label className="hafalan-custom-label">
-                📖 Jumlah Hafalan Santriwati (عدد الحفظ):
-              </label>
-            </div>
-
-            <div className="hafalan-input-group">
-              <input
-                type="text"
-                value={jumlahHafalan}
-                onChange={(e) => setJumlahHafalan(e.target.value)}
-                placeholder={calc.count > 0 ? `${calc.count} Juz (Otomatis)` : 'Contoh: 5 Juz'}
-                className="hafalan-input-field"
-              />
-              {jumlahHafalan && (
+              {/* TAB PINTAS NAVIGASI JUZ (MEMUDAHKAN GURU DI HP & TABLET) */}
+              <div className="juz-nav-tabs">
                 <button
                   type="button"
-                  onClick={() => setJumlahHafalan('')}
-                  className="btn btn-secondary btn-sm btn-reset-hafalan"
-                  title="Kembalikan ke hitungan otomatis"
+                  className={`juz-nav-tab ${activeTab === 'all' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('all')}
                 >
-                  Reset Otomatis
+                  Semua Juz (1–30)
                 </button>
-              )}
-            </div>
-          </div>
+                <button
+                  type="button"
+                  className={`juz-nav-tab ${activeTab === '1-10' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('1-10')}
+                >
+                  Juz 1–10
+                </button>
+                <button
+                  type="button"
+                  className={`juz-nav-tab ${activeTab === '11-20' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('11-20')}
+                >
+                  Juz 11–20
+                </button>
+                <button
+                  type="button"
+                  className={`juz-nav-tab ${activeTab === '21-30' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('21-30')}
+                >
+                  Juz 21–30
+                </button>
+              </div>
 
-          {/* TAB PINTAS NAVIGASI JUZ (MEMUDAHKAN GURU DI HP & TABLET) */}
-          <div className="juz-nav-tabs">
-            <button
-              type="button"
-              className={`juz-nav-tab ${activeTab === 'all' ? 'active' : ''}`}
-              onClick={() => setActiveTab('all')}
-            >
-              Semua Juz (1–30)
-            </button>
-            <button
-              type="button"
-              className={`juz-nav-tab ${activeTab === '1-10' ? 'active' : ''}`}
-              onClick={() => setActiveTab('1-10')}
-            >
-              Juz 1–10
-            </button>
-            <button
-              type="button"
-              className={`juz-nav-tab ${activeTab === '11-20' ? 'active' : ''}`}
-              onClick={() => setActiveTab('11-20')}
-            >
-              Juz 11–20
-            </button>
-            <button
-              type="button"
-              className={`juz-nav-tab ${activeTab === '21-30' ? 'active' : ''}`}
-              onClick={() => setActiveTab('21-30')}
-            >
-              Juz 21–30
-            </button>
-          </div>
+              {/* 3 Blok Juz format angka Latin */}
+              {(activeTab === 'all' || activeTab === '1-10') && renderJuzSection('Kelompok Juz 1 s/d 10', 1, 10)}
+              {(activeTab === 'all' || activeTab === '11-20') && renderJuzSection('Kelompok Juz 11 s/d 20', 11, 20)}
+              {(activeTab === 'all' || activeTab === '21-30') && renderJuzSection('Kelompok Juz 21 s/d 30', 21, 30)}
+            </>
+          ) : (
+            <>
+              {/* Banner Ringkasan Tahsin */}
+              <div
+                className="nilai-summary-banner tahsin-banner"
+                style={{
+                  background: colorTahsin.bg,
+                  border: `1.5px solid ${colorTahsin.border}`
+                }}
+              >
+                <div className="nilai-summary-primary">
+                  <div className="summary-status-tag" style={{ color: colorTahsin.text }}>
+                    STATUS PENILAIAN TAHSIN AL-QUR'AN
+                  </div>
+                  <div className="summary-main-count" style={{ color: colorTahsin.text }}>
+                    {calcTahsin.count} Aspek Dinilai • Total Nilai: {calcTahsin.total}
+                  </div>
+                </div>
 
-          {/* 3 Blok Juz format angka Latin */}
-          {(activeTab === 'all' || activeTab === '1-10') && renderJuzSection('Kelompok Juz 1 s/d 10', 1, 10)}
-          {(activeTab === 'all' || activeTab === '11-20') && renderJuzSection('Kelompok Juz 11 s/d 20', 11, 20)}
-          {(activeTab === 'all' || activeTab === '21-30') && renderJuzSection('Kelompok Juz 21 s/d 30', 21, 30)}
+                <div className="nilai-summary-metrics">
+                  <div className="summary-metric-card">
+                    <div className="metric-lbl" style={{ color: colorTahsin.text }}>Rata-rata (الدرجة)</div>
+                    <div className="metric-val" style={{ color: colorTahsin.text }}>
+                      {calcTahsin.count > 0 ? calcTahsin.rataRata : '-'}
+                    </div>
+                  </div>
+
+                  <div className="summary-metric-card">
+                    <div className="metric-lbl" style={{ color: colorTahsin.text }}>Predikat (التقدير)</div>
+                    <div className="metric-val arabic" style={{ color: colorTahsin.text }}>
+                      {calcTahsin.predikatAkhir}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid 7 Kriteria Nilai Tahsin */}
+              <div className="tahsin-criteria-grid">
+                {KRITERIA_TAHSIN.map((k, idx) => {
+                  const val = nilaiTahsin[k.id] !== undefined ? nilaiTahsin[k.id] : '';
+                  const pred = val !== '' ? getPredikat(val) : '';
+                  const pColor = PREDIKAT_COLORS[pred] || PREDIKAT_COLORS['-'];
+                  return (
+                    <div key={k.id} className="tahsin-card-item">
+                      <div className="tahsin-card-title-row">
+                        <span className="tahsin-idx">{idx + 1}.</span>
+                        <div className="tahsin-names">
+                          <span className="tahsin-label-id">{k.labelId}</span>
+                          <span className="tahsin-label-ar arabic">{k.labelAr}</span>
+                        </div>
+                      </div>
+                      <div className="tahsin-input-control">
+                        <input
+                          type="number"
+                          inputMode="decimal"
+                          step="any"
+                          min="0"
+                          max="100"
+                          placeholder="0 - 100"
+                          className="tahsin-input-box"
+                          value={val}
+                          onChange={(e) => handleTahsinScoreChange(k.id, e.target.value)}
+                        />
+                        <div
+                          className="tahsin-pred-badge"
+                          style={{
+                            color: pColor.text,
+                            background: pColor.bg,
+                            borderColor: pColor.border
+                          }}
+                        >
+                          {pred ? pred : '—'}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
 
           {/* FORM INPUT CATATAN USTADZAH */}
           <div className="catatan-pembina-box">
