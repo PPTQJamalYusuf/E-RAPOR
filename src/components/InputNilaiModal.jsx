@@ -194,10 +194,18 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
         <div className="modal-header">
           <div className="modal-header-info">
             <h2 className="modal-title-main">
-              Input Nilai Tahfidz & Catatan: {santri.nama}
+              Input Nilai & Catatan: {santri.nama}
+              {santri.is_tahsin && (
+                <span className="badge-tahsin-pill" style={{ marginLeft: '8px', verticalAlign: 'middle', fontSize: '0.78rem' }}>
+                  Tahsin
+                </span>
+              )}
             </h2>
             <div className="modal-subtitle-nis">
               NIS: {santri.nis || santri.id} • Kelas: <strong>{santri.kelas}</strong>
+              {santri.is_tahsin && (
+                <span className="keterangan-tahsin-text"> • Keterangan: <strong style={{ color: '#0369a1' }}>Tahsin</strong></span>
+              )}
             </div>
           </div>
           <button className="btn btn-secondary btn-sm btn-modal-close" onClick={handleRequestClose} title="Tutup">
@@ -214,14 +222,14 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
                 className={`program-mode-btn ${activeProgramMode === 'tahfidz' ? 'active' : ''}`}
                 onClick={() => setActiveProgramMode('tahfidz')}
               >
-                📖 Nilai Hafalan Tahfidz (30 Juz)
+                Tahfidz (30 Juz)
               </button>
               <button
                 type="button"
                 className={`program-mode-btn ${activeProgramMode === 'tahsin' ? 'active' : ''}`}
                 onClick={() => setActiveProgramMode('tahsin')}
               >
-                🗣️ Nilai Kualitas Bacaan Tahsin (7 Aspek)
+                Tahsin
               </button>
             </div>
           )}

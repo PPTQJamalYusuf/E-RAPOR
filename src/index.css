@@ -3302,6 +3302,25 @@ body {
   border: 1px solid #bae6fd;
 }
 
+.btn-tag-tahsin {
+  margin-left: 4px;
+  font-size: 0.68rem;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+  border: 1px solid #bae6fd;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1.2;
+}
+
+.keterangan-tahsin-text {
+  color: #0369a1;
+  font-weight: 600;
+}
+
 /* Switcher Mode Tab di Input Nilai Modal */
 .program-mode-switcher {
   display: flex;
