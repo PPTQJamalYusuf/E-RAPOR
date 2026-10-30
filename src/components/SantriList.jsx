@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Edit3, Printer, Users, Award, BookCheck, Eye, Volume2 } from 'lucide-react';
-import { hitungRapor, hitungRanking, PREDIKAT_COLORS, formatNamaKelas } from '../utils/tahfidzCalc';
+import { Search, Edit3, Printer, Users, Award, BookCheck, Eye, Volume2, X } from 'lucide-react';
+import { hitungRapor, hitungRaporTahsin, hitungRanking, PREDIKAT_COLORS, formatNamaKelas } from '../utils/tahfidzCalc';
 
 export default function SantriList({ santriList, onSelectInput, onSelectPrint, onSelectPrintClass, currentUser, onToggleTahsin }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterBelumNilai, setFilterBelumNilai] = useState(false);
   const [selectedKelas, setSelectedKelas] = useState(() => {
     if (currentUser?.role === 'guru' && currentUser?.kelas_binaan && currentUser?.kelas_binaan !== 'Semua') {
       return currentUser.kelas_binaan;
@@ -18,6 +19,17 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
     if (hasAlumni) list.push('Alumni');
     return list;
   }, [santriList]);
+
+  // Cek apakah santri sudah dinilai (baik nilai juz tahfidz maupun tahsin)
+  const isSantriGraded = (santri) => {
+    const calc = hitungRapor(santri.nilaiJuz || {});
+    if (calc.count > 0) return true;
+    if (santri.is_tahsin && santri.nilaiTahsin) {
+      const calcTahsin = hitungRaporTahsin(santri.nilaiTahsin);
+      if (calcTahsin.count > 0) return true;
+    }
+    return false;
+  };
 
   // Hitung ranking per kelas
   const rankedSantriList = useMemo(() => {
@@ -38,7 +50,7 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
     return result;
   }, [santriList]);
 
-  // Filter santri berdasarkan kelas & search query
+  // Filter santri berdasarkan kelas, filter belum dinilai, & search query
   const filteredSantri = useMemo(() => {
     return rankedSantriList.filter(s => {
       let matchesKelas = false;
@@ -49,24 +61,28 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
       } else {
         matchesKelas = s.kelas === selectedKelas;
       }
+
+      // Filter khusus santri yang belum diinput nilai
+      let matchesStatus = true;
+      if (filterBelumNilai) {
+        matchesStatus = !isSantriGraded(s);
+      }
+
       const searchStr = (s.nis || s.id || '').toString().toLowerCase();
       const matchesSearch = s.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             searchStr.includes(searchTerm.toLowerCase());
-      return matchesKelas && matchesSearch;
+      return matchesKelas && matchesStatus && matchesSearch;
     });
-  }, [rankedSantriList, selectedKelas, searchTerm]);
+  }, [rankedSantriList, selectedKelas, filterBelumNilai, searchTerm]);
 
   // Statistik ringkas
   const totalSantri = santriList.length;
-  const sudahDinilai = santriList.filter(s => {
-    const calc = hitungRapor(s.nilaiJuz || {});
-    return calc.count > 0;
-  }).length;
+  const sudahDinilai = santriList.filter(isSantriGraded).length;
   const belumDinilai = totalSantri - sudahDinilai;
 
   return (
     <div>
-      {/* 3 Kartu Statistik Ringkas */}
+      {/* 3 Kartu Statistik Ringkas (Hanya kartu Belum Nilai yang dapat diklik untuk memfilter) */}
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon" style={{ background: '#ecfdf5', color: '#047857' }}>
@@ -88,13 +104,29 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
           </div>
         </div>
 
-        <div className="stat-card">
+        <div
+          className={`stat-card clickable ${filterBelumNilai ? 'active-stat-belum' : ''}`}
+          onClick={() => setFilterBelumNilai(prev => !prev)}
+          title={filterBelumNilai ? "Klik untuk membatalkan filter dan tampilkan semua" : "Klik untuk menampilkan santri yang belum diinput nilai"}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFilterBelumNilai(prev => !prev); }}
+        >
           <div className="stat-icon" style={{ background: '#fef3c7', color: '#d97706' }}>
             <Award size={24} />
           </div>
-          <div>
+          <div style={{ flex: 1 }}>
             <div className="stat-val">{belumDinilai}</div>
             <div className="stat-lbl">Belum Memiliki Nilai</div>
+            {filterBelumNilai ? (
+              <span className="stat-card-badge-status" style={{ background: '#fde68a', color: '#92400e' }}>
+                ✓ Filter Aktif
+              </span>
+            ) : (
+              <span style={{ fontSize: '0.72rem', color: '#b45309', display: 'block', marginTop: '2px', fontWeight: 600 }}>
+                Klik untuk filter ➔
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -113,8 +145,21 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
             />
           </div>
 
-          <div style={{ fontSize: '0.84rem', color: 'var(--slate-500)', fontWeight: 600 }}>
-            Menampilkan: <strong style={{ color: 'var(--slate-800)' }}>{filteredSantri.length}</strong> santri
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <div style={{ fontSize: '0.84rem', color: 'var(--slate-500)', fontWeight: 600 }}>
+              Menampilkan: <strong style={{ color: 'var(--slate-800)' }}>{filteredSantri.length}</strong> santri
+            </div>
+            {filterBelumNilai && (
+              <button
+                type="button"
+                onClick={() => setFilterBelumNilai(false)}
+                className="filter-reset-badge"
+                title="Hapus filter dan tampilkan semua santri"
+              >
+                <span>Filter: Belum Ada Nilai</span>
+                <X size={13} />
+              </button>
+            )}
           </div>
         </div>
 
@@ -168,7 +213,18 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
             {filteredSantri.length === 0 ? (
               <tr>
                 <td colSpan="9" style={{ textAlign: 'center', padding: '3rem', color: 'var(--slate-400)' }}>
-                  Tidak ada santriwati yang sesuai dengan pencarian.
+                  {filterBelumNilai ? (
+                    <div>
+                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#047857', marginBottom: '0.35rem' }}>
+                        Alhamdulillah, semua santriwati sudah memiliki nilai!
+                      </div>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--slate-500)' }}>
+                        Tidak ada santriwati di kategori ini yang nilainya masih kosong.
+                      </div>
+                    </div>
+                  ) : (
+                    'Tidak ada santriwati yang sesuai dengan pencarian.'
+                  )}
                 </td>
               </tr>
             ) : (
@@ -280,7 +336,18 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
       <div className="santri-mobile-cards">
         {filteredSantri.length === 0 ? (
           <div className="empty-state-mobile-card">
-            Tidak ada santriwati yang sesuai dengan pencarian.
+            {filterBelumNilai ? (
+              <div>
+                <div style={{ fontWeight: 700, color: '#047857', marginBottom: '4px' }}>
+                  Alhamdulillah, semua santriwati sudah memiliki nilai!
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>
+                  Tidak ada santri di kategori ini yang nilainya masih kosong.
+                </div>
+              </div>
+            ) : (
+              'Tidak ada santriwati yang sesuai dengan pencarian.'
+            )}
           </div>
         ) : (
           filteredSantri.map((santri, idx) => {
