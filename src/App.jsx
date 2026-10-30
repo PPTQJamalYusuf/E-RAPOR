@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import SantriList from './components/SantriList';
 import InputNilaiModal from './components/InputNilaiModal';
@@ -7,6 +7,7 @@ import PrintKelasModal from './components/PrintKelasModal';
 import LoginModal from './components/LoginModal';
 import ManageUsersModal from './components/ManageUsersModal';
 import SemesterModal from './components/SemesterModal';
+import { WifiOff, RefreshCw, CheckCircle2 } from 'lucide-react';
 import { 
   getAcademicPeriods, 
   getSantriWithGrades, 
@@ -18,6 +19,7 @@ import initialSantriData from './data/initialSantri.json';
 
 const USER_SESSION_KEY = 'pondok_erapot_auth_user';
 const USER_SESSION_TIMESTAMP_KEY = 'pondok_erapot_auth_time';
+const OFFLINE_QUEUE_KEY = 'pondok_erapot_offline_queue';
 const SESSION_TIMEOUT_MS = 4 * 60 * 60 * 1000; // 4 Jam Tidak Aktif
 
 export default function App() {
@@ -53,6 +55,18 @@ export default function App() {
   const [printKelasData, setPrintKelasData] = useState(null);
   const [showManageUsers, setShowManageUsers] = useState(false);
   const [showAddSemester, setShowAddSemester] = useState(false);
+
+  // 4. Offline Queue & Sync State
+  const [offlineQueue, setOfflineQueue] = useState(() => {
+    try {
+      const saved = localStorage.getItem(OFFLINE_QUEUE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+  const [syncToast, setSyncToast] = useState(null); // { type: 'warning' | 'success', message: string }
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Status apakah ada modal yang sedang terbuka
   const isAnyModalOpen = Boolean(inputSantri || printData || printKelasData || showManageUsers || showAddSemester);
@@ -223,6 +237,63 @@ export default function App() {
     loadSantriData();
   }, [currentUser, currentPeriod]);
 
+  // Fungsi sinkronisasi antrean offline ke Supabase Cloud
+  const syncOfflineQueue = useCallback(async () => {
+    try {
+      const saved = localStorage.getItem(OFFLINE_QUEUE_KEY);
+      const queue = saved ? JSON.parse(saved) : [];
+      if (!queue.length) return;
+
+      setIsSyncing(true);
+      const remainingQueue = [];
+
+      for (const item of queue) {
+        try {
+          await saveSantriRapor(
+            item.periodId,
+            item.santriId,
+            item.nilaiJuz,
+            item.catatan,
+            item.jumlahHafalan,
+            item.nilaiTahsin
+          );
+        } catch (err) {
+          remainingQueue.push(item);
+        }
+      }
+
+      localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(remainingQueue));
+      setOfflineQueue(remainingQueue);
+
+      if (remainingQueue.length === 0) {
+        setSyncToast({
+          type: 'success',
+          message: 'Semua nilai offline berhasil disinkronkan ke Cloud!'
+        });
+        setTimeout(() => setSyncToast(null), 4000);
+      } else {
+        setSyncToast({
+          type: 'warning',
+          message: `${remainingQueue.length} data masih menunggu koneksi stabil...`
+        });
+      }
+    } catch (e) {
+      console.error('Gagal memproses offline queue:', e);
+    } finally {
+      setIsSyncing(false);
+    }
+  }, []);
+
+  // Pasang listener online otomatis saat internet tersambung kembali
+  useEffect(() => {
+    const handleOnline = () => {
+      syncOfflineQueue();
+    };
+
+    window.addEventListener('online', handleOnline);
+    return () => window.removeEventListener('online', handleOnline);
+  }, [syncOfflineQueue]);
+
   // Handler simpan nilai, catatan, jumlah hafalan, dan nilai tahsin ke Supabase
   const handleSaveNilai = async (santriId, newNilaiJuz, newCatatan, newJumlahHafalan, newNilaiTahsin) => {
     // 1. Optimistic Update di UI lokal
@@ -241,7 +312,7 @@ export default function App() {
       })
     );
 
-    // 2. Simpan permanen ke Supabase Cloud
+    // 2. Simpan permanen ke Supabase Cloud atau masuk ke Offline Queue jika gagal/offline
     if (currentPeriod?.id && currentPeriod.id !== 'default') {
       try {
         await saveSantriRapor(
@@ -252,9 +323,45 @@ export default function App() {
           newJumlahHafalan,
           newNilaiTahsin
         );
+
+        // Jika berhasil, bersihkan item ini dari offline queue jika sebelumnya sempat gagal
+        const currentSaved = localStorage.getItem(OFFLINE_QUEUE_KEY);
+        if (currentSaved) {
+          const q = JSON.parse(currentSaved);
+          const filtered = q.filter(item => !(item.periodId === currentPeriod.id && item.santriId === santriId));
+          localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(filtered));
+          setOfflineQueue(filtered);
+        }
       } catch (err) {
-        console.error('Gagal menyimpan nilai ke Supabase:', err);
-        alert('Peringatan: Nilai belum tersimpan ke Cloud Supabase. Periksa koneksi internet Anda.');
+        console.warn('Jaringan offline/bermasalah, menyimpan ke Draft Offline Queue:', err);
+
+        const draftItem = {
+          periodId: currentPeriod.id,
+          santriId,
+          nilaiJuz: newNilaiJuz,
+          catatan: newCatatan,
+          jumlahHafalan: newJumlahHafalan,
+          nilaiTahsin: newNilaiTahsin,
+          timestamp: Date.now()
+        };
+
+        const currentSaved = localStorage.getItem(OFFLINE_QUEUE_KEY);
+        const q = currentSaved ? JSON.parse(currentSaved) : [];
+        const existingIdx = q.findIndex(i => i.periodId === currentPeriod.id && i.santriId === santriId);
+        if (existingIdx >= 0) {
+          q[existingIdx] = draftItem;
+        } else {
+          q.push(draftItem);
+        }
+
+        localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(q));
+        setOfflineQueue(q);
+
+        // Tampilkan toast badge notifikasi offline
+        setSyncToast({
+          type: 'warning',
+          message: 'Nilai tersimpan lokal, akan disinkronkan saat online.'
+        });
       }
     }
   };
@@ -390,6 +497,35 @@ export default function App() {
           onClose={() => setShowAddSemester(false)}
           onCreated={handleSemesterCreated}
         />
+      )}
+
+      {/* Toast Notification Antrean Offline & Sinkronisasi */}
+      {syncToast && (
+        <div className={`offline-sync-toast ${syncToast.type}`}>
+          {syncToast.type === 'warning' ? (
+            <WifiOff size={18} style={{ flexShrink: 0 }} />
+          ) : (
+            <CheckCircle2 size={18} style={{ flexShrink: 0 }} />
+          )}
+          <span style={{ flex: 1 }}>{syncToast.message}</span>
+          {offlineQueue.length > 0 && (
+            <button
+              type="button"
+              className="offline-sync-toast-btn"
+              onClick={syncOfflineQueue}
+              disabled={isSyncing}
+              title="Coba sinkronkan sekarang ke cloud"
+            >
+              {isSyncing ? (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <RefreshCw size={12} className="spin-icon" /> Menyinkronkan...
+                </span>
+              ) : (
+                'Sinkronkan Sekarang'
+              )}
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
