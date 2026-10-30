@@ -412,15 +412,27 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
 
           {/* FORM INPUT CATATAN USTADZAH */}
           <div className="catatan-pembina-box">
-            <div className="catatan-pembina-title">
-              <MessageSquare size={16} color="#2d6a4f" />
-              <span>Catatan Ustadzah:</span>
+            <div className="catatan-pembina-title" style={{ justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <MessageSquare size={16} color="#2d6a4f" />
+                <span>Catatan Ustadzah:</span>
+              </div>
+              <span style={{ 
+                fontSize: '0.76rem', 
+                fontWeight: 600, 
+                color: (catatan || '').length >= 300 ? '#dc2626' : (catatan || '').length >= 260 ? '#d97706' : '#64748b' 
+              }}>
+                {(catatan || '').length} / 300 karakter
+              </span>
             </div>
             <textarea
+              id="catatan-ustadzah-input"
+              name="catatan_ustadzah"
               rows={3}
+              maxLength={300}
               value={catatan}
               onChange={(e) => setCatatan(e.target.value)}
-              placeholder="Tulis catatan evaluasi hafalan santri di sini..."
+              placeholder="Tulis catatan evaluasi hafalan santri di sini (maksimal 300 karakter agar muat presisi 1 lembar cetak A4)..."
               className="catatan-pembina-textarea"
             />
           </div>

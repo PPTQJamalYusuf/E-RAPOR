@@ -1803,6 +1803,8 @@ body {
   min-height: 38px;
   background: #ffffff;
   margin-bottom: 4px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .catatan-title-formal {
@@ -1817,6 +1819,10 @@ body {
 .catatan-content-formal {
   color: #1f2937;
   line-height: 1.35;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .catatan-dotted-line {
