@@ -267,7 +267,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             <span>Peringkat Kelas</span>
           </div>
           <div className="summary-card-val highlight-gold">
-            {ranking !== '-' ? `#${ranking}` : '—'}
+            —
           </div>
         </div>
       </div>

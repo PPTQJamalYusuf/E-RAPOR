@@ -453,7 +453,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                             <span>Peringkat Kelas</span>
                           </div>
                           <div className="summary-card-val highlight-gold">
-                            {ranking !== '-' ? `#${ranking}` : '—'}
+                            —
                           </div>
                         </div>
                       </div>
