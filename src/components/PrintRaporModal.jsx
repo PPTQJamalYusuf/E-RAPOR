@@ -428,7 +428,6 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             </th>
             <th style={{ textAlign: 'left', paddingLeft: '14px' }}>
               <span>Aspek Penilaian</span>
-              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '6px' }}>معايير التقييم</span>
             </th>
             <th style={{ width: '135px', textAlign: 'center' }}>
               <span>Nilai</span>
@@ -483,14 +482,14 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
       <div className="summary-cards-4col" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         <div className="summary-card-item">
           <div className="summary-card-label">
-            <span>Total Nilai (المجموع)</span>
+            <span>Total Nilai</span>
           </div>
           <div className="summary-card-val">{calcTahsin.total}</div>
         </div>
 
         <div className="summary-card-item">
           <div className="summary-card-label">
-            <span>Nilai Rata-rata (الدرجة)</span>
+            <span>Nilai Rata-rata</span>
           </div>
           <div className="summary-card-val highlight-green">
             {calcTahsin.count > 0 ? calcTahsin.rataRata : '—'}
@@ -499,7 +498,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
         <div className="summary-card-item">
           <div className="summary-card-label">
-            <span>Predikat Akhir (التقدير)</span>
+            <span>Predikat Akhir</span>
           </div>
           <div className="summary-card-val" style={{ color: '#047857', fontSize: '11pt', fontWeight: 800 }}>
             {calcTahsin.count > 0 ? (
@@ -568,7 +567,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             Tulang Bawang, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
           </div>
           <div className="sig-role-formal bold">
-            Pembina Tahsin & Tahfidz <span className="arabic">(رئيس قسم التحسين والتحفيظ)</span>
+            Pembina Tahfidz <span className="arabic">(رئيسة قسم التحفيظ)</span>
           </div>
           <div className="sig-space-formal"></div>
           <div className="sig-name-box">
