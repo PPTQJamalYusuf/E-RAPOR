@@ -74,6 +74,484 @@ body {
   overflow: hidden;
 }
 
+/* ==========================================================================
+   HEADER PRO — 2-TIER ARCHITECTURE (ANTI-SLOP & CLEAN DESIGN)
+   ========================================================================== */
+.app-header-pro {
+  background: linear-gradient(135deg, #064e3b 0%, #047857 60%, #0d9488 100%);
+  color: #ffffff;
+  padding: 1.25rem 1.75rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  margin-bottom: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* TIER 1: BRANDING & USER CONTROLS */
+.header-pro-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Left: Branding Group */
+.header-pro-branding {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  min-width: 0;
+}
+
+.header-pro-logo-box {
+  width: 54px;
+  height: 54px;
+  background: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+}
+
+.header-pro-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.header-pro-title-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.header-pro-title-ar {
+  font-family: var(--font-arabic);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #fef08a;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.header-pro-title-latin {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.header-pro-subtitle {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  margin-top: 1px;
+  letter-spacing: 0.02em;
+}
+
+/* Right: User Cluster */
+.header-pro-user-cluster {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+/* Cloud Online Pill */
+.header-pro-cloud-badge {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.76rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+  user-select: none;
+}
+
+.cloud-dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.35);
+  display: inline-block;
+  animation: pulseCloud 2s infinite ease-in-out;
+}
+
+@keyframes pulseCloud {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.7;
+  }
+}
+
+/* Header Buttons */
+.header-pro-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #ffffff;
+  color: #065f46;
+  border: 1.5px solid #d1fae5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  font-family: inherit;
+}
+
+.header-pro-btn:hover {
+  background: #f0fdf4;
+  color: #047857;
+  border-color: #6ee7b7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.header-pro-btn:active {
+  transform: translateY(0);
+}
+
+.header-pro-btn.btn-highlight-green {
+  background: #ffffff;
+  color: #047857;
+  border: 1.5px solid #a7f3d0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  font-weight: 800;
+}
+
+.header-pro-btn.btn-highlight-green:hover {
+  background: #ecfdf5;
+  color: #064e3b;
+  border-color: #34d399;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Unified Profile Chip */
+.header-pro-profile-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  padding: 0.3rem 0.45rem 0.3rem 0.7rem;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.header-pro-profile-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.header-pro-profile-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.header-pro-profile-name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.header-pro-profile-role {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fef08a;
+  white-space: nowrap;
+}
+
+.header-pro-logout-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: 0.25rem;
+  flex-shrink: 0;
+}
+
+.header-pro-logout-btn:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+  transform: scale(1.08);
+}
+
+/* TIER 2: PRIMARY NAVIGATION & SEMESTER CONTROL STRIP */
+.header-pro-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.15rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+/* Segmented Control Pill */
+.module-segmented-control {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  gap: 3px;
+}
+
+.module-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+}
+
+.module-tab-btn .tab-icon {
+  font-size: 1rem;
+}
+
+.module-tab-btn .tab-title {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.module-tab-btn .tab-caption {
+  font-size: 0.72rem;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.module-tab-btn:hover:not(.active) {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.module-tab-btn.active {
+  background: #ffffff;
+  color: #065f46;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.module-tab-btn.active .tab-caption {
+  color: #047857;
+  opacity: 0.9;
+}
+
+/* Guru Module Indicator Badge */
+.guru-module-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  border: 1.5px solid #d1fae5;
+  color: #064e3b;
+  font-size: 0.84rem;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* Semester Controls */
+.header-pro-period-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.period-pill-unified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  border: 1.5px solid #d1fae5;
+  padding: 0.35rem 0.85rem;
+  border-radius: 8px;
+  color: #064e3b;
+  font-size: 0.82rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.period-calendar-icon {
+  color: #047857;
+  flex-shrink: 0;
+}
+
+.period-label {
+  font-weight: 700;
+  color: #047857;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.period-select-pro {
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  padding: 2px 4px;
+}
+
+.period-select-pro option {
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  padding: 6px;
+}
+
+.period-val-text {
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #0f172a;
+}
+
+.period-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ffffff;
+  border: 1.5px solid #fde68a;
+  color: #b45309;
+  padding: 0.42rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  font-family: inherit;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+.period-add-btn:hover {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.period-add-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Breakpoints Header Pro */
+@media screen and (max-width: 960px) {
+  .app-header-pro {
+    padding: 1rem 1.25rem;
+  }
+  .header-pro-topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .header-pro-user-cluster {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .header-pro-navbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .module-segmented-control {
+    width: 100%;
+    display: flex;
+  }
+  .module-tab-btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .header-pro-period-control {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .period-pill-unified {
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .app-header-pro {
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+  }
+  .header-pro-logo-box {
+    width: 44px;
+    height: 44px;
+  }
+  .header-pro-title-ar {
+    font-size: 1.2rem;
+  }
+  .header-pro-title-latin {
+    font-size: 1.05rem;
+  }
+  .header-pro-subtitle {
+    font-size: 0.72rem;
+  }
+  .module-tab-btn .tab-caption {
+    display: none;
+  }
+  .header-pro-cloud-badge {
+    display: none;
+  }
+}
+
 .header-branding {
   display: flex;
   align-items: center;
@@ -2001,6 +2479,7 @@ body {
   main,
   .no-print,
   .app-header,
+  .app-header-pro,
   .stats-grid,
   .toolbar-card,
   .table-container,

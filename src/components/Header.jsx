@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, Download, Users, LogOut, PlusCircle, Cloud } from 'lucide-react';
-import { KELAS_BILINGUAL, formatNamaKelas } from '../utils/tahfidzCalc';
+import { formatNamaKelas } from '../utils/tahfidzCalc';
 
 export default function Header({
   currentUser,
@@ -17,227 +17,169 @@ export default function Header({
   const isAdmin = currentUser?.role === 'admin';
 
   return (
-    <header className="app-header">
-      <div className="header-branding">
-        <div className="logo-badge">
-          <img src="/logo.png" alt="Logo Pondok" className="header-logo-img" />
-        </div>
-        <div>
-          <div className="header-title-arabic">
-            {activeModule === 'diniyah' ? 'كشف درجات العلوم الدينية' : 'كشف درجات تحفيظ القرآن'}
+    <header className="app-header-pro">
+      
+      {/* TIER 1: BRANDING & USER CONTROLS */}
+      <div className="header-pro-topbar">
+        
+        {/* Left: Logo & Dual-language Typography */}
+        <div className="header-pro-branding">
+          <div className="header-pro-logo-box">
+            <img src="/logo.png" alt="Logo Pondok" className="header-pro-logo-img" />
           </div>
-          <h1 className="header-title-latin">
-            {activeModule === 'diniyah' ? 'E-Rapor Diniyah & Pengelolaan Pondok' : 'E-Rapor Tahfidz & Pengelolaan Pondok'}
-          </h1>
-          <p className="header-subtitle">
-            PPTQ JAMAL YUSUF AL-HADDAD • Sistem Cloud Terpusat
-          </p>
+          <div className="header-pro-title-group">
+            <div className="header-pro-title-ar">
+              {activeModule === 'diniyah' ? 'كشف درجات العلوم الدينية' : 'كشف درجات تحفيظ القرآن الكريم'}
+            </div>
+            <h1 className="header-pro-title-latin">
+              {activeModule === 'diniyah' ? 'E-Rapor Diniyah & Pengelolaan Pondok' : 'E-Rapor Tahfidz & Pengelolaan Pondok'}
+            </h1>
+            <p className="header-pro-subtitle">
+              PPTQ JAMAL YUSUF AL-HADDAD • Sistem Cloud Terpusat
+            </p>
+          </div>
+        </div>
+
+        {/* Right: Quick Tools & Profile Card */}
+        <div className="header-pro-user-cluster">
+          
+          {/* Cloud Status Pill */}
+          <div className="header-pro-cloud-badge" title="Sistem terhubung ke Supabase Cloud">
+            <span className="cloud-dot-pulse"></span>
+            <span>Cloud Online</span>
+          </div>
+
+          {/* Tombol Kelola Guru (Admin Saja) */}
+          {isAdmin && (
+            <button
+              type="button"
+              className="header-pro-btn btn-highlight-green"
+              onClick={onOpenManageUsers}
+              title="Kelola Akun Guru & Penugasan Kelas"
+            >
+              <Users size={15} />
+              <span>Kelola Guru</span>
+            </button>
+          )}
+
+          {/* Tombol Backup Data JSON */}
+          <button
+            type="button"
+            className="header-pro-btn"
+            onClick={onExportSemester}
+            title="Unduh file arsip cadangan semester ini"
+          >
+            <Download size={14} />
+            <span>Backup</span>
+          </button>
+
+          {/* Integrated User Profile & Logout */}
+          <div className="header-pro-profile-chip">
+            <div className="header-pro-profile-avatar">
+              {isAdmin ? '👑' : currentUser?.role === 'guru_diniyah' ? '📚' : '📖'}
+            </div>
+            <div className="header-pro-profile-text">
+              <div className="header-pro-profile-name">
+                {currentUser?.nama || 'Pengguna'}
+              </div>
+              <div className="header-pro-profile-role">
+                {isAdmin 
+                  ? 'Administrator' 
+                  : `${currentUser?.role === 'guru_diniyah' ? 'Guru Diniyah' : 'Guru Tahfidz'} • ${currentUser?.kelas_binaan === 'Semua' ? 'Semua' : formatNamaKelas(currentUser?.kelas_binaan)}`}
+              </div>
+            </div>
+            <button
+              type="button"
+              className="header-pro-logout-btn"
+              onClick={onLogout}
+              title="Keluar dari akun"
+            >
+              <LogOut size={14} />
+            </button>
+          </div>
+
         </div>
       </div>
 
-      <div className="header-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
+      {/* TIER 2: PRIMARY NAVIGATION & SEMESTER CONTROL STRIP */}
+      <div className="header-pro-navbar">
         
-        {/* Module Switcher Khusus Admin (Bisa pindah Tahfidz <-> Diniyah) */}
-        {isAdmin && (
-          <div style={{
-            display: 'inline-flex',
-            background: 'rgba(0, 0, 0, 0.25)',
-            padding: '3px',
-            borderRadius: '10px',
-            border: '1.5px solid rgba(255, 255, 255, 0.3)'
-          }}>
-            <button
-              type="button"
-              onClick={() => onChangeModule && onChangeModule('tahfidz')}
-              style={{
-                border: 'none',
-                background: activeModule === 'tahfidz' ? '#ffffff' : 'transparent',
-                color: activeModule === 'tahfidz' ? '#065f46' : '#ffffff',
-                fontWeight: 800,
-                fontSize: '0.8rem',
-                padding: '5px 12px',
-                borderRadius: '7px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: activeModule === 'tahfidz' ? '0 2px 5px rgba(0,0,0,0.2)' : 'none'
-              }}
-            >
-              📖 Tahfidz
-            </button>
-            <button
-              type="button"
-              onClick={() => onChangeModule && onChangeModule('diniyah')}
-              style={{
-                border: 'none',
-                background: activeModule === 'diniyah' ? '#ffffff' : 'transparent',
-                color: activeModule === 'diniyah' ? '#3730a3' : '#ffffff',
-                fontWeight: 800,
-                fontSize: '0.8rem',
-                padding: '5px 12px',
-                borderRadius: '7px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: activeModule === 'diniyah' ? '0 2px 5px rgba(0,0,0,0.2)' : 'none'
-              }}
-            >
-              📚 Diniyah
-            </button>
-          </div>
-        )}
-        {/* Semester Selector / Display (Hanya Admin yang bisa ubah) */}
+        {/* Left: Module Switcher (Segmented Pill) */}
         {isAdmin ? (
-          <div className="period-selector-pill" style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            background: '#ffffff', 
-            border: '2px solid rgba(255, 255, 255, 0.6)', 
-            borderRadius: '10px', 
-            padding: '4px 10px', 
-            gap: '6px',
-            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.12)',
-            flexWrap: 'wrap',
-            maxWidth: '100%'
-          }}>
-            <Calendar size={16} style={{ color: '#047857' }} />
-            <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#047857' }}>Atur Semester:</span>
-            <select
-              value={currentPeriod?.id || ''}
-              onChange={(e) => {
-                const selected = periods.find(p => p.id === e.target.value);
-                if (selected) onChangePeriod(selected);
-              }}
-              style={{
-                border: 'none',
-                background: 'transparent',
-                fontSize: '0.88rem',
-                fontWeight: '800',
-                color: '#0f172a',
-                cursor: 'pointer',
-                outline: 'none'
-              }}
-            >
-              {periods.map(p => (
-                <option key={p.id} value={p.id}>
-                  {p.tahun_ajaran} - Semester {p.semester}
-                </option>
-              ))}
-            </select>
-
+          <div className="module-segmented-control" role="tablist">
             <button
-              onClick={onOpenAddSemester}
-              title="Tambah Semester Baru"
-              style={{
-                border: 'none',
-                background: '#fef3c7',
-                color: '#92400e',
-                borderRadius: '6px',
-                padding: '3px 8px',
-                fontSize: '0.78rem',
-                fontWeight: '700',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px'
-              }}
+              type="button"
+              role="tab"
+              aria-selected={activeModule === 'tahfidz'}
+              className={`module-tab-btn ${activeModule === 'tahfidz' ? 'active' : ''}`}
+              onClick={() => onChangeModule && onChangeModule('tahfidz')}
             >
-              <PlusCircle size={13} /> + Baru
+              <span className="tab-icon">📖</span>
+              <span className="tab-title">Tahfidz</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeModule === 'diniyah'}
+              className={`module-tab-btn ${activeModule === 'diniyah' ? 'active' : ''}`}
+              onClick={() => onChangeModule && onChangeModule('diniyah')}
+            >
+              <span className="tab-icon">📚</span>
+              <span className="tab-title">Diniyah</span>
             </button>
           </div>
         ) : (
-          <div className="period-selector-pill" style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            background: '#ffffff', 
-            border: '2px solid rgba(255, 255, 255, 0.6)', 
-            borderRadius: '10px', 
-            padding: '5px 14px', 
-            gap: '8px',
-            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.12)'
-          }}>
-            <Calendar size={16} style={{ color: '#047857' }} />
-            <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#047857' }}>Periode:</span>
-            <span style={{ fontSize: '0.88rem', fontWeight: '800', color: '#0f172a' }}>
-              {currentPeriod?.tahun_ajaran || '2026/2027'} - Semester {currentPeriod?.semester || 'Ganjil'}
+          <div className="guru-module-badge">
+            <span className="guru-badge-icon">{activeModule === 'diniyah' ? '📚' : '📖'}</span>
+            <span className="guru-badge-text">
+              {activeModule === 'diniyah' ? 'Modul E-Rapor Diniyah' : 'Modul E-Rapor Tahfidz Al-Qur\'an'}
             </span>
           </div>
         )}
 
-        {/* Cloud Status */}
-        <span className="badge-free" style={{ background: 'rgba(255, 255, 255, 0.18)', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.35)', fontWeight: '600' }}>
-          <Cloud size={14} style={{ color: '#6ee7b7' }} /> Cloud Online
-        </span>
-
-        {/* Tombol Backup Data JSON */}
-        <button
-          className="btn btn-sm"
-          onClick={onExportSemester}
-          title="Unduh file backup riwayat semester ini"
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '5px',
-            background: 'rgba(255, 255, 255, 0.18)',
-            color: '#ffffff',
-            border: '1px solid rgba(255, 255, 255, 0.35)',
-            fontWeight: '600'
-          }}
-        >
-          <Download size={14} /> Backup
-        </button>
-
-        {/* Tombol Kelola Guru (Admin Saja) */}
-        {isAdmin && (
-          <button
-            className="btn btn-sm"
-            onClick={onOpenManageUsers}
-            title="Kelola Akun Guru & Penugasan Kelas"
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '6px',
-              background: '#ffffff',
-              color: '#047857',
-              border: '1.5px solid #a7f3d0',
-              fontWeight: '800',
-              padding: '0.45rem 0.85rem',
-              borderRadius: '8px',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.12)',
-              cursor: 'pointer'
-            }}
-          >
-            <Users size={16} /> Kelola Guru
-          </button>
-        )}
-
-        {/* User Info & Logout */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '1.5px solid rgba(255, 255, 255, 0.35)', paddingLeft: '12px' }}>
-          <div style={{ textAlign: 'right', lineHeight: '1.25' }}>
-            <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#ffffff' }}>
-              {isAdmin ? '👑 ' : currentUser?.role === 'guru_diniyah' ? '📚 ' : '📖 '}{currentUser?.nama || 'Pengguna'}
-            </div>
-            <div style={{ fontSize: '0.78rem', fontWeight: '700', color: '#fef08a' }}>
-              {isAdmin 
-                ? 'Administrator' 
-                : `${currentUser?.role === 'guru_diniyah' ? 'Guru Diniyah' : 'Guru Tahfidz'} • ${currentUser?.kelas_binaan === 'Semua' ? 'Semua Kelas' : formatNamaKelas(currentUser?.kelas_binaan)}`}
-            </div>
+        {/* Right: Academic Semester Controls */}
+        <div className="header-pro-period-control">
+          <div className="period-pill-unified">
+            <Calendar size={14} className="period-calendar-icon" />
+            <span className="period-label">Semester:</span>
+            {isAdmin ? (
+              <select
+                value={currentPeriod?.id || ''}
+                onChange={(e) => {
+                  const selected = periods.find(p => p.id === e.target.value);
+                  if (selected) onChangePeriod(selected);
+                }}
+                className="period-select-pro"
+                title="Pilih semester akademik"
+              >
+                {periods.map(p => (
+                  <option key={p.id} value={p.id}>
+                    {p.tahun_ajaran} — Semester {p.semester}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <span className="period-val-text">
+                {currentPeriod?.tahun_ajaran || '2026/2027'} — Semester {currentPeriod?.semester || 'Ganjil'}
+              </span>
+            )}
           </div>
-          <button
-            className="btn btn-sm"
-            onClick={onLogout}
-            title="Keluar dari Akun"
-            style={{ 
-              padding: '6px 8px', 
-              background: '#fee2e2', 
-              color: '#dc2626', 
-              border: '1px solid #fca5a5',
-              borderRadius: '6px',
-              cursor: 'pointer'
-            }}
-          >
-            <LogOut size={15} />
-          </button>
+
+          {isAdmin && (
+            <button
+              type="button"
+              className="period-add-btn"
+              onClick={onOpenAddSemester}
+              title="Tambah / Buka Semester Baru"
+            >
+              <PlusCircle size={13} />
+              <span>+ Baru</span>
+            </button>
+          )}
         </div>
+
       </div>
+
     </header>
   );
 }

@@ -255,9 +255,9 @@ export default function DiniyahSantriList({
                         <button
                           className="btn btn-secondary btn-sm"
                           onClick={() => onSelectInputSiswa(santri)}
-                          title="Input atau ubah 8 mapel santri ini"
+                          title="Input atau ubah nilai mapel santri ini"
                         >
-                          <Edit3 size={13} /> Edit 8 Mapel
+                          <Edit3 size={13} /> Input Nilai
                         </button>
                         {currentUser?.role === 'admin' ? (
                           <button
