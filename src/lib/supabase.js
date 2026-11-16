@@ -283,3 +283,116 @@ export async function deleteAppUser(id) {
   if (error) throw error;
   return true;
 }
+
+/**
+ * ============================================================================
+ * MODUL RAPOR DINIYAH (8 MATA PELAJARAN FORMAL PONDOK)
+ * ============================================================================
+ */
+
+/**
+ * Mengambil data santri beserta nilai rapor Diniyah pada periode semester tertentu
+ */
+export async function getSantriWithDiniyahGrades(periodId) {
+  // 1. Ambil seluruh data master santri
+  const { data: santriList, error: santriError } = await supabase
+    .from('santri')
+    .select('*')
+    .order('nis', { ascending: true });
+
+  if (santriError) {
+    console.error('Gagal mengambil data master santri:', santriError);
+    return [];
+  }
+
+  // 2. Ambil seluruh nilai rapor Diniyah pada periode aktif
+  let diniyahMap = {};
+  if (periodId && periodId !== 'default') {
+    const { data: diniyahGrades, error: diniyahError } = await supabase
+      .from('rapor_diniyah')
+      .select('*')
+      .eq('period_id', periodId);
+
+    if (diniyahError) {
+      console.warn('Tabel rapor_diniyah belum dibuat atau koneksi offline:', diniyahError);
+    } else if (diniyahGrades) {
+      diniyahGrades.forEach(r => {
+        diniyahMap[r.santri_id] = r;
+      });
+    }
+  }
+
+  // 3. Gabungkan data santri dengan nilai rapor Diniyah
+  return santriList.map(s => {
+    const r = diniyahMap[s.id] || {};
+    return {
+      id: s.id,
+      nis: s.nis,
+      nama: s.nama,
+      kelas: s.kelas,
+      halqah: s.halqah,
+      is_tahsin: Boolean(s.is_tahsin),
+      nilaiDiniyah: r.nilai_mapel || {},
+      catatanDiniyah: r.catatan || ''
+    };
+  });
+}
+
+/**
+ * Menyimpan / memperbarui nilai rapor Diniyah santri ke Supabase Cloud
+ */
+export async function saveSantriDiniyah(periodId, santriId, nilaiMapel, catatan) {
+  const payload = {
+    period_id: periodId,
+    santri_id: santriId,
+    nilai_mapel: nilaiMapel || {},
+    catatan: catatan !== undefined ? catatan : '',
+    updated_at: new Date().toISOString()
+  };
+
+  const { data, error } = await supabase
+    .from('rapor_diniyah')
+    .upsert(payload, { onConflict: 'period_id,santri_id' })
+    .select();
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Simpan nilai Diniyah massal sekelas untuk 1 mata pelajaran (Input Cepat Per Mapel Ala Excel)
+ */
+export async function saveBatchDiniyahPerMapel(periodId, mapelId, updatesArray) {
+  if (!periodId || !mapelId || !updatesArray || !updatesArray.length) return [];
+
+  const promises = updatesArray.map(async (u) => {
+    // Ambil nilai existing terlebih dahulu agar mapel lain tidak tertimpa
+    const { data: existing } = await supabase
+      .from('rapor_diniyah')
+      .select('nilai_mapel, catatan')
+      .eq('period_id', periodId)
+      .eq('santri_id', u.santriId)
+      .maybeSingle();
+
+    const currentNilaiMapel = existing?.nilai_mapel || {};
+    if (u.nilai === '' || u.nilai === null || u.nilai === undefined) {
+      delete currentNilaiMapel[mapelId];
+    } else {
+      currentNilaiMapel[mapelId] = Number(u.nilai);
+    }
+
+    const payload = {
+      period_id: periodId,
+      santri_id: u.santriId,
+      nilai_mapel: currentNilaiMapel,
+      catatan: existing?.catatan || '',
+      updated_at: new Date().toISOString()
+    };
+
+    return supabase
+      .from('rapor_diniyah')
+      .upsert(payload, { onConflict: 'period_id,santri_id' });
+  });
+
+  return Promise.all(promises);
+}

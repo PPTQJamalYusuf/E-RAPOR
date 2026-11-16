@@ -7,11 +7,19 @@ import PrintKelasModal from './components/PrintKelasModal';
 import LoginModal from './components/LoginModal';
 import ManageUsersModal from './components/ManageUsersModal';
 import SemesterModal from './components/SemesterModal';
+import DiniyahSantriList from './components/DiniyahSantriList';
+import InputDiniyahMapelModal from './components/InputDiniyahMapelModal';
+import InputDiniyahSiswaModal from './components/InputDiniyahSiswaModal';
+import PrintDiniyahModal from './components/PrintDiniyahModal';
+import PrintKelasDiniyahModal from './components/PrintKelasDiniyahModal';
 import { WifiOff, RefreshCw, CheckCircle2 } from 'lucide-react';
 import { 
   getAcademicPeriods, 
   getSantriWithGrades, 
   saveSantriRapor,
+  getSantriWithDiniyahGrades,
+  saveSantriDiniyah,
+  saveBatchDiniyahPerMapel,
   setActiveAcademicPeriod,
   toggleSantriTahsin
 } from './lib/supabase';
@@ -43,20 +51,41 @@ export default function App() {
     }
   });
 
+  // Mode Modul Aktif: 'tahfidz' atau 'diniyah' (otomatis terkunci sesuai role guru)
+  const [activeModule, setActiveModule] = useState(() => {
+    return currentUser?.role === 'guru_diniyah' ? 'diniyah' : 'tahfidz';
+  });
+
+  // Sinkronkan activeModule jika user berubah
+  useEffect(() => {
+    if (currentUser?.role === 'guru_diniyah') {
+      setActiveModule('diniyah');
+    } else if (currentUser?.role === 'guru_tahfidz' || currentUser?.role === 'guru') {
+      setActiveModule('tahfidz');
+    }
+  }, [currentUser]);
+
   // 2. Academic Periods & Santri State
   const [periods, setPeriods] = useState([]);
   const [currentPeriod, setCurrentPeriod] = useState(null);
   const [santriList, setSantriList] = useState([]);
+  const [diniyahSantriList, setDiniyahSantriList] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
 
-  // 3. Modals State
+  // 3. Modals State (Tahfidz)
   const [inputSantri, setInputSantri] = useState(null);
   const [printData, setPrintData] = useState(null);
   const [printKelasData, setPrintKelasData] = useState(null);
   const [showManageUsers, setShowManageUsers] = useState(false);
   const [showAddSemester, setShowAddSemester] = useState(false);
 
-  // 4. Offline Queue & Sync State
+  // 4. Modals State (Diniyah)
+  const [inputDiniyahMapelKelas, setInputDiniyahMapelKelas] = useState(null); // string nama kelas
+  const [inputDiniyahSiswa, setInputDiniyahSiswa] = useState(null); // objek santri
+  const [printDiniyahData, setPrintDiniyahData] = useState(null); // { santri, ranking }
+  const [printKelasDiniyahData, setPrintKelasDiniyahData] = useState(null); // { kelas }
+
+  // 5. Offline Queue & Sync State
   const [offlineQueue, setOfflineQueue] = useState(() => {
     try {
       const saved = localStorage.getItem(OFFLINE_QUEUE_KEY);
@@ -69,7 +98,17 @@ export default function App() {
   const [isSyncing, setIsSyncing] = useState(false);
 
   // Status apakah ada modal yang sedang terbuka
-  const isAnyModalOpen = Boolean(inputSantri || printData || printKelasData || showManageUsers || showAddSemester);
+  const isAnyModalOpen = Boolean(
+    inputSantri || 
+    printData || 
+    printKelasData || 
+    showManageUsers || 
+    showAddSemester ||
+    inputDiniyahMapelKelas ||
+    inputDiniyahSiswa ||
+    printDiniyahData ||
+    printKelasDiniyahData
+  );
 
   // Tangani tombol Back di browser/HP & tombol ESC keyboard untuk menutup modal
   useEffect(() => {
@@ -87,6 +126,10 @@ export default function App() {
       setPrintKelasData(null);
       setShowManageUsers(false);
       setShowAddSemester(false);
+      setInputDiniyahMapelKelas(null);
+      setInputDiniyahSiswa(null);
+      setPrintDiniyahData(null);
+      setPrintKelasDiniyahData(null);
     };
 
     // Saat user menekan tombol Escape di keyboard
@@ -97,6 +140,10 @@ export default function App() {
         setPrintKelasData(null);
         setShowManageUsers(false);
         setShowAddSemester(false);
+        setInputDiniyahMapelKelas(null);
+        setInputDiniyahSiswa(null);
+        setPrintDiniyahData(null);
+        setPrintKelasDiniyahData(null);
       }
     };
 
@@ -212,30 +259,42 @@ export default function App() {
     loadPeriods();
   }, [currentUser]);
 
-  // Muat data santri & nilai setiap kali periode berubah
+  // Muat data santri (Tahfidz / Diniyah) setiap kali periode atau modul aktif berubah
   useEffect(() => {
     if (!currentUser || !currentPeriod) return;
 
-    async function loadSantriData() {
+    async function loadData() {
       setLoadingData(true);
       try {
-        const data = await getSantriWithGrades(currentPeriod.id);
-        if (data && data.length > 0) {
-          setSantriList(data);
+        if (activeModule === 'diniyah') {
+          const dData = await getSantriWithDiniyahGrades(currentPeriod.id);
+          if (dData && dData.length > 0) {
+            setDiniyahSantriList(dData);
+          } else {
+            setDiniyahSantriList(initialSantriData.map(s => ({ ...s, nilaiDiniyah: {}, catatanDiniyah: '' })));
+          }
         } else {
-          // Jika di DB belum ada, pakai data initial
-          setSantriList(initialSantriData);
+          const tData = await getSantriWithGrades(currentPeriod.id);
+          if (tData && tData.length > 0) {
+            setSantriList(tData);
+          } else {
+            setSantriList(initialSantriData);
+          }
         }
       } catch (err) {
         console.error('Gagal memuat data santri dari Supabase:', err);
-        setSantriList(initialSantriData);
+        if (activeModule === 'diniyah') {
+          setDiniyahSantriList(initialSantriData.map(s => ({ ...s, nilaiDiniyah: {}, catatanDiniyah: '' })));
+        } else {
+          setSantriList(initialSantriData);
+        }
       } finally {
         setLoadingData(false);
       }
     }
 
-    loadSantriData();
-  }, [currentUser, currentPeriod]);
+    loadData();
+  }, [currentUser, currentPeriod, activeModule]);
 
   // Fungsi sinkronisasi antrean offline ke Supabase Cloud
   const syncOfflineQueue = useCallback(async () => {
@@ -381,6 +440,62 @@ export default function App() {
     }
   };
 
+  // Handler simpan nilai Diniyah per santriwati
+  const handleSaveDiniyahSiswa = async (santriId, newNilaiMapel, newCatatan) => {
+    // 1. Optimistic Update lokal
+    setDiniyahSantriList(prev =>
+      prev.map(s => {
+        if (s.id === santriId) {
+          return {
+            ...s,
+            nilaiDiniyah: newNilaiMapel,
+            catatanDiniyah: newCatatan !== undefined ? newCatatan : s.catatanDiniyah
+          };
+        }
+        return s;
+      })
+    );
+
+    // 2. Simpan permanen ke Supabase Cloud
+    if (currentPeriod?.id && currentPeriod.id !== 'default') {
+      try {
+        await saveSantriDiniyah(currentPeriod.id, santriId, newNilaiMapel, newCatatan);
+      } catch (err) {
+        console.error('Gagal simpan nilai diniyah ke Supabase:', err);
+        alert('Gagal menyimpan nilai Diniyah ke Cloud. Periksa koneksi internet.');
+      }
+    }
+  };
+
+  // Handler simpan nilai Diniyah cepat massal per mapel sekelas (Ala Excel)
+  const handleSaveBatchDiniyahMapel = async (kelas, mapelId, updates) => {
+    // updates: [{ santriId, nilai }]
+    // 1. Optimistic Update
+    setDiniyahSantriList(prev =>
+      prev.map(s => {
+        const item = updates.find(u => u.santriId === s.id);
+        if (item) {
+          const currentMapel = { ...(s.nilaiDiniyah || {}) };
+          if (item.nilai === '' || item.nilai === null || item.nilai === undefined) {
+            delete currentMapel[mapelId];
+          } else {
+            currentMapel[mapelId] = Number(item.nilai);
+          }
+          return {
+            ...s,
+            nilaiDiniyah: currentMapel
+          };
+        }
+        return s;
+      })
+    );
+
+    // 2. Simpan permanen ke Supabase Cloud
+    if (currentPeriod?.id && currentPeriod.id !== 'default') {
+      await saveBatchDiniyahPerMapel(currentPeriod.id, mapelId, updates);
+    }
+  };
+
   // Handler penambahan semester baru
   const handleSemesterCreated = (newPeriod) => {
     setPeriods(prev => [newPeriod, ...prev.map(p => ({ ...p, is_active: false }))]);
@@ -403,16 +518,18 @@ export default function App() {
   // Handler ekspor file cadangan JSON semester aktif
   const handleExportSemester = () => {
     const periodLabel = `${currentPeriod?.tahun_ajaran || '2024-2025'}_Sem_${currentPeriod?.semester || 'Ganjil'}`.replace(/[\/\s]/g, '-');
+    const isDiniyah = activeModule === 'diniyah';
     const exportPayload = {
+      modul: isDiniyah ? 'Diniyah' : 'Tahfidz',
       periode: currentPeriod,
       tanggalExport: new Date().toISOString(),
-      santriList: santriList
+      santriList: isDiniyah ? diniyahSantriList : santriList
     };
 
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportPayload, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `Arsip_Rapor_Tahfidz_${periodLabel}.json`);
+    downloadAnchor.setAttribute('download', `Arsip_Rapor_${isDiniyah ? 'Diniyah' : 'Tahfidz'}_${periodLabel}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -427,6 +544,8 @@ export default function App() {
     <div className="app-container">
       <Header
         currentUser={currentUser}
+        activeModule={activeModule}
+        onChangeModule={setActiveModule}
         onLogout={handleLogout}
         onOpenManageUsers={() => setShowManageUsers(true)}
         periods={periods}
@@ -440,8 +559,19 @@ export default function App() {
         {loadingData ? (
           <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
             <div style={{ fontSize: '1.8rem', marginBottom: '10px' }}>⏳</div>
-            <div style={{ fontSize: '1.05rem', fontWeight: '600' }}>Menyinkronkan data santri dari Cloud Supabase...</div>
+            <div style={{ fontSize: '1.05rem', fontWeight: '600' }}>
+              Menyinkronkan data santri {activeModule === 'diniyah' ? 'Diniyah' : 'Tahfidz'} dari Cloud Supabase...
+            </div>
           </div>
+        ) : activeModule === 'diniyah' ? (
+          <DiniyahSantriList
+            santriList={diniyahSantriList}
+            currentUser={currentUser}
+            onOpenInputMapel={(kelas) => setInputDiniyahMapelKelas(kelas)}
+            onSelectInputSiswa={(s) => setInputDiniyahSiswa(s)}
+            onSelectPrintDiniyah={(s, rank) => setPrintDiniyahData({ santri: s, ranking: rank })}
+            onSelectPrintClassDiniyah={(kelas) => setPrintKelasDiniyahData({ kelas })}
+          />
         ) : (
           <SantriList
             santriList={santriList}
@@ -463,7 +593,7 @@ export default function App() {
         />
       )}
 
-      {/* Modal Pratinjau & Cetak E-Rapor Format Asli */}
+      {/* Modal Pratinjau & Cetak E-Rapor Format Asli Tahfidz */}
       {printData && (
         <PrintRaporModal
           santri={santriList.find(s => s.id === printData.santri.id) || printData.santri}
@@ -474,13 +604,53 @@ export default function App() {
         />
       )}
 
-      {/* Modal Cetak Per Kelas (Batch Rapor Santriwati & Rekap Nilai Leger) */}
+      {/* Modal Cetak Per Kelas Tahfidz (Batch Rapor Santriwati & Rekap Nilai Leger) */}
       {printKelasData && (
         <PrintKelasModal
           santriList={santriList}
           initialKelas={printKelasData.kelas}
           currentPeriod={currentPeriod}
           onClose={() => setPrintKelasData(null)}
+        />
+      )}
+
+      {/* Modal Input Cepat Diniyah Per Mapel (Ala Excel) */}
+      {inputDiniyahMapelKelas && (
+        <InputDiniyahMapelModal
+          initialKelas={inputDiniyahMapelKelas}
+          santriList={diniyahSantriList}
+          onClose={() => setInputDiniyahMapelKelas(null)}
+          onSaveBatch={handleSaveBatchDiniyahMapel}
+        />
+      )}
+
+      {/* Modal Input Nilai Diniyah Per Santriwati */}
+      {inputDiniyahSiswa && (
+        <InputDiniyahSiswaModal
+          santri={diniyahSantriList.find(s => s.id === inputDiniyahSiswa.id) || inputDiniyahSiswa}
+          onClose={() => setInputDiniyahSiswa(null)}
+          onSave={handleSaveDiniyahSiswa}
+        />
+      )}
+
+      {/* Modal Cetak Lembar Rapor Diniyah A4 Formal (1 Santri) */}
+      {printDiniyahData && (
+        <PrintDiniyahModal
+          santri={diniyahSantriList.find(s => s.id === printDiniyahData.santri.id) || printDiniyahData.santri}
+          ranking={printDiniyahData.ranking}
+          currentPeriod={currentPeriod}
+          currentUser={currentUser}
+          onClose={() => setPrintDiniyahData(null)}
+        />
+      )}
+
+      {/* Modal Cetak Rapor Diniyah Per Kelas (Batch A4 & Leger Rekap) */}
+      {printKelasDiniyahData && (
+        <PrintKelasDiniyahModal
+          santriList={diniyahSantriList}
+          initialKelas={printKelasDiniyahData.kelas}
+          currentPeriod={currentPeriod}
+          onClose={() => setPrintKelasDiniyahData(null)}
         />
       )}
 

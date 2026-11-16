@@ -4,6 +4,8 @@ import { KELAS_BILINGUAL, formatNamaKelas } from '../utils/tahfidzCalc';
 
 export default function Header({
   currentUser,
+  activeModule = 'tahfidz',
+  onChangeModule,
   onLogout,
   onOpenManageUsers,
   periods,
@@ -21,8 +23,12 @@ export default function Header({
           <img src="/logo.png" alt="Logo Pondok" className="header-logo-img" />
         </div>
         <div>
-          <div className="header-title-arabic">كشف درجات تحفيظ القرآن</div>
-          <h1 className="header-title-latin">E-Rapor Tahfidz & Pengelolaan Pondok</h1>
+          <div className="header-title-arabic">
+            {activeModule === 'diniyah' ? 'كشف درجات العلوم الدينية' : 'كشف درجات تحفيظ القرآن'}
+          </div>
+          <h1 className="header-title-latin">
+            {activeModule === 'diniyah' ? 'E-Rapor Diniyah & Pengelolaan Pondok' : 'E-Rapor Tahfidz & Pengelolaan Pondok'}
+          </h1>
           <p className="header-subtitle">
             PPTQ JAMAL YUSUF AL-HADDAD • Sistem Cloud Terpusat
           </p>
@@ -30,6 +36,54 @@ export default function Header({
       </div>
 
       <div className="header-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
+        
+        {/* Module Switcher Khusus Admin (Bisa pindah Tahfidz <-> Diniyah) */}
+        {isAdmin && (
+          <div style={{
+            display: 'inline-flex',
+            background: 'rgba(0, 0, 0, 0.25)',
+            padding: '3px',
+            borderRadius: '10px',
+            border: '1.5px solid rgba(255, 255, 255, 0.3)'
+          }}>
+            <button
+              type="button"
+              onClick={() => onChangeModule && onChangeModule('tahfidz')}
+              style={{
+                border: 'none',
+                background: activeModule === 'tahfidz' ? '#ffffff' : 'transparent',
+                color: activeModule === 'tahfidz' ? '#065f46' : '#ffffff',
+                fontWeight: 800,
+                fontSize: '0.8rem',
+                padding: '5px 12px',
+                borderRadius: '7px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                boxShadow: activeModule === 'tahfidz' ? '0 2px 5px rgba(0,0,0,0.2)' : 'none'
+              }}
+            >
+              📖 Tahfidz
+            </button>
+            <button
+              type="button"
+              onClick={() => onChangeModule && onChangeModule('diniyah')}
+              style={{
+                border: 'none',
+                background: activeModule === 'diniyah' ? '#ffffff' : 'transparent',
+                color: activeModule === 'diniyah' ? '#3730a3' : '#ffffff',
+                fontWeight: 800,
+                fontSize: '0.8rem',
+                padding: '5px 12px',
+                borderRadius: '7px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                boxShadow: activeModule === 'diniyah' ? '0 2px 5px rgba(0,0,0,0.2)' : 'none'
+              }}
+            >
+              📚 Diniyah
+            </button>
+          </div>
+        )}
         {/* Semester Selector / Display (Hanya Admin yang bisa ubah) */}
         {isAdmin ? (
           <div className="period-selector-pill" style={{ 
@@ -159,10 +213,12 @@ export default function Header({
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '1.5px solid rgba(255, 255, 255, 0.35)', paddingLeft: '12px' }}>
           <div style={{ textAlign: 'right', lineHeight: '1.25' }}>
             <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#ffffff' }}>
-              {isAdmin ? '👑 ' : '👩‍🏫 '}{currentUser?.nama || 'Pengguna'}
+              {isAdmin ? '👑 ' : currentUser?.role === 'guru_diniyah' ? '📚 ' : '📖 '}{currentUser?.nama || 'Pengguna'}
             </div>
             <div style={{ fontSize: '0.78rem', fontWeight: '700', color: '#fef08a' }}>
-              {isAdmin ? 'Administrator' : (currentUser?.kelas_binaan === 'Semua' ? 'Semua Kelas' : formatNamaKelas(currentUser?.kelas_binaan))}
+              {isAdmin 
+                ? 'Administrator' 
+                : `${currentUser?.role === 'guru_diniyah' ? 'Guru Diniyah' : 'Guru Tahfidz'} • ${currentUser?.kelas_binaan === 'Semua' ? 'Semua Kelas' : formatNamaKelas(currentUser?.kelas_binaan)}`}
             </div>
           </div>
           <button

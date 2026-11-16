@@ -1844,6 +1844,60 @@ body {
   width: 220px;
 }
 
+.signature-container-formal.signature-3col-formal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 0 5px;
+}
+
+.signature-3col-formal .signature-col-formal {
+  flex: 1;
+  width: 32%;
+  max-width: 33%;
+  text-align: center;
+}
+
+.signature-3col-formal .sig-top-line {
+  font-size: 8.5pt;
+  color: #1f2937;
+  height: 18px;
+  line-height: 18px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+.signature-3col-formal .sig-role-line {
+  font-size: 8.8pt;
+  font-weight: 700;
+  color: #111827;
+  height: 20px;
+  line-height: 20px;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.signature-3col-formal .sig-space-formal {
+  height: 52px;
+}
+
+.signature-3col-formal .sig-name-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+}
+
+.signature-3col-formal .sig-solid-line {
+  display: inline-block;
+  width: 140px;
+  border-bottom: 1.2px solid #1f2937;
+  height: 0;
+  margin: 0 4px;
+}
+
 .sig-role-formal {
   color: #1f2937;
   margin-bottom: 1px;
@@ -3270,6 +3324,50 @@ body {
     text-align: center !important;
   }
 
+  .signature-3col-formal {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    padding: 0 2px !important;
+    font-size: 6.8pt !important;
+    margin-top: 8px !important;
+  }
+
+  .signature-3col-formal .signature-col-formal {
+    width: 32% !important;
+    flex: 1 !important;
+    max-width: 33% !important;
+    text-align: center !important;
+  }
+
+  .signature-3col-formal .sig-top-line {
+    font-size: 7pt !important;
+    height: 14px !important;
+    line-height: 14px !important;
+    margin-bottom: 1px !important;
+  }
+
+  .signature-3col-formal .sig-role-line {
+    font-size: 7.2pt !important;
+    height: 15px !important;
+    line-height: 15px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .signature-3col-formal .sig-space-formal {
+    height: 32px !important;
+  }
+
+  .signature-3col-formal .sig-name-box {
+    height: 18px !important;
+  }
+
+  .signature-3col-formal .sig-solid-line {
+    width: 95px !important;
+    border-bottom: 1px solid #000000 !important;
+  }
+
   .sig-space-formal {
     height: 30px !important;
   }
@@ -3725,4 +3823,97 @@ body {
     font-size: 0.8rem;
   }
 }
+
+/* ========================================================
+   MODUL RAPOR DINIYAH STYLING (A4 FORMAL & LEGER REKAP)
+   ======================================================== */
+.scores-table-formal {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #111827 !important;
+  background: #ffffff;
+  font-size: 9.5pt;
+  margin-top: 6px;
+  margin-bottom: 8px;
+}
+
+.scores-table-formal th {
+  background-color: #1b4332 !important;
+  color: #ffffff !important;
+  font-weight: bold;
+  font-size: 9pt;
+  padding: 5px 8px;
+  border: 1px solid #111827 !important;
+  text-align: center;
+}
+
+.scores-table-formal td {
+  padding: 5px 8px;
+  border: 1px solid #111827 !important;
+  vertical-align: middle;
+}
+
+.scores-table-formal tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.summary-cards-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.kkm-table-wrapper {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.kkm-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #94a3b8;
+  text-align: center;
+}
+
+.kkm-table th, .kkm-table td {
+  border: 1px solid #94a3b8;
+  padding: 3px 6px;
+}
+
+@media print {
+  .scores-table-formal {
+    font-size: 8.5pt !important;
+    border: 1px solid #000000 !important;
+  }
+  .scores-table-formal th {
+    background-color: #1b4332 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color: #ffffff !important;
+    font-size: 8pt !important;
+    padding: 3px 6px !important;
+    border: 1px solid #000000 !important;
+  }
+  .scores-table-formal td {
+    padding: 3px 6px !important;
+    border: 1px solid #000000 !important;
+    font-size: 8.5pt !important;
+  }
+  .summary-cards-3col {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 4px !important;
+    margin-bottom: 4px !important;
+  }
+  .kkm-table {
+    border: 1px solid #000000 !important;
+    font-size: 7.5pt !important;
+  }
+  .kkm-table th, .kkm-table td {
+    border: 1px solid #000000 !important;
+    padding: 2px 4px !important;
+  }
+}
+
 

@@ -15,7 +15,7 @@ export default function ManageUsersModal({ onClose }) {
     nama: '',
     username: '',
     password: '',
-    role: 'guru',
+    role: 'guru_tahfidz',
     kelas_binaan: 'Semua'
   });
   const [submitting, setSubmitting] = useState(false);
@@ -59,7 +59,7 @@ export default function ManageUsersModal({ onClose }) {
         nama: '',
         username: '',
         password: '',
-        role: 'guru',
+        role: 'guru_tahfidz',
         kelas_binaan: 'Semua'
       });
       await loadUsers();
@@ -201,8 +201,9 @@ export default function ManageUsersModal({ onClose }) {
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   >
-                    <option value="guru">Guru / Ustadzah</option>
-                    <option value="admin">Administrator Pondok</option>
+                    <option value="guru_tahfidz">📖 Guru Tahfidz (Al-Qur'an & Juz)</option>
+                    <option value="guru_diniyah">📚 Guru Diniyah (Kitab & Mapel)</option>
+                    <option value="admin">👑 Administrator Pondok (Semua Akses)</option>
                   </select>
                 </div>
 
@@ -283,11 +284,23 @@ export default function ManageUsersModal({ onClose }) {
                             borderRadius: '12px',
                             fontSize: '0.75rem',
                             fontWeight: '700',
-                            background: u.role === 'admin' ? '#fef3c7' : '#ecfdf5',
-                            color: u.role === 'admin' ? '#92400e' : '#047857',
-                            border: u.role === 'admin' ? '1px solid #fde047' : '1px solid #a7f3d0'
+                            background: u.role === 'admin' 
+                              ? '#fef3c7' 
+                              : u.role === 'guru_diniyah' 
+                              ? '#e0e7ff' 
+                              : '#ecfdf5',
+                            color: u.role === 'admin' 
+                              ? '#92400e' 
+                              : u.role === 'guru_diniyah' 
+                              ? '#3730a3' 
+                              : '#047857',
+                            border: u.role === 'admin' 
+                              ? '1px solid #fde047' 
+                              : u.role === 'guru_diniyah' 
+                              ? '1px solid #c7d2fe' 
+                              : '1px solid #a7f3d0'
                           }}>
-                            {u.role === 'admin' ? '👑 Admin' : '👩‍🏫 Guru'}
+                            {u.role === 'admin' ? '👑 Admin' : u.role === 'guru_diniyah' ? '📚 Guru Diniyah' : '📖 Guru Tahfidz'}
                           </span>
                         </td>
                         <td>
