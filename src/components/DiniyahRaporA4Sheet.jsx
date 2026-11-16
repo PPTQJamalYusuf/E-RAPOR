@@ -121,7 +121,7 @@ export default function DiniyahRaporA4Sheet({
       <table className="tahsin-formal-table" style={{ width: '100%', marginBottom: '6px' }}>
         <thead>
           <tr>
-            <th style={{ width: '38px', textAlign: 'center' }}>
+            <th style={{ width: '40px', textAlign: 'center' }}>
               <span>No</span>
               <span className="arabic" style={{ fontSize: '9.5pt', marginLeft: '3px' }}>الرقم</span>
             </th>
@@ -129,15 +129,11 @@ export default function DiniyahRaporA4Sheet({
               <span>Mata Pelajaran</span>
               <span className="arabic" style={{ fontSize: '9.5pt', marginLeft: '6px' }}>المادة الدراسية</span>
             </th>
-            <th style={{ width: '65px', textAlign: 'center' }}>
-              <span>KKM</span>
-              <span className="arabic" style={{ fontSize: '9.5pt', marginLeft: '3px' }}>المعيار</span>
-            </th>
-            <th style={{ width: '75px', textAlign: 'center' }}>
+            <th style={{ width: '90px', textAlign: 'center' }}>
               <span>Nilai</span>
               <span className="arabic" style={{ fontSize: '9.5pt', marginLeft: '3px' }}>الدرجة</span>
             </th>
-            <th style={{ width: '160px', textAlign: 'center' }}>
+            <th style={{ width: '180px', textAlign: 'center' }}>
               <span>Predikat</span>
               <span className="arabic" style={{ fontSize: '9.5pt', marginLeft: '3px' }}>التقدير</span>
             </th>
@@ -160,9 +156,6 @@ export default function DiniyahRaporA4Sheet({
                   <span className="arabic" style={{ fontSize: '10.5pt', marginLeft: '8px', color: '#166534', fontWeight: 700 }}>
                     {m.labelAr || m.arab}
                   </span>
-                </td>
-                <td style={{ textAlign: 'center', fontWeight: 700, color: '#64748b', fontSize: '9pt' }}>
-                  60
                 </td>
                 <td className={`cell-tahsin-val ${hasVal ? 'has-val' : 'is-empty'}`} style={{ textAlign: 'center' }}>
                   {hasVal ? numVal : '—'}
