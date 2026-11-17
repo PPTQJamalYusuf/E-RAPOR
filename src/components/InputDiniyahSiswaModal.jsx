@@ -69,7 +69,9 @@ export default function InputDiniyahSiswaModal({
         <div style={{ padding: '0.85rem 1.25rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', textAlign: 'center' }}>
           <div style={{ background: '#ffffff', padding: '6px 8px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
             <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700 }}>Total Nilai</div>
-            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1e293b' }}>{calc.total}</div>
+            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: calc.count > 0 ? '#1e293b' : '#94a3b8' }}>
+              {calc.count > 0 ? calc.total : '—'}
+            </div>
           </div>
           <div style={{ background: '#ffffff', padding: '6px 8px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
             <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700 }}>Rata-rata</div>
@@ -79,68 +81,94 @@ export default function InputDiniyahSiswaModal({
           </div>
           <div style={{ background: '#ffffff', padding: '6px 8px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
             <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700 }}>Predikat Akhir</div>
-            <div className="arabic" style={{ fontSize: '1.05rem', fontWeight: 800, color: colorInfo.text }}>
-              {calc.predikatAkhir}
+            <div className="arabic" style={{ fontSize: '1.05rem', fontWeight: 800, color: calc.count > 0 ? colorInfo.text : '#94a3b8' }}>
+              {calc.count > 0 ? calc.predikatAkhir : '—'}
             </div>
           </div>
         </div>
 
-        {/* Body Modal: 8 Input Form Mata Pelajaran */}
-        <div className="modal-body" style={{ padding: '1rem 1.25rem', overflowY: 'auto', flex: 1 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '10px' }}>
-            {MATA_PELAJARAN_DINIYAH.map(m => {
-              const val = nilaiMapel[m.id] ?? '';
-              const pred = getPredikatDiniyah(val);
-              const colorP = PREDIKAT_DINIYAH_COLORS[pred] || PREDIKAT_DINIYAH_COLORS['-'];
+        {/* Body Modal: Tabel 8 Mata Pelajaran (Kebawah Vertikal) */}
+        <div className="modal-body" style={{ padding: '0.85rem 1.25rem', overflowY: 'auto', flex: 1 }}>
+          <table className="santri-table" style={{ width: '100%', margin: 0, borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+                <th style={{ width: '45px', textAlign: 'center', padding: '8px' }}>No</th>
+                <th style={{ textAlign: 'left', padding: '8px 12px' }}>Mata Pelajaran</th>
+                <th style={{ width: '110px', textAlign: 'center', padding: '8px' }}>Nilai</th>
+                <th style={{ width: '130px', textAlign: 'center', padding: '8px' }}>Predikat</th>
+              </tr>
+            </thead>
+            <tbody>
+              {MATA_PELAJARAN_DINIYAH.map((m, idx) => {
+                const val = nilaiMapel[m.id] ?? '';
+                const pred = getPredikatDiniyah(val);
+                const colorP = PREDIKAT_DINIYAH_COLORS[pred] || PREDIKAT_DINIYAH_COLORS['-'];
 
-              return (
-                <div key={m.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1e293b' }}>{m.labelId}</div>
-                    <div className="arabic" style={{ fontSize: '0.85rem', color: '#4338ca', fontWeight: 600 }}>{m.labelAr}</div>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      placeholder="0 - 100"
-                      value={val}
-                      onChange={(e) => handleScoreChange(m.id, e.target.value)}
-                      style={{
-                        width: '70px',
-                        padding: '6px',
-                        textAlign: 'center',
-                        fontSize: '0.95rem',
-                        fontWeight: 800,
-                        borderRadius: '6px',
-                        border: val !== '' ? '2px solid #4338ca' : '1.5px solid #cbd5e1',
-                        background: '#ffffff',
-                        outline: 'none'
-                      }}
-                    />
-                    <div
-                      className="arabic"
-                      style={{
-                        width: '65px',
-                        textAlign: 'center',
-                        fontSize: '0.85rem',
-                        fontWeight: 800,
-                        padding: '4px',
-                        borderRadius: '4px',
-                        background: colorP.bg,
-                        color: colorP.text,
-                        border: `1px solid ${colorP.border}`
-                      }}
-                    >
-                      {pred || '—'}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                return (
+                  <tr key={m.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ textAlign: 'center', color: '#64748b', fontWeight: 600, padding: '8px' }}>
+                      {idx + 1}
+                    </td>
+                    <td style={{ padding: '8px 12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1e293b' }}>
+                          {m.labelId}
+                        </span>
+                        <span className="arabic" style={{ fontSize: '0.95rem', color: '#4338ca', fontWeight: 700 }}>
+                          {m.labelAr}
+                        </span>
+                      </div>
+                    </td>
+                    <td style={{ textAlign: 'center', padding: '6px 8px' }}>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        placeholder=""
+                        value={val}
+                        onChange={(e) => handleScoreChange(m.id, e.target.value)}
+                        style={{
+                          width: '75px',
+                          padding: '6px 8px',
+                          textAlign: 'center',
+                          fontSize: '0.95rem',
+                          fontWeight: 800,
+                          borderRadius: '6px',
+                          border: val !== '' ? '2px solid #4338ca' : '1.5px solid #cbd5e1',
+                          background: '#ffffff',
+                          outline: 'none',
+                          color: '#1e293b'
+                        }}
+                      />
+                    </td>
+                    <td style={{ textAlign: 'center', padding: '6px 8px' }}>
+                      {val !== '' ? (
+                        <span
+                          className="arabic"
+                          style={{
+                            display: 'inline-block',
+                            minWidth: '85px',
+                            textAlign: 'center',
+                            fontSize: '0.88rem',
+                            fontWeight: 800,
+                            padding: '4px 8px',
+                            borderRadius: '6px',
+                            background: colorP.bg,
+                            color: colorP.text,
+                            border: `1px solid ${colorP.border}`
+                          }}
+                        >
+                          {pred}
+                        </span>
+                      ) : (
+                        <span style={{ color: '#cbd5e1', fontWeight: 600 }}>—</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
 
           {/* Catatan Evaluasi Guru Diniyah */}
           <div style={{ marginTop: '1rem', background: '#f8fafc', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>

@@ -156,7 +156,7 @@ export default function InputDiniyahMapelModal({
                 <th style={{ width: '45px', textAlign: 'center' }}>No</th>
                 <th style={{ width: '90px' }}>NIS</th>
                 <th>Nama Santriwati</th>
-                <th style={{ width: '130px', textAlign: 'center' }}>Nilai (0 - 100)</th>
+                <th style={{ width: '110px', textAlign: 'center' }}>Nilai</th>
                 <th style={{ width: '120px', textAlign: 'center' }}>Predikat</th>
               </tr>
             </thead>
@@ -185,7 +185,7 @@ export default function InputDiniyahMapelModal({
                           inputMode="numeric"
                           min="0"
                           max="100"
-                          placeholder="—"
+                          placeholder=""
                           value={val}
                           onChange={(e) => handleScoreChange(santri.id, e.target.value)}
                           onKeyDown={(e) => handleKeyDown(e, idx)}
