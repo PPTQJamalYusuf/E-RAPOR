@@ -156,15 +156,15 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                 <td className="cell-split-juz">
                   Juz {toArabicNum(j)}
                 </td>
-                <td className={`cell-split-nilai ${hasVal ? 'has-val' : 'is-empty'}`}>
+                <td className={`cell-split-nilai ${hasVal ? 'has-val' : 'is-empty'}`} style={{ color: hasVal ? '#000000' : '#9ca3af' }}>
                   {hasVal ? val : '—'}
                 </td>
-                <td className={`cell-split-pred ${hasVal ? '' : 'is-empty'}`}>
+                <td className={`cell-split-pred ${hasVal ? '' : 'is-empty'}`} style={{ color: hasVal ? '#000000' : '#9ca3af' }}>
                   {hasVal ? (
                     <span>
-                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold' }}>{pred}</span>
+                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold', color: '#000000' }}>{pred}</span>
                       {' '}
-                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#166534' }}>
+                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#000000' }}>
                         ({PREDIKAT_LABEL_ID[pred] || pred})
                       </span>
                     </span>
@@ -417,14 +417,14 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                           <div className="summary-card-label">
                             <span>Total Nilai</span>
                           </div>
-                          <div className="summary-card-val">{calc.total}</div>
+                          <div className="summary-card-val" style={{ color: '#000000' }}>{calc.total}</div>
                         </div>
 
                         <div className="summary-card-item">
                           <div className="summary-card-label">
                             <span>Nilai Rata-rata</span>
                           </div>
-                          <div className="summary-card-val highlight-green">
+                          <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800 }}>
                             {calc.count > 0 ? calc.rataRata : '—'}
                           </div>
                         </div>
@@ -433,14 +433,14 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                           <div className="summary-card-label">
                             <span>Predikat Akhir</span>
                           </div>
-                          <div className="summary-card-val" style={{ color: '#047857', fontSize: '11pt', fontWeight: 800 }}>
+                          <div className="summary-card-val" style={{ color: '#000000', fontSize: '11pt', fontWeight: 800 }}>
                             {calc.count > 0 ? (
                               <span>
-                                <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold' }}>
+                                <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold', color: '#000000' }}>
                                   {calc.predikatAkhir}
                                 </span>
                                 {' '}
-                                <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#047857', fontFamily: 'Calibri, sans-serif' }}>
+                                <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#000000', fontFamily: 'Calibri, sans-serif' }}>
                                   ({PREDIKAT_LABEL_ID[calc.predikatAkhir] || calc.predikatAkhir})
                                 </span>
                               </span>
@@ -452,8 +452,8 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                           <div className="summary-card-label">
                             <span>Peringkat Kelas</span>
                           </div>
-                          <div className="summary-card-val highlight-gold">
-                            —
+                          <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800 }}>
+                            {santri.ranking && santri.ranking !== '-' ? `#${santri.ranking}` : '—'}
                           </div>
                         </div>
                       </div>
@@ -477,7 +477,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                         <div className="catatan-title-formal">
                           <span>C. Catatan</span>
                         </div>
-                        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px' }}>
+                        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px', color: '#000000' }}>
                           {santri.catatan || ''}
                         </div>
                         <div className="catatan-dotted-line"></div>
@@ -580,19 +580,19 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
               <div className="summary-cards-4col" style={{ marginBottom: '12px' }}>
                 <div className="summary-card-item">
                   <div className="summary-card-label">Santri Dinilai</div>
-                  <div className="summary-card-val">{statsKelas.countDinilai} / {statsKelas.total}</div>
+                  <div className="summary-card-val" style={{ color: '#000000' }}>{statsKelas.countDinilai} / {statsKelas.total}</div>
                 </div>
                 <div className="summary-card-item">
                   <div className="summary-card-label">Rata-rata Kelas</div>
-                  <div className="summary-card-val highlight-green">{statsKelas.rataRataKelas}</div>
+                  <div className="summary-card-val" style={{ color: '#000000' }}>{statsKelas.rataRataKelas}</div>
                 </div>
                 <div className="summary-card-item">
                   <div className="summary-card-label">Nilai Tertinggi</div>
-                  <div className="summary-card-val highlight-gold">{statsKelas.nilaiTertinggi}</div>
+                  <div className="summary-card-val" style={{ color: '#000000' }}>{statsKelas.nilaiTertinggi}</div>
                 </div>
                 <div className="summary-card-item">
                   <div className="summary-card-label">Ketuntasan (≥80)</div>
-                  <div className="summary-card-val" style={{ color: '#047857' }}>{statsKelas.persenTuntas}%</div>
+                  <div className="summary-card-val" style={{ color: '#000000' }}>{statsKelas.persenTuntas}%</div>
                 </div>
               </div>
 
@@ -633,7 +633,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                         <td style={{ textAlign: 'center', fontWeight: 600 }}>
                           {calc.count > 0 ? `${calc.count} Juz` : '—'}
                         </td>
-                        <td style={{ textAlign: 'center', fontWeight: 700, color: calc.count > 0 ? '#15803d' : '#94a3b8' }}>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: calc.count > 0 ? '#000000' : '#94a3b8' }}>
                           {calc.count > 0 ? calc.rataRata : '—'}
                         </td>
                         <td style={{ textAlign: 'center' }}>

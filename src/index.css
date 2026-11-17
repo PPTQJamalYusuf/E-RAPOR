@@ -2170,12 +2170,12 @@ body {
 .cell-split-nilai {
   font-size: 11pt !important;
   font-weight: 800 !important;
-  color: #1b4332 !important;
+  color: #000000 !important;
   letter-spacing: 0.3px;
 }
 
 .cell-split-nilai.has-val {
-  color: #15803d !important;
+  color: #000000 !important;
 }
 
 .cell-split-nilai.is-empty {
@@ -2187,7 +2187,7 @@ body {
   font-family: 'Amiri', serif;
   font-size: 10.5pt !important;
   font-weight: 700;
-  color: #15803d;
+  color: #000000;
 }
 
 .cell-split-pred.is-empty {
@@ -2228,11 +2228,11 @@ body {
 }
 
 .summary-card-val.highlight-green {
-  color: #166534;
+  color: #000000;
 }
 
 .summary-card-val.highlight-gold {
-  color: #b45309;
+  color: #000000;
 }
 
 /* Legenda Kriteria Kelulusan Horizontal (Hemat Ruang) */
@@ -2295,7 +2295,7 @@ body {
 }
 
 .catatan-content-formal {
-  color: #1f2937;
+  color: #000000;
   line-height: 1.35;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -3717,6 +3717,81 @@ body {
     border: 1px solid #000000 !important;
   }
 
+  /* Diniyah A4 Table: Tabel Tinggi & Font Besar Proporsional di Hasil Cetak (8 Mapel Rapi) */
+  .diniyah-formal-table {
+    font-size: 10pt !important;
+    margin-top: 4px !important;
+    margin-bottom: 8px !important;
+    border: 1.5px solid #000000 !important;
+  }
+
+  .diniyah-formal-table th {
+    font-size: 9.8pt !important;
+    padding: 8px 6px !important;
+    border: 1.2px solid #000000 !important;
+    background-color: #1b4332 !important;
+    color: #ffffff !important;
+  }
+
+  .diniyah-formal-table th .arabic {
+    font-size: 11.5pt !important;
+    margin-left: 6px !important;
+    color: #ffffff !important;
+  }
+
+  .diniyah-formal-table td {
+    padding: 8px 8px !important;
+    font-size: 10pt !important;
+    border: 1.2px solid #000000 !important;
+    line-height: 1.35 !important;
+  }
+
+  .diniyah-formal-table .cell-num {
+    font-size: 10.5pt !important;
+    font-weight: 800 !important;
+  }
+
+  .diniyah-formal-table .cell-aspek {
+    text-align: left !important;
+    padding-left: 14px !important;
+  }
+
+  .diniyah-formal-table .cell-aspek-latin {
+    font-size: 10.2pt !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+  }
+
+  .diniyah-formal-table .cell-aspek-arab {
+    font-size: 12pt !important;
+    font-weight: 700 !important;
+    color: #166534 !important;
+    margin-left: 8px !important;
+  }
+
+  .diniyah-formal-table .cell-tahsin-val {
+    font-size: 13pt !important;
+    font-weight: 800 !important;
+    color: #000000 !important;
+  }
+
+  .diniyah-formal-table .cell-tahsin-pred {
+    font-size: 10pt !important;
+    color: #000000 !important;
+  }
+
+  .diniyah-formal-table .cell-pred-arab {
+    font-size: 12pt !important;
+    font-weight: 800 !important;
+    color: #000000 !important;
+  }
+
+  .diniyah-formal-table .cell-pred-id {
+    font-size: 8pt !important;
+    font-weight: 700 !important;
+    color: #000000 !important;
+  }
+
   .cell-split-juz {
     padding-left: 2px !important;
   }
@@ -4147,6 +4222,93 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+/* ==========================================================================
+   TABEL RAPOR DINIYAH FORMAL A4 (LEBIH TINGGI & FONT ELEGAN PENUH)
+   ========================================================================== */
+.diniyah-formal-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid #111827 !important;
+  background: #ffffff;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+.diniyah-formal-table th {
+  background-color: #1b4332 !important;
+  color: #ffffff !important;
+  font-weight: bold;
+  font-size: 9.8pt;
+  padding: 8px 6px;
+  border: 1.2px solid #111827 !important;
+  text-align: center;
+}
+
+.diniyah-formal-table th .arabic {
+  font-family: 'Amiri', serif;
+  font-size: 11.5pt;
+  margin-left: 6px;
+  color: #ffffff !important;
+}
+
+.diniyah-formal-table td {
+  padding: 8px 8px;
+  border: 1.2px solid #111827 !important;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 10pt;
+  line-height: 1.35;
+}
+
+.diniyah-formal-table .cell-num {
+  font-weight: 800;
+  font-size: 10.5pt;
+  color: #111827;
+}
+
+.diniyah-formal-table .cell-aspek {
+  text-align: left !important;
+  padding-left: 14px !important;
+}
+
+.diniyah-formal-table .cell-aspek-latin {
+  font-size: 10.2pt;
+  font-weight: 700;
+  color: #111827;
+}
+
+.diniyah-formal-table .cell-aspek-arab {
+  font-size: 12pt;
+  font-weight: 700;
+  color: #166534;
+  margin-left: 8px;
+}
+
+.diniyah-formal-table .cell-tahsin-val {
+  font-size: 13pt !important;
+  font-weight: 800 !important;
+  color: #000000 !important;
+}
+
+.diniyah-formal-table .cell-tahsin-pred {
+  font-size: 10pt;
+  font-weight: 700;
+  color: #000000;
+}
+
+.diniyah-formal-table .cell-pred-arab {
+  font-size: 12pt;
+  font-weight: 800;
+  color: #000000;
+}
+
+.diniyah-formal-table .cell-pred-id {
+  font-size: 8pt;
+  font-weight: 700;
+  color: #000000;
+  font-family: Calibri, sans-serif;
+}
+
 /* Tabel Rapor Tahsin Formal A4 (Disamakan dengan Tabel Tahfidz) */
 .tahsin-formal-table {
   width: 100%;
@@ -4202,12 +4364,12 @@ body {
 .tahsin-formal-table .cell-tahsin-val {
   font-size: 11pt !important;
   font-weight: 800 !important;
-  color: #1b4332 !important;
+  color: #000000 !important;
   letter-spacing: 0.3px;
 }
 
 .tahsin-formal-table .cell-tahsin-val.has-val {
-  color: #15803d !important;
+  color: #000000 !important;
 }
 
 .tahsin-formal-table .cell-tahsin-val.is-empty {
@@ -4218,6 +4380,7 @@ body {
 .tahsin-formal-table .cell-tahsin-pred {
   font-weight: 700;
   font-size: 9pt;
+  color: #000000;
 }
 
 .tahsin-formal-table .cell-tahsin-pred.is-empty {

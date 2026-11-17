@@ -113,29 +113,29 @@ export default function DiniyahRaporA4Sheet({
         </tbody>
       </table>
 
-      {/* 4. TABEL CAPAIAN PEMBELAJARAN DINIYAH (8 MATA PELAJARAN) */}
-      <div className="section-title-formal">
+      {/* 4. TABEL CAPAIAN PEMBELAJARAN DINIYAH (8 MATA PELAJARAN - TINGGI & FONT BESAR) */}
+      <div className="section-title-formal" style={{ marginTop: '4px', marginBottom: '4px' }}>
         <span>A. Capaian Hasil Belajar Mata Pelajaran Diniyah</span>
       </div>
 
-      <table className="tahsin-formal-table" style={{ width: '100%', marginBottom: '6px' }}>
+      <table className="diniyah-formal-table tahsin-formal-table" style={{ width: '100%', marginBottom: '8px' }}>
         <thead>
           <tr>
-            <th style={{ width: '40px', textAlign: 'center' }}>
+            <th style={{ width: '45px', textAlign: 'center' }}>
               <span>No</span>
-              <span className="arabic" style={{ fontSize: '9.5pt', marginLeft: '3px' }}>الرقم</span>
+              <span className="arabic" style={{ fontSize: '10.5pt', marginLeft: '3px' }}>الرقم</span>
             </th>
             <th style={{ textAlign: 'left', paddingLeft: '14px' }}>
               <span>Mata Pelajaran</span>
-              <span className="arabic" style={{ fontSize: '9.5pt', marginLeft: '6px' }}>المادة الدراسية</span>
+              <span className="arabic" style={{ fontSize: '10.5pt', marginLeft: '6px' }}>المادة الدراسية</span>
             </th>
-            <th style={{ width: '90px', textAlign: 'center' }}>
+            <th style={{ width: '95px', textAlign: 'center' }}>
               <span>Nilai</span>
-              <span className="arabic" style={{ fontSize: '9.5pt', marginLeft: '3px' }}>الدرجة</span>
+              <span className="arabic" style={{ fontSize: '10.5pt', marginLeft: '3px' }}>الدرجة</span>
             </th>
-            <th style={{ width: '180px', textAlign: 'center' }}>
+            <th style={{ width: '190px', textAlign: 'center' }}>
               <span>Predikat</span>
-              <span className="arabic" style={{ fontSize: '9.5pt', marginLeft: '3px' }}>التقدير</span>
+              <span className="arabic" style={{ fontSize: '10.5pt', marginLeft: '3px' }}>التقدير</span>
             </th>
           </tr>
         </thead>
@@ -150,24 +150,24 @@ export default function DiniyahRaporA4Sheet({
               <tr key={m.id}>
                 <td className="cell-num">{idx + 1}</td>
                 <td className="cell-aspek">
-                  <span style={{ fontWeight: 600, color: '#111827' }}>
+                  <span className="cell-aspek-latin">
                     {m.labelId || m.nama}
                   </span>
-                  <span className="arabic" style={{ fontSize: '10.5pt', marginLeft: '8px', color: '#166534', fontWeight: 700 }}>
+                  <span className="arabic cell-aspek-arab">
                     {m.labelAr || m.arab}
                   </span>
                 </td>
-                <td className={`cell-tahsin-val ${hasVal ? 'has-val' : 'is-empty'}`} style={{ textAlign: 'center' }}>
+                <td className={`cell-tahsin-val ${hasVal ? 'has-val' : 'is-empty'}`} style={{ textAlign: 'center', color: hasVal ? '#000000' : '#9ca3af' }}>
                   {hasVal ? numVal : '—'}
                 </td>
-                <td className={`cell-tahsin-pred ${hasVal ? '' : 'is-empty'}`} style={{ textAlign: 'center' }}>
+                <td className={`cell-tahsin-pred ${hasVal ? '' : 'is-empty'}`} style={{ textAlign: 'center', color: hasVal ? '#000000' : '#9ca3af' }}>
                   {hasVal ? (
                     <span>
-                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold' }}>
+                      <span className="arabic cell-pred-arab" style={{ color: '#000000' }}>
                         {pred}
                       </span>
                       {' '}
-                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#166534' }}>
+                      <span className="cell-pred-id" style={{ color: '#000000' }}>
                         ({PREDIKAT_DINIYAH_LABEL_ID[pred] || pred})
                       </span>
                     </span>
@@ -180,23 +180,23 @@ export default function DiniyahRaporA4Sheet({
       </table>
 
       {/* 5. RINGKASAN HASIL BELAJAR & PERINGKAT (4 Kolom Persis Tahfidz) */}
-      <div className="section-title-formal" style={{ marginTop: '2px' }}>
+      <div className="section-title-formal" style={{ marginTop: '6px', marginBottom: '4px' }}>
         <span>B. Ringkasan Hasil Belajar & Peringkat</span>
       </div>
 
-      <div className="summary-cards-4col">
+      <div className="summary-cards-4col" style={{ marginTop: '4px', marginBottom: '8px' }}>
         <div className="summary-card-item">
           <div className="summary-card-label">
             <span>Total Nilai</span>
           </div>
-          <div className="summary-card-val">{calc.total}</div>
+          <div className="summary-card-val" style={{ color: '#000000', fontSize: '13pt', fontWeight: 800 }}>{calc.total}</div>
         </div>
 
         <div className="summary-card-item">
           <div className="summary-card-label">
             <span>Nilai Rata-rata</span>
           </div>
-          <div className="summary-card-val highlight-green">
+          <div className="summary-card-val" style={{ color: '#000000', fontSize: '13pt', fontWeight: 800 }}>
             {calc.count > 0 ? calc.rataRata : '—'}
           </div>
         </div>
@@ -205,14 +205,14 @@ export default function DiniyahRaporA4Sheet({
           <div className="summary-card-label">
             <span>Predikat Akhir</span>
           </div>
-          <div className="summary-card-val" style={{ color: '#047857', fontSize: '11pt', fontWeight: 800 }}>
+          <div className="summary-card-val" style={{ color: '#000000', fontSize: '11pt', fontWeight: 800 }}>
             {calc.count > 0 ? (
               <span>
-                <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold' }}>
+                <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold', color: '#000000' }}>
                   {calc.predikatAkhir}
                 </span>
                 {' '}
-                <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#047857', fontFamily: 'Calibri, sans-serif' }}>
+                <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#000000', fontFamily: 'Calibri, sans-serif' }}>
                   ({PREDIKAT_DINIYAH_LABEL_ID[calc.predikatAkhir] || calc.predikatAkhir})
                 </span>
               </span>
@@ -224,14 +224,14 @@ export default function DiniyahRaporA4Sheet({
           <div className="summary-card-label">
             <span>Peringkat Kelas</span>
           </div>
-          <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800 }}>
+          <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800, fontSize: '13pt' }}>
             {hasRank ? `#${ranking}` : '—'}
           </div>
         </div>
       </div>
 
       {/* 6. LEGENDA KRITERIA KELULUSAN (Format Asli Horizontal) */}
-      <div className="legenda-kriteria-horizontal">
+      <div className="legenda-kriteria-horizontal" style={{ marginTop: '6px', marginBottom: '8px', padding: '4px 8px' }}>
         <div className="legenda-title">
           <span>Kriteria Kelulusan <span className="arabic">(معيار التقدير)</span>:</span>
         </div>
@@ -245,18 +245,18 @@ export default function DiniyahRaporA4Sheet({
       </div>
 
       {/* 7. CATATAN */}
-      <div className="catatan-box-formal">
+      <div className="catatan-box-formal" style={{ marginTop: '6px', marginBottom: '10px' }}>
         <div className="catatan-title-formal">
           <span>C. Catatan</span>
         </div>
-        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px' }}>
+        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '36px', color: '#000000' }}>
           {santri.catatanDiniyah || santri.catatan || ''}
         </div>
         <div className="catatan-dotted-line"></div>
       </div>
 
       {/* SPASI 4: Form ttd */}
-      <div className="spacer-3" style={{ height: '16px' }}></div>
+      <div className="spacer-3" style={{ height: '18px' }}></div>
 
       {/* 8. TANDA TANGAN RESMI 3 PIHAK (Format Sejajar Sempurna & Kosong Sesuai Permintaan) */}
       <div className="signature-container-formal signature-3col-formal">
@@ -270,8 +270,8 @@ export default function DiniyahRaporA4Sheet({
           </div>
           <div className="sig-space-formal"></div>
           <div className="sig-name-box">
-            <div className="sig-line-formal">
-              ( <span className="sig-solid-line"></span> )
+            <div className="arabic sig-name-ar" style={{ fontSize: '12pt', fontWeight: 'bold' }}>
+              ابن خيرية
             </div>
           </div>
         </div>

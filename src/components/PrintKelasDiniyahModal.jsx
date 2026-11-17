@@ -427,8 +427,8 @@ export default function PrintKelasDiniyahModal({ santriList = [], initialKelas =
                     </div>
                     <div className="sig-space-formal"></div>
                     <div className="sig-name-box">
-                      <div className="sig-line-formal">
-                        ( <span className="sig-solid-line"></span> )
+                      <div className="arabic sig-name-ar" style={{ fontSize: '11pt', fontWeight: 'bold' }}>
+                        ابن خيرية
                       </div>
                     </div>
                   </div>

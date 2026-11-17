@@ -110,15 +110,15 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                 <td className="cell-split-juz">
                   Juz {toArabicNum(j)}
                 </td>
-                <td className={`cell-split-nilai ${hasVal ? 'has-val' : 'is-empty'}`}>
+                <td className={`cell-split-nilai ${hasVal ? 'has-val' : 'is-empty'}`} style={{ color: hasVal ? '#000000' : '#9ca3af' }}>
                   {hasVal ? val : '—'}
                 </td>
-                <td className={`cell-split-pred ${hasVal ? '' : 'is-empty'}`}>
+                <td className={`cell-split-pred ${hasVal ? '' : 'is-empty'}`} style={{ color: hasVal ? '#000000' : '#9ca3af' }}>
                   {hasVal ? (
                     <span>
-                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold' }}>{pred}</span>
+                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold', color: '#000000' }}>{pred}</span>
                       {' '}
-                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#166534' }}>
+                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#000000' }}>
                         ({PREDIKAT_LABEL_ID[pred] || pred})
                       </span>
                     </span>
@@ -231,14 +231,14 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
           <div className="summary-card-label">
             <span>Total Nilai</span>
           </div>
-          <div className="summary-card-val">{calc.total}</div>
+          <div className="summary-card-val" style={{ color: '#000000' }}>{calc.total}</div>
         </div>
 
         <div className="summary-card-item">
           <div className="summary-card-label">
             <span>Nilai Rata-rata</span>
           </div>
-          <div className="summary-card-val highlight-green">
+          <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800 }}>
             {calc.count > 0 ? calc.rataRata : '—'}
           </div>
         </div>
@@ -247,14 +247,14 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
           <div className="summary-card-label">
             <span>Predikat Akhir</span>
           </div>
-          <div className="summary-card-val" style={{ color: '#047857', fontSize: '11pt', fontWeight: 800 }}>
+          <div className="summary-card-val" style={{ color: '#000000', fontSize: '11pt', fontWeight: 800 }}>
             {calc.count > 0 ? (
               <span>
-                <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold' }}>
+                <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold', color: '#000000' }}>
                   {calc.predikatAkhir}
                 </span>
                 {' '}
-                <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#047857', fontFamily: 'Calibri, sans-serif' }}>
+                <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#000000', fontFamily: 'Calibri, sans-serif' }}>
                   ({PREDIKAT_LABEL_ID[calc.predikatAkhir] || calc.predikatAkhir})
                 </span>
               </span>
@@ -266,7 +266,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
           <div className="summary-card-label">
             <span>Peringkat Kelas</span>
           </div>
-          <div className="summary-card-val highlight-gold">
+          <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800 }}>
             —
           </div>
         </div>
@@ -291,7 +291,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
         <div className="catatan-title-formal">
           <span>C. Catatan</span>
         </div>
-        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px' }}>
+        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px', color: '#000000' }}>
           {santri.catatan || ''}
         </div>
         <div className="catatan-dotted-line"></div>
@@ -454,15 +454,15 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                     {k.labelAr}
                   </span>
                 </td>
-                <td className={`cell-tahsin-val ${hasVal ? 'has-val' : 'is-empty'}`}>
+                <td className={`cell-tahsin-val ${hasVal ? 'has-val' : 'is-empty'}`} style={{ color: hasVal ? '#000000' : '#9ca3af' }}>
                   {val}
                 </td>
-                <td className={`cell-tahsin-pred ${hasVal ? '' : 'is-empty'}`}>
+                <td className={`cell-tahsin-pred ${hasVal ? '' : 'is-empty'}`} style={{ color: hasVal ? '#000000' : '#9ca3af' }}>
                   {hasVal ? (
                     <span>
-                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold' }}>{pred}</span>
+                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold', color: '#000000' }}>{pred}</span>
                       {' '}
-                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#166534' }}>
+                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#000000' }}>
                         ({PREDIKAT_LABEL_ID[pred] || pred})
                       </span>
                     </span>
@@ -484,14 +484,14 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
           <div className="summary-card-label">
             <span>Total Nilai</span>
           </div>
-          <div className="summary-card-val">{calcTahsin.total}</div>
+          <div className="summary-card-val" style={{ color: '#000000' }}>{calcTahsin.total}</div>
         </div>
 
         <div className="summary-card-item">
           <div className="summary-card-label">
             <span>Nilai Rata-rata</span>
           </div>
-          <div className="summary-card-val highlight-green">
+          <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800 }}>
             {calcTahsin.count > 0 ? calcTahsin.rataRata : '—'}
           </div>
         </div>
@@ -500,14 +500,14 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
           <div className="summary-card-label">
             <span>Predikat Akhir</span>
           </div>
-          <div className="summary-card-val" style={{ color: '#047857', fontSize: '11pt', fontWeight: 800 }}>
+          <div className="summary-card-val" style={{ color: '#000000', fontSize: '11pt', fontWeight: 800 }}>
             {calcTahsin.count > 0 ? (
               <span>
-                <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold' }}>
+                <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold', color: '#000000' }}>
                   {calcTahsin.predikatAkhir}
                 </span>
                 {' '}
-                <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#047857', fontFamily: 'Calibri, sans-serif' }}>
+                <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#000000', fontFamily: 'Calibri, sans-serif' }}>
                   ({PREDIKAT_LABEL_ID[calcTahsin.predikatAkhir] || calcTahsin.predikatAkhir})
                 </span>
               </span>
@@ -535,7 +535,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
         <div className="catatan-title-formal">
           <span>C. Catatan Perkembangan Tahsin</span>
         </div>
-        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px' }}>
+        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px', color: '#000000' }}>
           {santri.catatan || ''}
         </div>
         <div className="catatan-dotted-line"></div>
