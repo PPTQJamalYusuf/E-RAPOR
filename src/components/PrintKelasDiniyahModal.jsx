@@ -423,7 +423,7 @@ export default function PrintKelasDiniyahModal({ santriList = [], initialKelas =
                       Mengetahui, <span className="arabic">(معرفة)</span>
                     </div>
                     <div className="sig-role-line bold">
-                      Kabag. Pendidikan &amp; Tarbiyah
+                      <span className="arabic" style={{ fontSize: '11pt', fontWeight: 'bold' }}>رئيس قسم التربية والتعليم</span>
                     </div>
                     <div className="sig-space-formal"></div>
                     <div className="sig-name-box">
@@ -455,12 +455,12 @@ export default function PrintKelasDiniyahModal({ santriList = [], initialKelas =
                       Tulang Bawang, {formattedDate}
                     </div>
                     <div className="sig-role-line bold">
-                      Kepala Bagian Diniyah <span className="arabic">(رئيسة قسم الدينية)</span>
+                      <span className="arabic" style={{ fontSize: '11pt', fontWeight: 'bold' }}>رئيسة قسم الدينية</span>
                     </div>
                     <div className="sig-space-formal"></div>
                     <div className="sig-name-box">
-                      <div className="sig-line-formal">
-                        ( <span className="sig-solid-line"></span> )
+                      <div className="arabic sig-name-ar" style={{ fontSize: '11pt', fontWeight: 'bold' }}>
+                        نينا هرياتي
                       </div>
                     </div>
                   </div>

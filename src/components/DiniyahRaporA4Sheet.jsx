@@ -224,7 +224,7 @@ export default function DiniyahRaporA4Sheet({
           <div className="summary-card-label">
             <span>Peringkat Kelas</span>
           </div>
-          <div className="summary-card-val highlight-gold">
+          <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800 }}>
             {hasRank ? `#${ranking}` : '—'}
           </div>
         </div>
@@ -256,18 +256,17 @@ export default function DiniyahRaporA4Sheet({
       </div>
 
       {/* SPASI 4: Form ttd */}
-      <div className="spacer-3"></div>
+      <div className="spacer-3" style={{ height: '16px' }}></div>
 
       {/* 8. TANDA TANGAN RESMI 3 PIHAK (Format Sejajar Sempurna & Kosong Sesuai Permintaan) */}
       <div className="signature-container-formal signature-3col-formal">
         
         {/* Kolom 1: Kabag. Pendidikan & Tarbiyah */}
         <div className="signature-col-formal">
-          <div className="sig-top-line">
-            Mengetahui, <span className="arabic">(معرفة)</span>
-          </div>
+          <div className="sig-top-line">&nbsp;</div>
+          <div style={{ height: '12px' }}>&nbsp;</div>
           <div className="sig-role-line bold">
-            Kabag. Pendidikan &amp; Tarbiyah
+            <span className="arabic" style={{ fontSize: '11.5pt', fontWeight: 'bold' }}>رئيس قسم التربية والتعليم</span>
           </div>
           <div className="sig-space-formal"></div>
           <div className="sig-name-box">
@@ -277,13 +276,14 @@ export default function DiniyahRaporA4Sheet({
           </div>
         </div>
 
-        {/* Kolom 2: Orang Tua / Wali Santriwati */}
+        {/* Kolom 2: Orang Tua / Wali Santriwati (Di Tengah, 1 Saja Mengetahui) */}
         <div className="signature-col-formal">
           <div className="sig-top-line">
             Mengetahui, <span className="arabic">(معرفة)</span>
           </div>
+          <div style={{ height: '12px' }}>&nbsp;</div>
           <div className="sig-role-line bold">
-            Orang Tua / Wali Santri <span className="arabic">(ولي الطالبة)</span>
+            <span className="arabic" style={{ fontSize: '11.5pt', fontWeight: 'bold' }}>ولي الطالبة</span>
           </div>
           <div className="sig-space-formal"></div>
           <div className="sig-name-box">
@@ -293,18 +293,19 @@ export default function DiniyahRaporA4Sheet({
           </div>
         </div>
 
-        {/* Kolom 3: Kepala Bagian Diniyah */}
+        {/* Kolom 3: Kepala Bagian Diniyah (Bahasa Arab Saja & Enter 2x) */}
         <div className="signature-col-formal">
           <div className="sig-top-line">
             Tulang Bawang, {formattedDate}
           </div>
+          <div style={{ height: '12px' }}>&nbsp;</div>
           <div className="sig-role-line bold">
-            Kepala Bagian Diniyah <span className="arabic">(رئيسة قسم الدينية)</span>
+            <span className="arabic" style={{ fontSize: '11.5pt', fontWeight: 'bold' }}>رئيسة قسم الدينية</span>
           </div>
           <div className="sig-space-formal"></div>
           <div className="sig-name-box">
-            <div className="sig-line-formal">
-              ( <span className="sig-solid-line"></span> )
+            <div className="arabic sig-name-ar" style={{ fontSize: '12pt', fontWeight: 'bold' }}>
+              نينا هرياتي
             </div>
           </div>
         </div>

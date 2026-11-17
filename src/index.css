@@ -2357,7 +2357,7 @@ body {
 }
 
 .signature-3col-formal .sig-space-formal {
-  height: 52px;
+  height: 85px;
 }
 
 .signature-3col-formal .sig-name-box {
@@ -2389,7 +2389,7 @@ body {
 }
 
 .sig-space-formal {
-  height: 52px;
+  height: 85px;
 }
 
 .sig-name-box {
@@ -3835,7 +3835,7 @@ body {
   }
 
   .signature-3col-formal .sig-space-formal {
-    height: 32px !important;
+    height: 85px !important;
   }
 
   .signature-3col-formal .sig-name-box {
@@ -3848,7 +3848,7 @@ body {
   }
 
   .sig-space-formal {
-    height: 30px !important;
+    height: 85px !important;
   }
 
   .sig-solid-line {
