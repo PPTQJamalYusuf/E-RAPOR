@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Download, Users, LogOut, PlusCircle, Cloud } from 'lucide-react';
+import { Calendar, Download, Users, LogOut, PlusCircle, Cloud, History } from 'lucide-react';
 import { formatNamaKelas } from '../utils/tahfidzCalc';
 
 export default function Header({
@@ -8,6 +8,7 @@ export default function Header({
   onChangeModule,
   onLogout,
   onOpenManageUsers,
+  onOpenActivityLog,
   periods,
   currentPeriod,
   onChangePeriod,
@@ -49,17 +50,28 @@ export default function Header({
             <span>Cloud Online</span>
           </div>
 
-          {/* Tombol Kelola Guru (Admin Saja) */}
+          {/* Tombol Kelola Guru & Riwayat Log (Admin Saja) */}
           {isAdmin && (
-            <button
-              type="button"
-              className="header-pro-btn btn-highlight-green"
-              onClick={onOpenManageUsers}
-              title="Kelola Akun Guru & Penugasan Kelas"
-            >
-              <Users size={15} />
-              <span>Kelola Guru</span>
-            </button>
+            <>
+              <button
+                type="button"
+                className="header-pro-btn btn-highlight-green"
+                onClick={onOpenManageUsers}
+                title="Kelola Akun Guru & Penugasan Kelas"
+              >
+                <Users size={15} />
+                <span>Kelola Guru</span>
+              </button>
+              <button
+                type="button"
+                className="header-pro-btn"
+                onClick={onOpenActivityLog}
+                title="Lihat Riwayat Aktivitas & Edit Nilai"
+              >
+                <History size={15} />
+                <span>Riwayat</span>
+              </button>
+            </>
           )}
 
           {/* Tombol Backup Data JSON */}

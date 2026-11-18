@@ -396,3 +396,65 @@ export async function saveBatchDiniyahPerMapel(periodId, mapelId, updatesArray) 
 
   return Promise.all(promises);
 }
+
+/**
+ * Mencatat log aktivitas perubahan nilai via RPC aman (append-only, validasi server).
+ */
+export async function recordActivityLog({
+  actorId,
+  module,
+  action,
+  targetId = null,
+  targetName,
+  periodId = null,
+  summary,
+  changes = {}
+}) {
+  if (!actorId || !module || !action || !targetName || !summary) return null;
+
+  const { data, error } = await supabase.rpc('log_activity', {
+    p_actor_id: actorId,
+    p_module: module,
+    p_action: action,
+    p_target_id: targetId ? String(targetId) : null,
+    p_target_name: targetName,
+    p_period_id: periodId ? String(periodId) : null,
+    p_summary: summary,
+    p_changes: changes || {}
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Mengambil riwayat log aktivitas (khusus Admin, diverifikasi di server Supabase).
+ */
+export async function fetchActivityLogs({
+  adminId,
+  module = 'all',
+  search = '',
+  limit = 30,
+  offset = 0
+}) {
+  if (!adminId) {
+    throw new Error('Sesi admin tidak valid. Silakan login kembali.');
+  }
+
+  const { data, error } = await supabase.rpc('get_activity_logs', {
+    p_admin_id: adminId,
+    p_module: module,
+    p_search: search,
+    p_limit: limit,
+    p_offset: offset
+  });
+
+  if (error) {
+    if (error.code === '42883' || error.message?.includes('get_activity_logs')) {
+      throw new Error('Tabel log aktivitas belum dipasang di Supabase. Jalankan skrip SQL 20261118_add_activity_logs.sql terlebih dahulu.');
+    }
+    throw new Error(error.message || 'Gagal memuat riwayat aktivitas dari server.');
+  }
+
+  return data || [];
+}

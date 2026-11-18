@@ -12,7 +12,15 @@ import InputDiniyahMapelModal from './components/InputDiniyahMapelModal';
 import InputDiniyahSiswaModal from './components/InputDiniyahSiswaModal';
 import PrintDiniyahModal from './components/PrintDiniyahModal';
 import PrintKelasDiniyahModal from './components/PrintKelasDiniyahModal';
+import ActivityLogModal from './components/ActivityLogModal';
 import { WifiOff, RefreshCw, CheckCircle2 } from 'lucide-react';
+import {
+  buildTahfidzDiff,
+  buildDiniyahSiswaDiff,
+  buildBatchDiniyahDiff,
+  formatTargetSantri,
+  safeLogActivity
+} from './utils/activityLogger';
 import { 
   getAcademicPeriods, 
   getSantriWithGrades, 
@@ -78,6 +86,7 @@ export default function App() {
   const [printKelasData, setPrintKelasData] = useState(null);
   const [showManageUsers, setShowManageUsers] = useState(false);
   const [showAddSemester, setShowAddSemester] = useState(false);
+  const [showActivityLog, setShowActivityLog] = useState(false);
 
   // 4. Modals State (Diniyah)
   const [inputDiniyahMapelKelas, setInputDiniyahMapelKelas] = useState(null); // string nama kelas
@@ -104,6 +113,7 @@ export default function App() {
     printKelasData || 
     showManageUsers || 
     showAddSemester ||
+    showActivityLog ||
     inputDiniyahMapelKelas ||
     inputDiniyahSiswa ||
     printDiniyahData ||
@@ -126,6 +136,7 @@ export default function App() {
       setPrintKelasData(null);
       setShowManageUsers(false);
       setShowAddSemester(false);
+      setShowActivityLog(false);
       setInputDiniyahMapelKelas(null);
       setInputDiniyahSiswa(null);
       setPrintDiniyahData(null);
@@ -140,6 +151,7 @@ export default function App() {
         setPrintKelasData(null);
         setShowManageUsers(false);
         setShowAddSemester(false);
+        setShowActivityLog(false);
         setInputDiniyahMapelKelas(null);
         setInputDiniyahSiswa(null);
         setPrintDiniyahData(null);
@@ -316,6 +328,10 @@ export default function App() {
             item.jumlahHafalan,
             item.nilaiTahsin
           );
+          // Kirim juga log tertunda dari mode offline secara non-blocking
+          if (item.pendingLog) {
+            safeLogActivity(item.pendingLog);
+          }
         } catch (err) {
           remainingQueue.push(item);
         }
@@ -355,6 +371,15 @@ export default function App() {
 
   // Handler simpan nilai, catatan, jumlah hafalan, dan nilai tahsin ke Supabase
   const handleSaveNilai = async (santriId, newNilaiJuz, newCatatan, newJumlahHafalan, newNilaiTahsin) => {
+    // Hitung diff perubahan SEBELUM state lokal ditimpa
+    const oldSantri = santriList.find(s => s.id === santriId);
+    const diff = buildTahfidzDiff(oldSantri, newNilaiJuz, newCatatan, newJumlahHafalan, newNilaiTahsin);
+    const pendingLog = diff && currentUser?.id ? {
+      actorId: currentUser.id,
+      periodId: currentPeriod?.id || null,
+      ...diff
+    } : null;
+
     // 1. Optimistic Update di UI lokal
     setSantriList(prev =>
       prev.map(s => {
@@ -383,6 +408,11 @@ export default function App() {
           newNilaiTahsin
         );
 
+        // Catat log aktivitas secara non-blocking hanya jika ada perubahan nyata
+        if (pendingLog) {
+          safeLogActivity(pendingLog);
+        }
+
         // Jika berhasil, bersihkan item ini dari offline queue jika sebelumnya sempat gagal
         const currentSaved = localStorage.getItem(OFFLINE_QUEUE_KEY);
         if (currentSaved) {
@@ -401,6 +431,7 @@ export default function App() {
           catatan: newCatatan,
           jumlahHafalan: newJumlahHafalan,
           nilaiTahsin: newNilaiTahsin,
+          pendingLog,
           timestamp: Date.now()
         };
 
@@ -427,11 +458,26 @@ export default function App() {
 
   // Handler toggle program Tahsin oleh Admin
   const handleToggleTahsin = async (santriId, newStatus) => {
+    const targetSantri = santriList.find(s => s.id === santriId);
     // Optimistic Update
     setSantriList(prev => prev.map(s => s.id === santriId ? { ...s, is_tahsin: newStatus } : s));
 
     try {
       await toggleSantriTahsin(santriId, newStatus);
+      if (currentUser?.id && targetSantri) {
+        safeLogActivity({
+          actorId: currentUser.id,
+          module: 'tahsin',
+          action: 'TOGGLE_TAHSIN',
+          targetId: santriId,
+          targetName: formatTargetSantri(targetSantri),
+          periodId: currentPeriod?.id || null,
+          summary: `Program Tahsin diubah menjadi ${newStatus ? 'Aktif' : 'Nonaktif'}`,
+          changes: {
+            'Status Tahsin': { old: Boolean(targetSantri.is_tahsin), new: Boolean(newStatus) }
+          }
+        });
+      }
     } catch (err) {
       console.error('Gagal mengubah status Tahsin santri:', err);
       // Revert if error
@@ -442,6 +488,10 @@ export default function App() {
 
   // Handler simpan nilai Diniyah per santriwati
   const handleSaveDiniyahSiswa = async (santriId, newNilaiMapel, newCatatan) => {
+    // Hitung diff perubahan SEBELUM state lokal ditimpa
+    const oldSantri = diniyahSantriList.find(s => s.id === santriId);
+    const diff = buildDiniyahSiswaDiff(oldSantri, newNilaiMapel, newCatatan);
+
     // 1. Optimistic Update lokal
     setDiniyahSantriList(prev =>
       prev.map(s => {
@@ -460,6 +510,13 @@ export default function App() {
     if (currentPeriod?.id && currentPeriod.id !== 'default') {
       try {
         await saveSantriDiniyah(currentPeriod.id, santriId, newNilaiMapel, newCatatan);
+        if (diff && currentUser?.id) {
+          safeLogActivity({
+            actorId: currentUser.id,
+            periodId: currentPeriod.id,
+            ...diff
+          });
+        }
       } catch (err) {
         console.error('Gagal simpan nilai diniyah ke Supabase:', err);
         alert('Gagal menyimpan nilai Diniyah ke Cloud. Periksa koneksi internet.');
@@ -470,6 +527,9 @@ export default function App() {
   // Handler simpan nilai Diniyah cepat massal per mapel sekelas (Ala Excel)
   const handleSaveBatchDiniyahMapel = async (kelas, mapelId, updates) => {
     // updates: [{ santriId, nilai }]
+    // Hitung diff batch gabungan SEBELUM state lokal ditimpa (1 baris log hemat storage)
+    const batchDiff = buildBatchDiniyahDiff(diniyahSantriList, kelas, mapelId, updates);
+
     // 1. Optimistic Update
     setDiniyahSantriList(prev =>
       prev.map(s => {
@@ -493,6 +553,13 @@ export default function App() {
     // 2. Simpan permanen ke Supabase Cloud
     if (currentPeriod?.id && currentPeriod.id !== 'default') {
       await saveBatchDiniyahPerMapel(currentPeriod.id, mapelId, updates);
+      if (batchDiff && currentUser?.id) {
+        safeLogActivity({
+          actorId: currentUser.id,
+          periodId: currentPeriod.id,
+          ...batchDiff
+        });
+      }
     }
   };
 
@@ -548,6 +615,7 @@ export default function App() {
         onChangeModule={setActiveModule}
         onLogout={handleLogout}
         onOpenManageUsers={() => setShowManageUsers(true)}
+        onOpenActivityLog={() => setShowActivityLog(true)}
         periods={periods}
         currentPeriod={currentPeriod}
         onChangePeriod={handleChangePeriod}
@@ -666,6 +734,14 @@ export default function App() {
         <SemesterModal
           onClose={() => setShowAddSemester(false)}
           onCreated={handleSemesterCreated}
+        />
+      )}
+
+      {/* Modal Riwayat Aktivitas & Edit Nilai (Admin Saja) */}
+      {showActivityLog && currentUser?.role === 'admin' && (
+        <ActivityLogModal
+          currentUser={currentUser}
+          onClose={() => setShowActivityLog(false)}
         />
       )}
 
