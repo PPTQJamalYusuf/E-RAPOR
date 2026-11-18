@@ -65,7 +65,8 @@ BEGIN
     v_clean_module := NULLIF(LOWER(TRIM(COALESCE(p_module, 'all'))), '');
 
     IF v_clean_module IS NULL OR v_clean_module = 'all' THEN
-        DELETE FROM activity_logs;
+        -- Wajib menyertakan klausa WHERE karena Supabase mengaktifkan pg_safeupdate
+        DELETE FROM activity_logs WHERE id IS NOT NULL;
     ELSE
         DELETE FROM activity_logs WHERE module = v_clean_module;
     END IF;
