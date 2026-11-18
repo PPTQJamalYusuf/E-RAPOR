@@ -458,3 +458,49 @@ export async function fetchActivityLogs({
 
   return data || [];
 }
+
+/**
+ * Menghapus 1 baris log aktivitas berdasarkan ID (khusus Admin via RPC).
+ */
+export async function deleteActivityLog(adminId, logId) {
+  if (!adminId || !logId) {
+    throw new Error('Data permintaan hapus log tidak lengkap.');
+  }
+
+  const { error } = await supabase.rpc('delete_activity_log', {
+    p_admin_id: adminId,
+    p_log_id: logId
+  });
+
+  if (error) {
+    if (error.code === '42883' || error.message?.includes('delete_activity_log')) {
+      throw new Error('Fungsi hapus log belum dipasang di Supabase. Jalankan skrip SQL 20261118_add_delete_activity_logs_rpc.sql terlebih dahulu.');
+    }
+    throw new Error(error.message || 'Gagal menghapus log aktivitas.');
+  }
+
+  return true;
+}
+
+/**
+ * Membersihkan seluruh log aktivitas atau berdasarkan modul tertentu (khusus Admin via RPC).
+ */
+export async function clearActivityLogs(adminId, module = 'all') {
+  if (!adminId) {
+    throw new Error('Sesi admin tidak valid. Silakan login kembali.');
+  }
+
+  const { data, error } = await supabase.rpc('clear_activity_logs', {
+    p_admin_id: adminId,
+    p_module: module
+  });
+
+  if (error) {
+    if (error.code === '42883' || error.message?.includes('clear_activity_logs')) {
+      throw new Error('Fungsi bersihkan log belum dipasang di Supabase. Jalankan skrip SQL 20261118_add_delete_activity_logs_rpc.sql terlebih dahulu.');
+    }
+    throw new Error(error.message || 'Gagal membersihkan log aktivitas.');
+  }
+
+  return Number(data || 0);
+}
