@@ -1,22 +1,25 @@
 // ============================================================
 // FILE   : src/components/ActivityLogModal.jsx
 // TUJUAN : Modal pemantauan riwayat edit nilai (khusus Admin)
-//          dengan tampilan line-text ringkas, filter, pencarian,
-//          dan fitur hapus log (per baris / bersihkan semua).
+//          yang mengelompokkan log per santri/target (1 nama = 1 baris),
+//          dapat diklik untuk melihat seluruh rincian perubahan, serta
+//          mendukung hapus per baris, per santri, atau semua log.
 // CALLER : src/App.jsx
 // DEPS   : src/lib/supabase.js (fetchActivityLogs, deleteActivityLog,
 //          clearActivityLogs), lucide-react
 // EFEK   : Membaca & menghapus baris pada tabel activity_logs via RPC
 // ============================================================
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   X,
   History,
   Search,
   RefreshCw,
   AlertCircle,
-  Trash2
+  Trash2,
+  ChevronRight,
+  ChevronDown
 } from 'lucide-react';
 import {
   fetchActivityLogs,
@@ -24,8 +27,7 @@ import {
   clearActivityLogs
 } from '../lib/supabase';
 
-const PAGE_SIZE = 40;
-const INLINE_PREVIEW_LIMIT = 3;
+const PAGE_SIZE = 100;
 
 const MODULE_OPTIONS = [
   { id: 'all', label: 'Semua' },
@@ -68,10 +70,10 @@ export default function ActivityLogModal({ currentUser, onClose }) {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [clearing, setClearing] = useState(false);
-  const [deletingId, setDeletingId] = useState(null);
+  const [deletingKey, setDeletingKey] = useState(null);
   const [hasMore, setHasMore] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [expandedIds, setExpandedIds] = useState({});
+  const [expandedGroups, setExpandedGroups] = useState({});
 
   const isAdmin = currentUser?.role === 'admin';
 
@@ -120,17 +122,47 @@ export default function ActivityLogModal({ currentUser, onClose }) {
     loadLogs(0, false);
   }, [loadLogs]);
 
-  const toggleExpand = (id) => {
-    setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  // Kelompokkan log berdasarkan santri/target agar 1 nama hanya tampil 1 baris
+  // Urutan otomatis mengikuti aktivitas terbaru di paling atas
+  const groupedLogs = useMemo(() => {
+    const map = new Map();
+
+    logs.forEach((item) => {
+      const groupKey = item.target_id || item.target_name || item.id;
+      if (!map.has(groupKey)) {
+        map.set(groupKey, {
+          key: groupKey,
+          targetName: item.target_name,
+          latestAt: item.created_at,
+          latestActor: item.actor_nama,
+          modules: [],
+          items: []
+        });
+      }
+
+      const group = map.get(groupKey);
+      group.items.push(item);
+      if (item.module && !group.modules.includes(item.module)) {
+        group.modules.push(item.module);
+      }
+    });
+
+    return Array.from(map.values());
+  }, [logs]);
+
+  const toggleGroup = (key) => {
+    setExpandedGroups((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  // Hapus 1 baris log dengan konfirmasi
+  // Hapus 1 baris log di dalam grup santri
   const handleDeleteOne = async (item) => {
     if (!isAdmin || !currentUser?.id) return;
-    const confirmed = window.confirm(`Hapus riwayat "${item.target_name}" ini?`);
+    const confirmed = window.confirm(
+      `Hapus 1 catatan perubahan (${formatCompactTime(item.created_at)}) milik "${item.target_name}"?`
+    );
     if (!confirmed) return;
 
-    setDeletingId(item.id);
+    setDeletingKey(item.id);
     setErrorMsg('');
     try {
       await deleteActivityLog(currentUser.id, item.id);
@@ -138,7 +170,31 @@ export default function ActivityLogModal({ currentUser, onClose }) {
     } catch (err) {
       setErrorMsg(err.message || 'Gagal menghapus log.');
     } finally {
-      setDeletingId(null);
+      setDeletingKey(null);
+    }
+  };
+
+  // Hapus seluruh log yang tergabung dalam 1 santri/target
+  const handleDeleteGroup = async (e, group) => {
+    e.stopPropagation();
+    if (!isAdmin || !currentUser?.id || !group.items.length) return;
+
+    const confirmed = window.confirm(
+      `Hapus semua (${group.items.length}) riwayat log milik "${group.targetName}"?`
+    );
+    if (!confirmed) return;
+
+    setDeletingKey(group.key);
+    setErrorMsg('');
+    try {
+      const idsToDelete = group.items.map((i) => i.id);
+      await Promise.all(idsToDelete.map((id) => deleteActivityLog(currentUser.id, id)));
+      const idSet = new Set(idsToDelete);
+      setLogs((prev) => prev.filter((row) => !idSet.has(row.id)));
+    } catch (err) {
+      setErrorMsg(err.message || 'Gagal menghapus riwayat santri tersebut.');
+    } finally {
+      setDeletingKey(null);
     }
   };
 
@@ -186,7 +242,7 @@ export default function ActivityLogModal({ currentUser, onClose }) {
             <div>
               <h2 className="activity-log-title">Riwayat Aktivitas Nilai</h2>
               <p className="activity-log-subtitle">
-                Catatan perubahan nilai Tahfidz, Tahsin, dan Diniyah
+                Dikelompokkan per santri — klik nama untuk melihat rincian perubahan
               </p>
             </div>
           </div>
@@ -257,7 +313,7 @@ export default function ActivityLogModal({ currentUser, onClose }) {
           </div>
         </div>
 
-        {/* Daftar Line-Text Log */}
+        {/* Daftar Grup per Santri (Klik untuk Expand Rincian) */}
         <div className="activity-log-body">
           {errorMsg && (
             <div className="login-error-banner" style={{ margin: '12px 18px' }}>
@@ -270,93 +326,128 @@ export default function ActivityLogModal({ currentUser, onClose }) {
             <div className="activity-empty-state">
               Memuat riwayat aktivitas...
             </div>
-          ) : logs.length === 0 ? (
+          ) : groupedLogs.length === 0 ? (
             <div className="activity-empty-state">
               Belum ada riwayat perubahan nilai.
             </div>
           ) : (
             <div className="activity-lines-wrap">
-              {logs.map((item) => {
-                const tag = MODULE_TAG[item.module] || MODULE_TAG.tahfidz;
-                const diffEntries = Object.entries(item.changes || {});
-                const hasMoreDiffs = diffEntries.length > INLINE_PREVIEW_LIMIT;
-                const isExpanded = Boolean(expandedIds[item.id]);
-                const inlineEntries = diffEntries.slice(0, INLINE_PREVIEW_LIMIT);
+              {groupedLogs.map((group) => {
+                const isExpanded = Boolean(expandedGroups[group.key]);
 
                 return (
-                  <div key={item.id} className="activity-line-item">
-                    <div className="activity-line-row">
-                      <span className="activity-line-time">
-                        {formatCompactTime(item.created_at)}
+                  <div
+                    key={group.key}
+                    className={`activity-group-item ${isExpanded ? 'is-expanded' : ''}`}
+                  >
+                    {/* Baris Utama 1 Santri = 1 Baris */}
+                    <div
+                      className="activity-group-row"
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={isExpanded}
+                      onClick={() => toggleGroup(group.key)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleGroup(group.key);
+                        }
+                      }}
+                    >
+                      <span className="activity-group-chevron">
+                        {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                       </span>
 
-                      <span
-                        className="activity-line-tag"
-                        style={{ background: tag.bg, color: tag.color }}
-                      >
-                        {tag.label}
+                      <span className="activity-group-name">{group.targetName}</span>
+
+                      <span className="activity-group-tags">
+                        {group.modules.map((mod) => {
+                          const tag = MODULE_TAG[mod] || MODULE_TAG.tahfidz;
+                          return (
+                            <span
+                              key={mod}
+                              className="activity-line-tag"
+                              style={{ background: tag.bg, color: tag.color }}
+                            >
+                              {tag.label}
+                            </span>
+                          );
+                        })}
                       </span>
 
-                      <div className="activity-line-content">
-                        <strong className="activity-line-actor">{item.actor_nama}</strong>
-                        <span className="activity-line-sep">•</span>
-                        <span className="activity-line-target">{item.target_name}</span>
+                      <span className="activity-group-count">
+                        {group.items.length}x ubah
+                      </span>
 
-                        {diffEntries.length > 0 ? (
-                          <span className="activity-line-diffs">
-                            <span className="activity-line-sep">—</span>
-                            {inlineEntries.map(([field, vals], idx) => (
-                              <span key={field} className="activity-inline-diff">
-                                {idx > 0 && ', '}
-                                <span className="diff-key">{field}:</span>{' '}
-                                <span className="diff-old">{formatVal(vals?.old)}</span>
-                                <span className="diff-arrow"> → </span>
-                                <span className="diff-new">{formatVal(vals?.new)}</span>
-                              </span>
-                            ))}
-                            {hasMoreDiffs && (
-                              <button
-                                type="button"
-                                className="activity-inline-toggle"
-                                onClick={() => toggleExpand(item.id)}
-                              >
-                                {isExpanded
-                                  ? ' (tutup)'
-                                  : ` (+${diffEntries.length - INLINE_PREVIEW_LIMIT} lainnya)`}
-                              </button>
-                            )}
-                          </span>
-                        ) : (
-                          <span className="activity-line-diffs">
-                            <span className="activity-line-sep">—</span>
-                            {item.summary}
-                          </span>
-                        )}
-                      </div>
+                      <span className="activity-group-meta">
+                        {formatCompactTime(group.latestAt)} • {group.latestActor}
+                      </span>
 
                       <button
                         type="button"
                         className="activity-line-del-btn"
-                        onClick={() => handleDeleteOne(item)}
-                        disabled={deletingId === item.id}
-                        title="Hapus baris log ini"
-                        aria-label="Hapus baris log"
+                        onClick={(e) => handleDeleteGroup(e, group)}
+                        disabled={deletingKey === group.key}
+                        title={`Hapus semua (${group.items.length}) log milik ${group.targetName}`}
+                        aria-label={`Hapus semua log ${group.targetName}`}
                       >
                         <Trash2 size={14} />
                       </button>
                     </div>
 
-                    {/* Rincian Tambahan (Khusus Batch / Perubahan > 3 item) */}
-                    {hasMoreDiffs && isExpanded && (
-                      <div className="activity-line-expanded">
-                        {diffEntries.slice(INLINE_PREVIEW_LIMIT).map(([field, vals]) => (
-                          <div key={field} className="activity-sub-line">
-                            <span className="diff-key">{field}:</span>{' '}
-                            <span className="diff-old">{formatVal(vals?.old)}</span>
-                            <span className="diff-arrow"> → </span>
-                            <span className="diff-new">{formatVal(vals?.new)}</span>
-                          </div>
-                        ))}
+                    {/* Rincian Semua Perubahan Santri Tersebut Saat Diklik */}
+                    {isExpanded && (
+                      <div className="activity-group-details">
+                        {group.items.map((item) => {
+                          const tag = MODULE_TAG[item.module] || MODULE_TAG.tahfidz;
+                          const diffEntries = Object.entries(item.changes || {});
+
+                          return (
+                            <div key={item.id} className="activity-detail-line">
+                              <span className="activity-line-time">
+                                {formatCompactTime(item.created_at)}
+                              </span>
+
+                              <span
+                                className="activity-line-tag"
+                                style={{ background: tag.bg, color: tag.color }}
+                              >
+                                {tag.label}
+                              </span>
+
+                              <div className="activity-line-content">
+                                <strong className="activity-line-actor">{item.actor_nama}</strong>
+                                <span className="activity-line-sep">—</span>
+                                {diffEntries.length > 0 ? (
+                                  <span className="activity-line-diffs">
+                                    {diffEntries.map(([field, vals], idx) => (
+                                      <span key={field} className="activity-inline-diff">
+                                        {idx > 0 && ', '}
+                                        <span className="diff-key">{field}:</span>{' '}
+                                        <span className="diff-old">{formatVal(vals?.old)}</span>
+                                        <span className="diff-arrow"> → </span>
+                                        <span className="diff-new">{formatVal(vals?.new)}</span>
+                                      </span>
+                                    ))}
+                                  </span>
+                                ) : (
+                                  <span className="activity-line-diffs">{item.summary}</span>
+                                )}
+                              </div>
+
+                              <button
+                                type="button"
+                                className="activity-line-del-btn"
+                                onClick={() => handleDeleteOne(item)}
+                                disabled={deletingKey === item.id}
+                                title="Hapus catatan ini saja"
+                                aria-label="Hapus catatan ini"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
