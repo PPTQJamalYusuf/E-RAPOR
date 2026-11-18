@@ -3071,20 +3071,32 @@ body {
   .modal-content {
     max-width: 100%;
     max-height: 100vh;
+    max-height: 100dvh;
     height: 100vh;
+    height: 100dvh;
     border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
   .modal-header {
     padding: 0.85rem 1rem;
+    flex-shrink: 0;
   }
 
   .modal-body {
     padding: 1rem;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .modal-footer {
     padding: 0.75rem 1rem;
+    padding-bottom: max(0.85rem, env(safe-area-inset-bottom, 14px));
+    flex-shrink: 0;
   }
 
   /* Juz grid — 5 kolom rapi di tablet (2 baris x 5 cards) */
@@ -3311,14 +3323,20 @@ body {
   .modal-content {
     border-radius: 0 !important;
     max-height: 100vh !important;
+    max-height: 100dvh !important;
     height: 100vh !important;
+    height: 100dvh !important;
     width: 100vw !important;
     max-width: 100vw !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
   }
 
   .modal-header {
     padding: 0.75rem;
     gap: 0.5rem;
+    flex-shrink: 0 !important;
   }
 
   .modal-header h2 {
@@ -3327,10 +3345,16 @@ body {
 
   .modal-body {
     padding: 0.75rem;
+    min-height: 0 !important;
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
 
   .modal-footer {
     padding: 0.65rem 0.75rem;
+    padding-bottom: max(0.9rem, env(safe-area-inset-bottom, 14px)) !important;
+    flex-shrink: 0 !important;
   }
 
   /* ========================================================================
@@ -5015,6 +5039,175 @@ body {
   }
   .activity-line-content {
     flex-basis: calc(100% - 30px);
+  }
+}
+
+/* ==========================================================================
+   MODAL INPUT NILAI DINIYAH (PER SANTRI & PER MAPEL) — DESKTOP + HP FIX
+   ========================================================================== */
+.input-diniyah-modal-content {
+  width: 95vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.diniyah-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.diniyah-mapel-label-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.diniyah-score-input {
+  width: 76px;
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 16px; /* Minimal 16px agar iOS Safari tidak auto-zoom */
+  font-weight: 800;
+  border-radius: 6px;
+  background: #ffffff;
+  outline: none;
+  color: #1e293b;
+  box-sizing: border-box;
+}
+
+.diniyah-pred-badge {
+  display: inline-block;
+  min-width: 78px;
+  text-align: center;
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.diniyah-nis-mobile-sub {
+  display: none;
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+@media (max-width: 640px) {
+  .input-diniyah-modal-content {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+
+  .diniyah-modal-header {
+    padding: 0.7rem 0.85rem !important;
+  }
+
+  .diniyah-modal-subtitle {
+    font-size: 0.76rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .diniyah-summary-strip {
+    padding: 0.5rem 0.75rem !important;
+    gap: 6px !important;
+  }
+
+  .diniyah-summary-box {
+    padding: 4px 6px !important;
+  }
+
+  .diniyah-modal-body {
+    padding: 0.65rem 0.75rem !important;
+  }
+
+  .col-hide-mobile {
+    display: none !important;
+  }
+
+  .diniyah-nis-mobile-sub {
+    display: block;
+  }
+
+  .diniyah-mapel-label-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+  }
+
+  .diniyah-score-input {
+    width: 66px !important;
+    height: 40px;
+    padding: 4px 6px !important;
+    font-size: 16px !important;
+  }
+
+  .diniyah-pred-badge {
+    min-width: 64px !important;
+    font-size: 0.78rem !important;
+    padding: 3px 6px !important;
+  }
+
+  .diniyah-input-table th,
+  .diniyah-input-table td,
+  .diniyah-mapel-table th,
+  .diniyah-mapel-table td {
+    padding: 6px 5px !important;
+  }
+
+  .diniyah-mapel-filterbar {
+    padding: 0.55rem 0.75rem !important;
+    gap: 6px !important;
+  }
+
+  .diniyah-mapel-selects {
+    display: grid !important;
+    grid-template-columns: 1fr 1.4fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .diniyah-santri-count {
+    width: 100%;
+    text-align: left !important;
+    font-size: 0.76rem !important;
+  }
+
+  .diniyah-enter-hint {
+    display: none !important;
+  }
+
+  .input-diniyah-mapel-footer {
+    padding: 0.7rem 0.85rem !important;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 16px)) !important;
+    background: #ffffff !important;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .diniyah-footer-actions {
+    width: 100% !important;
+    display: flex !important;
+    gap: 0.65rem !important;
+  }
+
+  .diniyah-footer-actions .btn {
+    flex: 1 !important;
+    min-height: 46px !important;
+    justify-content: center !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.88rem !important;
   }
 }
 

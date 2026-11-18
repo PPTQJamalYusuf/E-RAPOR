@@ -85,35 +85,35 @@ export default function InputDiniyahMapelModal({
 
   return (
     <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget && !isDirty) onClose(); }}>
-      <div className="modal-content" style={{ maxWidth: '820px', width: '95vw', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+      <div className="modal-content input-diniyah-modal-content" style={{ maxWidth: '820px' }}>
         
         {/* Header Modal */}
-        <div className="modal-header" style={{ background: 'linear-gradient(135deg, #312e81 0%, #4338ca 100%)', color: '#ffffff', padding: '1rem 1.25rem' }}>
-          <div>
+        <div className="modal-header diniyah-modal-header" style={{ background: 'linear-gradient(135deg, #312e81 0%, #4338ca 100%)', color: '#ffffff', padding: '1rem 1.25rem', flexShrink: 0 }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <BookOpen size={20} color="#a5b4fc" />
+              <BookOpen size={20} color="#a5b4fc" style={{ flexShrink: 0 }} />
               <h2 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0, color: '#ffffff' }}>
-                Lembar Input Nilai Diniyah Cepat (Per Mapel)
+                Input Nilai Diniyah Per Mapel
               </h2>
             </div>
-            <p style={{ margin: '4px 0 0 0', fontSize: '0.82rem', color: '#c7d2fe' }}>
+            <p className="diniyah-enter-hint" style={{ margin: '4px 0 0 0', fontSize: '0.82rem', color: '#c7d2fe' }}>
               Ketik nilai lalu tekan <strong>Enter [↵]</strong> untuk langsung pindah ke santri berikutnya ala Excel.
             </p>
           </div>
-          <button className="btn-close" onClick={onClose} style={{ color: '#ffffff' }}>
+          <button type="button" className="btn-close" onClick={onClose} style={{ color: '#ffffff', flexShrink: 0 }}>
             <X size={20} />
           </button>
         </div>
 
         {/* Filter Pilih Kelas & Mata Pelajaran */}
-        <div style={{ padding: '0.85rem 1.25rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-            <div>
-              <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#64748b', display: 'block' }}>Pilih Kelas:</span>
+        <div className="diniyah-mapel-filterbar" style={{ padding: '0.75rem 1.25rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+          <div className="diniyah-mapel-selects" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <div className="diniyah-select-group">
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '2px' }}>Kelas:</span>
               <select
                 value={selectedKelas}
                 onChange={(e) => setSelectedKelas(e.target.value)}
-                style={{ padding: '5px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontWeight: 700, fontSize: '0.88rem', color: '#1e293b' }}
+                style={{ width: '100%', padding: '6px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontWeight: 700, fontSize: '0.88rem', color: '#1e293b', background: '#ffffff' }}
               >
                 {['الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس'].map(k => (
                   <option key={k} value={k}>{formatNamaKelas(k)}</option>
@@ -121,12 +121,12 @@ export default function InputDiniyahMapelModal({
               </select>
             </div>
 
-            <div>
-              <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#64748b', display: 'block' }}>Mata Pelajaran (Mapel):</span>
+            <div className="diniyah-select-group">
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '2px' }}>Mata Pelajaran:</span>
               <select
                 value={selectedMapel}
                 onChange={(e) => setSelectedMapel(e.target.value)}
-                style={{ padding: '5px 12px', borderRadius: '6px', border: '1.5px solid #6366f1', background: '#e0e7ff', fontWeight: 800, fontSize: '0.88rem', color: '#312e81' }}
+                style={{ width: '100%', padding: '6px 10px', borderRadius: '6px', border: '1.5px solid #6366f1', background: '#e0e7ff', fontWeight: 800, fontSize: '0.88rem', color: '#312e81' }}
               >
                 {MATA_PELAJARAN_DINIYAH.map(m => (
                   <option key={m.id} value={m.id}>
@@ -137,103 +137,100 @@ export default function InputDiniyahMapelModal({
             </div>
           </div>
 
-          <div style={{ fontSize: '0.82rem', color: '#64748b', textAlign: 'right' }}>
-            Jumlah Santri: <strong style={{ color: '#1e293b' }}>{santriKelas.length}</strong> anak
+          <div className="diniyah-santri-count" style={{ fontSize: '0.82rem', color: '#64748b', textAlign: 'right' }}>
+            Jumlah: <strong style={{ color: '#1e293b' }}>{santriKelas.length}</strong> santri
           </div>
         </div>
 
         {/* Body Modal: Tabel Daftar Santri & Kotak Nilai */}
-        <div className="modal-body" style={{ padding: '0.75rem 1.25rem', overflowY: 'auto', flex: 1 }}>
+        <div className="modal-body diniyah-modal-body" style={{ padding: '0.75rem 1.25rem', overflowY: 'auto', flex: 1, minHeight: 0 }}>
           {savedSuccess && (
             <div style={{ padding: '8px 12px', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: '6px', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem', fontWeight: 700 }}>
               <CheckCircle size={16} /> Nilai mapel {mapelInfo.labelId} berhasil disimpan ke sistem!
             </div>
           )}
 
-          <table className="santri-table" style={{ margin: 0 }}>
-            <thead>
-              <tr style={{ background: '#f1f5f9' }}>
-                <th style={{ width: '45px', textAlign: 'center' }}>No</th>
-                <th style={{ width: '90px' }}>NIS</th>
-                <th>Nama Santriwati</th>
-                <th style={{ width: '110px', textAlign: 'center' }}>Nilai</th>
-                <th style={{ width: '120px', textAlign: 'center' }}>Predikat</th>
-              </tr>
-            </thead>
-            <tbody>
-              {santriKelas.length === 0 ? (
-                <tr>
-                  <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>
-                    Tidak ada santriwati di {formatNamaKelas(selectedKelas)}.
-                  </td>
+          <div className="diniyah-table-scroll">
+            <table className="santri-table diniyah-mapel-table" style={{ margin: 0, width: '100%' }}>
+              <thead>
+                <tr style={{ background: '#f1f5f9' }}>
+                  <th className="col-hide-mobile" style={{ width: '42px', textAlign: 'center' }}>No</th>
+                  <th className="col-hide-mobile" style={{ width: '90px' }}>NIS</th>
+                  <th>Nama Santriwati</th>
+                  <th style={{ width: '92px', textAlign: 'center' }}>Nilai</th>
+                  <th style={{ width: '100px', textAlign: 'center' }}>Predikat</th>
                 </tr>
-              ) : (
-                santriKelas.map((santri, idx) => {
-                  const val = scores[santri.id] ?? '';
-                  const pred = getPredikatDiniyah(val);
-                  const colorInfo = PREDIKAT_DINIYAH_COLORS[pred] || PREDIKAT_DINIYAH_COLORS['-'];
+              </thead>
+              <tbody>
+                {santriKelas.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>
+                      Tidak ada santriwati di {formatNamaKelas(selectedKelas)}.
+                    </td>
+                  </tr>
+                ) : (
+                  santriKelas.map((santri, idx) => {
+                    const val = scores[santri.id] ?? '';
+                    const pred = getPredikatDiniyah(val);
+                    const colorInfo = PREDIKAT_DINIYAH_COLORS[pred] || PREDIKAT_DINIYAH_COLORS['-'];
 
-                  return (
-                    <tr key={santri.id}>
-                      <td style={{ textAlign: 'center', color: '#64748b', fontWeight: 600 }}>{idx + 1}</td>
-                      <td style={{ fontFamily: 'monospace', fontWeight: 700 }}>{santri.nis || santri.id}</td>
-                      <td style={{ fontWeight: 600 }}>{santri.nama}</td>
-                      <td style={{ textAlign: 'center' }}>
-                        <input
-                          ref={el => inputRefs.current[idx] = el}
-                          type="number"
-                          inputMode="numeric"
-                          min="0"
-                          max="100"
-                          placeholder=""
-                          value={val}
-                          onChange={(e) => handleScoreChange(santri.id, e.target.value)}
-                          onKeyDown={(e) => handleKeyDown(e, idx)}
-                          style={{
-                            width: '80px',
-                            padding: '6px 8px',
-                            textAlign: 'center',
-                            fontSize: '0.95rem',
-                            fontWeight: 800,
-                            borderRadius: '6px',
-                            border: val !== '' ? '2px solid #4338ca' : '1.5px solid #cbd5e1',
-                            background: val !== '' ? '#f5f3ff' : '#ffffff',
-                            color: '#1e1b4b',
-                            outline: 'none'
-                          }}
-                        />
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <span
-                          className="predikat-pill arabic"
-                          style={{
-                            background: colorInfo.bg,
-                            color: colorInfo.text,
-                            border: `1px solid ${colorInfo.border}`,
-                            padding: '3px 8px',
-                            fontSize: '0.85rem'
-                          }}
-                        >
-                          {pred || '—'}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+                    return (
+                      <tr key={santri.id}>
+                        <td className="col-hide-mobile" style={{ textAlign: 'center', color: '#64748b', fontWeight: 600 }}>{idx + 1}</td>
+                        <td className="col-hide-mobile" style={{ fontFamily: 'monospace', fontWeight: 700 }}>{santri.nis || santri.id}</td>
+                        <td style={{ fontWeight: 600 }}>
+                          <div>{santri.nama}</div>
+                          <div className="diniyah-nis-mobile-sub">{santri.nis || santri.id}</div>
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <input
+                            ref={el => inputRefs.current[idx] = el}
+                            type="number"
+                            inputMode="numeric"
+                            min="0"
+                            max="100"
+                            placeholder=""
+                            value={val}
+                            onChange={(e) => handleScoreChange(santri.id, e.target.value)}
+                            onKeyDown={(e) => handleKeyDown(e, idx)}
+                            className="diniyah-score-input"
+                            style={{
+                              border: val !== '' ? '2px solid #4338ca' : '1.5px solid #cbd5e1',
+                              background: val !== '' ? '#f5f3ff' : '#ffffff',
+                              color: '#1e1b4b'
+                            }}
+                          />
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <span
+                            className="predikat-pill arabic diniyah-pred-badge"
+                            style={{
+                              background: colorInfo.bg,
+                              color: colorInfo.text,
+                              border: `1px solid ${colorInfo.border}`
+                            }}
+                          >
+                            {pred || '—'}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* Footer Modal */}
-        <div className="modal-footer" style={{ background: '#f8fafc', padding: '0.75rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+        {/* Footer Modal (Sticky & Safe-Area di HP) */}
+        <div className="modal-footer input-diniyah-mapel-footer" style={{ background: '#f8fafc', padding: '0.75rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+          <div className="diniyah-enter-hint" style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px' }}>
             <ArrowDown size={14} /> Tekan <strong>Enter</strong> untuk loncat otomatis ke santri berikutnya.
           </div>
 
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="diniyah-footer-actions" style={{ display: 'flex', gap: '8px' }}>
             <button type="button" className="btn btn-secondary" onClick={onClose} disabled={saving}>
-              Batal / Tutup
+              Batal
             </button>
             <button
               type="button"
