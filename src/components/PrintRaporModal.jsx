@@ -342,7 +342,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
   // Render Dokumen Rapor Tahsin (7 Kriteria Tajwid Sesuai Excel Ust. Hanifah)
   const renderTahsinDocument = (isPageBreak = false) => (
-    <div className={`rapor-a4-formal ${isPageBreak ? 'page-break-print' : ''}`}>
+    <div className={`rapor-a4-formal rapor-tahsin-sheet ${isPageBreak ? 'page-break-print' : ''}`}>
       {/* 1. KOP PONDOK RESMI */}
       <div className="letterhead-wrapper">
         <img
@@ -431,11 +431,11 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             </th>
             <th style={{ width: '135px', textAlign: 'center' }}>
               <span>Nilai</span>
-              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '4px' }}>الدرجة</span>
+              <span className="arabic" style={{ fontSize: '11pt', marginLeft: '4px' }}>الدرجة</span>
             </th>
             <th style={{ width: '185px', textAlign: 'center' }}>
               <span>Predikat</span>
-              <span className="arabic" style={{ fontSize: '10pt', marginLeft: '4px' }}>التقدير</span>
+              <span className="arabic" style={{ fontSize: '11pt', marginLeft: '4px' }}>التقدير</span>
             </th>
           </tr>
         </thead>
@@ -450,7 +450,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                 <td className="cell-num">{idx + 1}</td>
                 <td className="cell-aspek">
                   <span className="aspek-id bold">{k.labelId}</span>
-                  <span className="aspek-ar arabic" style={{ fontSize: '10.5pt', marginLeft: '8px', color: '#166534', fontWeight: 600 }}>
+                  <span className="aspek-ar arabic" style={{ fontSize: '11.5pt', marginLeft: '8px', color: '#166534', fontWeight: 700 }}>
                     {k.labelAr}
                   </span>
                 </td>
@@ -460,9 +460,9 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                 <td className={`cell-tahsin-pred ${hasVal ? '' : 'is-empty'}`} style={{ color: hasVal ? '#000000' : '#9ca3af' }}>
                   {hasVal ? (
                     <span>
-                      <span className="arabic" style={{ fontSize: '10pt', fontWeight: 'bold', color: '#000000' }}>{pred}</span>
+                      <span className="arabic" style={{ fontSize: '11.5pt', fontWeight: 'bold', color: '#000000' }}>{pred}</span>
                       {' '}
-                      <span style={{ fontSize: '7.5pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#000000' }}>
+                      <span style={{ fontSize: '8pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#000000' }}>
                         ({PREDIKAT_LABEL_ID[pred] || pred})
                       </span>
                     </span>
@@ -475,23 +475,23 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
       </table>
 
       {/* 5. RINGKASAN HASIL BELAJAR TAHSIN */}
-      <div className="section-title-formal" style={{ marginTop: '6px' }}>
+      <div className="section-title-formal" style={{ marginTop: '8px', marginBottom: '4px' }}>
         <span>B. Ringkasan Hasil Belajar Tahsin</span>
       </div>
 
-      <div className="summary-cards-4col" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+      <div className="summary-cards-4col" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginTop: '4px', marginBottom: '8px' }}>
         <div className="summary-card-item">
           <div className="summary-card-label">
             <span>Total Nilai</span>
           </div>
-          <div className="summary-card-val" style={{ color: '#000000' }}>{calcTahsin.total}</div>
+          <div className="summary-card-val" style={{ color: '#000000', fontSize: '13pt', fontWeight: 800 }}>{calcTahsin.total}</div>
         </div>
 
         <div className="summary-card-item">
           <div className="summary-card-label">
             <span>Nilai Rata-rata</span>
           </div>
-          <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800 }}>
+          <div className="summary-card-val" style={{ color: '#000000', fontSize: '13pt', fontWeight: 800 }}>
             {calcTahsin.count > 0 ? calcTahsin.rataRata : '—'}
           </div>
         </div>
@@ -500,7 +500,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
           <div className="summary-card-label">
             <span>Predikat Akhir</span>
           </div>
-          <div className="summary-card-val" style={{ color: '#000000', fontSize: '11pt', fontWeight: 800 }}>
+          <div className="summary-card-val" style={{ color: '#000000', fontSize: '11.5pt', fontWeight: 800 }}>
             {calcTahsin.count > 0 ? (
               <span>
                 <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold', color: '#000000' }}>
@@ -517,7 +517,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
       </div>
 
       {/* 6. LEGENDA KRITERIA KELULUSAN */}
-      <div className="legenda-kriteria-horizontal">
+      <div className="legenda-kriteria-horizontal" style={{ marginTop: '6px', marginBottom: '8px', padding: '4px 8px' }}>
         <div className="legenda-title">
           <span>Kriteria Kelulusan <span className="arabic">(معيار التقدير)</span>:</span>
         </div>
@@ -531,18 +531,18 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
       </div>
 
       {/* 7. CATATAN PEMBINA TAHSIN */}
-      <div className="catatan-box-formal">
+      <div className="catatan-box-formal" style={{ marginTop: '6px', marginBottom: '10px' }}>
         <div className="catatan-title-formal">
           <span>C. Catatan Perkembangan Tahsin</span>
         </div>
-        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px', color: '#000000' }}>
+        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '38px', color: '#000000' }}>
           {santri.catatan || ''}
         </div>
         <div className="catatan-dotted-line"></div>
       </div>
 
       {/* SPASI: Form ttd */}
-      <div className="spacer-3"></div>
+      <div className="spacer-3" style={{ height: '16px' }}></div>
 
       {/* 8. TANDA TANGAN RESMI */}
       <div className="signature-container-formal">
