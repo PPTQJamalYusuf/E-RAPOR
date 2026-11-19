@@ -276,7 +276,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
                     type="text"
                     value={jumlahHafalan}
                     onChange={(e) => setJumlahHafalan(e.target.value)}
-                    placeholder={calc.count > 0 ? `${calc.count} Juz (Otomatis)` : 'Contoh: 5 Juz'}
+                    placeholder=""
                     className="hafalan-input-field"
                   />
                   {jumlahHafalan && (
@@ -365,47 +365,97 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
                 </div>
               </div>
 
-              {/* Grid 7 Kriteria Nilai Tahsin */}
-              <div className="tahsin-criteria-grid">
-                {KRITERIA_TAHSIN.map((k, idx) => {
-                  const val = nilaiTahsin[k.id] !== undefined ? nilaiTahsin[k.id] : '';
-                  const pred = val !== '' ? getPredikat(val) : '';
-                  const pColor = PREDIKAT_COLORS[pred] || PREDIKAT_COLORS['-'];
-                  return (
-                    <div key={k.id} className="tahsin-card-item">
-                      <div className="tahsin-card-title-row">
-                        <span className="tahsin-idx">{idx + 1}.</span>
-                        <div className="tahsin-names">
-                          <span className="tahsin-label-id">{k.labelId}</span>
-                          <span className="tahsin-label-ar arabic">{k.labelAr}</span>
-                        </div>
-                      </div>
-                      <div className="tahsin-input-control">
-                        <input
-                          type="number"
-                          inputMode="decimal"
-                          step="any"
-                          min="0"
-                          max="100"
-                          placeholder="0 - 100"
-                          className="tahsin-input-box"
-                          value={val}
-                          onChange={(e) => handleTahsinScoreChange(k.id, e.target.value)}
-                        />
-                        <div
-                          className="tahsin-pred-badge"
-                          style={{
-                            color: pColor.text,
-                            background: pColor.bg,
-                            borderColor: pColor.border
-                          }}
-                        >
-                          {pred ? pred : '—'}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+              {/* INPUT JUMLAH HAFALAN SANTRIWATI TAHSIN */}
+              <div className="hafalan-custom-box" style={{ marginTop: '0.85rem', marginBottom: '0.25rem' }}>
+                <div className="hafalan-custom-info">
+                  <label className="hafalan-custom-label">
+                    📖 Jumlah Hafalan Santriwati (عدد الحفظ):
+                  </label>
+                </div>
+
+                <div className="hafalan-input-group">
+                  <input
+                    type="text"
+                    value={jumlahHafalan}
+                    onChange={(e) => setJumlahHafalan(e.target.value)}
+                    placeholder=""
+                    className="hafalan-input-field"
+                  />
+                  {jumlahHafalan && (
+                    <button
+                      type="button"
+                      onClick={() => setJumlahHafalan('')}
+                      className="btn btn-secondary btn-sm btn-reset-hafalan"
+                      title="Kembalikan ke hitungan otomatis / kosong"
+                    >
+                      Reset Otomatis
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Tabel 7 Kriteria Nilai Tahsin Vertikal Kebawah */}
+              <div className="tahsin-table-wrapper">
+                <table className="tahsin-input-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '45px', textAlign: 'center' }}>No</th>
+                      <th style={{ textAlign: 'left' }}>Aspek Penilaian Tahsin</th>
+                      <th style={{ width: '125px', textAlign: 'center' }}>Nilai</th>
+                      <th style={{ width: '110px', textAlign: 'center' }}>Predikat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {KRITERIA_TAHSIN.map((k, idx) => {
+                      const val = nilaiTahsin[k.id] !== undefined ? nilaiTahsin[k.id] : '';
+                      const pred = val !== '' ? getPredikat(val) : '';
+                      const pColor = PREDIKAT_COLORS[pred] || PREDIKAT_COLORS['-'];
+                      return (
+                        <tr key={k.id}>
+                          <td className="tahsin-tbl-idx">{idx + 1}</td>
+                          <td className="tahsin-tbl-aspek">
+                            <div className="tahsin-aspek-names">
+                              <span className="tahsin-tbl-label-id">{k.labelId}</span>
+                              <span className="tahsin-tbl-label-ar arabic">{k.labelAr}</span>
+                            </div>
+                          </td>
+                          <td className="tahsin-tbl-input-cell">
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              step="any"
+                              min="0"
+                              max="100"
+                              placeholder=""
+                              className="tahsin-table-input"
+                              style={{
+                                border: val !== '' ? '2px solid #047857' : '1.5px solid #cbd5e1'
+                              }}
+                              value={val}
+                              onChange={(e) => handleTahsinScoreChange(k.id, e.target.value)}
+                            />
+                          </td>
+                          <td className="tahsin-tbl-pred-cell">
+                            {pred ? (
+                              <span
+                                className="arabic tahsin-pred-badge"
+                                style={{
+                                  color: pColor.text,
+                                  background: pColor.bg,
+                                  borderColor: pColor.border
+                                }}
+                              >
+                                {pred}
+                              </span>
+                            ) : (
+                              <span className="tahsin-pred-empty">—</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </>
           )}
