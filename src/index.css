@@ -2865,7 +2865,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1.45rem;
 }
 
 .login-logo-img {
@@ -2993,6 +2993,35 @@ body {
 .input-with-icon .form-control {
   padding-left: 40px !important;
   height: 44px;
+}
+
+.input-with-icon .form-control.has-toggle {
+  padding-right: 42px !important;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 6px;
+  z-index: 2;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.password-toggle-btn:hover {
+  color: #047857;
+  background: rgba(4, 120, 87, 0.08);
+}
+
+.password-toggle-btn:active {
+  background: rgba(4, 120, 87, 0.15);
 }
 
 .login-btn {

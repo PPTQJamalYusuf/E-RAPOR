@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, User, LogIn, AlertCircle } from 'lucide-react';
+import { Lock, User, LogIn, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { authenticateUser } from '../lib/supabase';
 
 // Karakter utuh berharakat tersusun rapi untuk animasi typing
@@ -14,6 +14,7 @@ const FULL_ARABIC_TEXT = ARABIC_AHLAN_CHARS.join('');
 export default function LoginModal({ onLoginSuccess }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -112,13 +113,23 @@ export default function LoginModal({ onLoginSuccess }) {
             <div className="input-with-icon">
               <Lock size={18} className="input-icon" />
               <input
-                type="password"
-                className="form-control"
+                type={showPassword ? 'text' : 'password'}
+                className="form-control has-toggle"
                 placeholder="Masukkan password..."
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
               />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(prev => !prev)}
+                tabIndex={-1}
+                aria-label={showPassword ? 'Sembunyikan password' : 'Lihat password'}
+                title={showPassword ? 'Sembunyikan password' : 'Lihat password'}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
           </div>
 
