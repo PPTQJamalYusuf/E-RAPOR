@@ -9,7 +9,8 @@ import {
   formatNamaKelas,
   SEMESTER_BILINGUAL,
   PREDIKAT_LABEL_ID,
-  PREDIKAT_COLORS
+  PREDIKAT_COLORS,
+  KRITERIA_TAHSIN
 } from '../utils/tahfidzCalc';
 
 export default function PrintKelasModal({ santriList, initialKelas, currentPeriod, onClose }) {
@@ -184,6 +185,246 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
     );
   };
 
+  // Render Lembar Rapor Tahsin A4 Khusus Santriwati Program Tahsin dalam Mode Cetak Batch
+  const renderBatchTahsinSheet = (santri, sIdx) => {
+    const calcTahsin = hitungRaporTahsin(santri.nilaiTahsin || {});
+
+    return (
+      <div key={santri.id} className="batch-rapor-page">
+        <div className="rapor-a4-formal rapor-tahsin-sheet">
+          {/* 1. KOP PONDOK RESMI */}
+          <div className="letterhead-wrapper">
+            <img
+              src="/kop-pondok.png"
+              alt="Pusat Tahfidzul Qur'an Jamal Al-Haddad Tulang Bawang"
+              className="letterhead-img"
+            />
+          </div>
+
+          {/* SPASI 1: Setelah kop */}
+          <div className="spacer-header-top"></div>
+
+          {/* 2. JUDUL DOKUMEN: TAHSIN */}
+          <div className="doc-header-formal">
+            <div className="arabic title-ar">كَشْفُ دَرَجَاتِ تَحْسِيْنِ الْقُرْآنِ الْكَرِيْمِ</div>
+            <h1 className="doc-title-formal title-rapor-tahfidz">Rapor Tahsin Al-Qur'an</h1>
+          </div>
+
+          {/* SPASI 2 */}
+          <div className="spacer-header-bottom"></div>
+
+          {/* 3. DATA SANTRI */}
+          <table className="student-info-formal-lg">
+            <tbody>
+              <tr>
+                <td className="info-label">
+                  Nama Santri <span className="ar-label-inline">الإسم</span>
+                </td>
+                <td className="info-colon">:</td>
+                <td className="info-val bold">{santri.nama}</td>
+
+                <td className="info-label">
+                  Kelas <span className="ar-label-inline">المستوى</span>
+                </td>
+                <td className="info-colon">:</td>
+                <td className="info-val bold">
+                  {KELAS_BILINGUAL[santri.kelas] || santri.kelas}
+                </td>
+              </tr>
+              <tr>
+                <td className="info-label">
+                  Nomor Induk <span className="ar-label-inline">رقم القيد</span>
+                </td>
+                <td className="info-colon">:</td>
+                <td className="info-val">{santri.nis || santri.id}</td>
+
+                <td className="info-label">
+                  Semester <span className="ar-label-inline">الفصل</span>
+                </td>
+                <td className="info-colon">:</td>
+                <td className="info-val">
+                  {SEMESTER_BILINGUAL[selectedSemester] || selectedSemester || 'Ganjil (الأول)'}
+                </td>
+              </tr>
+              <tr>
+                <td className="info-label">
+                  Tahun Pelajaran <span className="ar-label-inline">العام</span>
+                </td>
+                <td className="info-colon">:</td>
+                <td className="info-val">{tahunPelajaran}</td>
+
+                <td className="info-label">
+                  Jumlah Hafalan <span className="ar-label-inline">عدد الحفظ</span>
+                </td>
+                <td className="info-colon">:</td>
+                <td className="info-val bold">
+                  {formatJumlahHafalan(santri.jumlahHafalan, calcTahsin.count)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* 4. TABEL 7 KRITERIA TAHSIN RESMI */}
+          <div className="section-title-formal">
+            <span>A. Capaian Pembelajaran Tahsin & Tajwid Al-Qur'an</span>
+          </div>
+
+          <table className="tahsin-formal-table">
+            <thead>
+              <tr>
+                <th style={{ width: '45px', textAlign: 'center' }}>No</th>
+                <th style={{ textAlign: 'left', paddingLeft: '14px' }}>Aspek Penilaian</th>
+                <th style={{ width: '135px', textAlign: 'center' }}>
+                  <span>Nilai</span>
+                  <span className="arabic" style={{ fontSize: '11pt', marginLeft: '4px' }}>الدرجة</span>
+                </th>
+                <th style={{ width: '185px', textAlign: 'center' }}>
+                  <span>Predikat</span>
+                  <span className="arabic" style={{ fontSize: '11pt', marginLeft: '4px' }}>التقدير</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {KRITERIA_TAHSIN.map((k, idx) => {
+                const item = calcTahsin.details[k.id];
+                const hasVal = item !== undefined;
+                const val = hasVal ? item.nilai : '—';
+                const pred = hasVal ? item.predikat : '';
+                return (
+                  <tr key={k.id}>
+                    <td className="cell-num">{idx + 1}</td>
+                    <td className="cell-aspek">
+                      <span className="aspek-id bold">{k.labelId}</span>
+                      <span className="aspek-ar arabic" style={{ fontSize: '11.5pt', marginLeft: '8px', color: '#166534', fontWeight: 700 }}>
+                        {k.labelAr}
+                      </span>
+                    </td>
+                    <td className={`cell-tahsin-val ${hasVal ? 'has-val' : 'is-empty'}`} style={{ color: hasVal ? '#000000' : '#9ca3af' }}>
+                      {val}
+                    </td>
+                    <td className={`cell-tahsin-pred ${hasVal ? '' : 'is-empty'}`} style={{ color: hasVal ? '#000000' : '#9ca3af' }}>
+                      {hasVal ? (
+                        <span>
+                          <span className="arabic" style={{ fontSize: '11.5pt', fontWeight: 'bold', color: '#000000' }}>{pred}</span>
+                          {' '}
+                          <span style={{ fontSize: '8pt', fontFamily: 'Calibri, sans-serif', fontWeight: 600, color: '#000000' }}>
+                            ({PREDIKAT_LABEL_ID[pred] || pred})
+                          </span>
+                        </span>
+                      ) : '—'}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {/* 5. RINGKASAN HASIL BELAJAR TAHSIN */}
+          <div className="section-title-formal" style={{ marginTop: '8px', marginBottom: '4px' }}>
+            <span>B. Ringkasan Hasil Belajar Tahsin</span>
+          </div>
+
+          <div className="summary-cards-4col" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginTop: '4px', marginBottom: '8px' }}>
+            <div className="summary-card-item">
+              <div className="summary-card-label">Total Nilai</div>
+              <div className="summary-card-val" style={{ color: '#000000', fontSize: '13pt', fontWeight: 800 }}>{calcTahsin.total}</div>
+            </div>
+
+            <div className="summary-card-item">
+              <div className="summary-card-label">Nilai Rata-rata</div>
+              <div className="summary-card-val" style={{ color: '#000000', fontSize: '13pt', fontWeight: 800 }}>
+                {calcTahsin.count > 0 ? calcTahsin.rataRata : '—'}
+              </div>
+            </div>
+
+            <div className="summary-card-item">
+              <div className="summary-card-label">Predikat Akhir</div>
+              <div className="summary-card-val" style={{ color: '#000000', fontSize: '11.5pt', fontWeight: 800 }}>
+                {calcTahsin.count > 0 ? (
+                  <span>
+                    <span className="arabic" style={{ fontSize: '12pt', fontWeight: 'bold', color: '#000000' }}>
+                      {calcTahsin.predikatAkhir}
+                    </span>
+                    {' '}
+                    <span style={{ fontSize: '8.5pt', fontWeight: 600, color: '#000000', fontFamily: 'Calibri, sans-serif' }}>
+                      ({PREDIKAT_LABEL_ID[calcTahsin.predikatAkhir] || calcTahsin.predikatAkhir})
+                    </span>
+                  </span>
+                ) : '—'}
+              </div>
+            </div>
+          </div>
+
+          {/* 6. LEGENDA KRITERIA KELULUSAN */}
+          <div className="legenda-kriteria-horizontal" style={{ marginTop: '6px', marginBottom: '8px', padding: '4px 8px' }}>
+            <div className="legenda-title">
+              <span>Kriteria Kelulusan <span className="arabic">(معيار التقدير)</span>:</span>
+            </div>
+            <div className="legenda-items">
+              <span className="legenda-chip">95–100: <strong className="arabic">ممتاز</strong> (Sangat Baik)</span>
+              <span className="legenda-chip">90–94: <strong className="arabic">جيّد جدا</strong> (Baik Sekali)</span>
+              <span className="legenda-chip">85–89: <strong className="arabic">جيّد</strong> (Baik)</span>
+              <span className="legenda-chip">80–84: <strong className="arabic">مقبول</strong> (Cukup)</span>
+              <span className="legenda-chip">&lt;80: <strong className="arabic">راسب</strong> (Mengulang)</span>
+            </div>
+          </div>
+
+          {/* 7. CATATAN PEMBINA TAHSIN */}
+          <div className="catatan-box-formal" style={{ marginTop: '6px', marginBottom: '10px' }}>
+            <div className="catatan-title-formal">
+              <span>C. Catatan Perkembangan Tahsin</span>
+            </div>
+            <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '38px', color: '#000000' }}>
+              {santri.catatan || ''}
+            </div>
+            <div className="catatan-dotted-line"></div>
+          </div>
+
+          {/* SPASI FORM TTD */}
+          <div className="spacer-3" style={{ height: '16px' }}></div>
+
+          {/* 8. TANDA TANGAN RESMI */}
+          <div className="signature-container-formal">
+            <div className="signature-col-formal">
+              <div className="sig-role-formal">
+                Mengetahui, <span className="arabic">(معرفة)</span>
+              </div>
+              <div className="sig-role-formal bold">
+                Orang Tua / Wali Santri <span className="arabic">(ولي الطالبة)</span>
+              </div>
+              <div className="sig-space-formal"></div>
+              <div className="sig-name-box">
+                <div className="sig-name-ar-spacer">&nbsp;</div>
+                <div className="sig-line-formal">
+                  ( <span className="sig-solid-line"></span> )
+                </div>
+              </div>
+            </div>
+
+            <div className="signature-col-formal">
+              <div className="sig-date-formal">
+                Tulang Bawang, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </div>
+              <div className="sig-role-formal bold">
+                Pembina Tahfidz <span className="arabic">(رئيسة قسم التحفيظ)</span>
+              </div>
+              <div className="sig-space-formal"></div>
+              <div className="sig-name-box">
+                <div className="arabic sig-name-ar">يينى رحمواتـى</div>
+                <div className="sig-name-latin">YENI RAHMAWATI</div>
+              </div>
+            </div>
+          </div>
+
+          {/* 9. FOOTER DOKUMEN RESMI */}
+          <div className="doc-footer-formal">
+            <span>E-Rapor Tahsin PPTQ Jamal Yusuf Al-Haddad • Hal. {sIdx + 1} dari {santriKelas.length}</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content print-modal-container" onClick={(e) => e.stopPropagation()}>
@@ -321,6 +562,10 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
             /* MODE 1: BATCH PRINT SELURUH RAPOR SANTRI DALAM KELAS (1 SANTRI 1 HALAMAN A4) */
             <div className="batch-rapor-container">
               {santriKelas.map((santri, sIdx) => {
+                if (santri.is_tahsin) {
+                  return renderBatchTahsinSheet(santri, sIdx);
+                }
+
                 const calc = santri.calc || hitungRapor(santri.nilaiJuz || {});
                 const ranking = santri.ranking;
 

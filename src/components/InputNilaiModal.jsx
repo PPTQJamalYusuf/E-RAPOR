@@ -13,7 +13,6 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
   const [nilaiTahsin, setNilaiTahsin] = useState({ ...(santri.nilaiTahsin || {}) });
   const [catatan, setCatatan] = useState(santri.catatan || '');
   const [jumlahHafalan, setJumlahHafalan] = useState(santri.jumlahHafalan || '');
-  const [activeProgramMode, setActiveProgramMode] = useState(santri.is_tahsin ? 'tahsin' : 'tahfidz');
   const [activeTab, setActiveTab] = useState('all');
   const [showConfirmClose, setShowConfirmClose] = useState(false);
 
@@ -193,9 +192,16 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
       <div className="modal-content input-nilai-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div className="modal-header-info">
-            <h2 className="modal-title-main">
-              Input Nilai & Catatan: {santri.nama}
-            </h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <h2 className="modal-title-main">
+                Input Nilai: {santri.nama}
+              </h2>
+              {santri.is_tahsin && (
+                <span className="badge-tahsin-pill" style={{ fontSize: '0.75rem' }}>
+                  <Volume2 size={12} /> Program Tahsin
+                </span>
+              )}
+            </div>
             <div className="modal-subtitle-nis">
               NIS: {santri.nis || santri.id} • Kelas: <strong>{santri.kelas}</strong>
             </div>
@@ -206,28 +212,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
         </div>
 
         <div className="modal-body input-nilai-modal-body">
-          {/* Switcher Tab Khusus Santri Program Tahsin */}
-          {santri.is_tahsin && (
-            <div className="program-mode-switcher">
-              <button
-                type="button"
-                className={`program-mode-btn ${activeProgramMode === 'tahfidz' ? 'active' : ''}`}
-                onClick={() => setActiveProgramMode('tahfidz')}
-              >
-                Tahfidz (30 Juz)
-              </button>
-              <button
-                type="button"
-                className={`program-mode-btn ${activeProgramMode === 'tahsin' ? 'active' : ''}`}
-                onClick={() => setActiveProgramMode('tahsin')}
-              >
-                <Volume2 size={15} style={{ marginRight: '4px' }} />
-                Tahsin
-              </button>
-            </div>
-          )}
-
-          {(!santri.is_tahsin || activeProgramMode === 'tahfidz') ? (
+          {!santri.is_tahsin ? (
             <>
               {/* Ringkasan Nilai Realtime Responsif */}
               <div

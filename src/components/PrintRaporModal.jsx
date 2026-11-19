@@ -15,7 +15,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
   const initialSem = currentPeriod?.semester === 'Genap' ? 'الثاني' : (santri.semester || 'الأول');
   const [selectedSemester, setSelectedSemester] = useState(initialSem);
   const [zoom, setZoom] = useState(1);
-  const [printDocType, setPrintDocType] = useState('tahfidz'); // 'tahfidz' | 'tahsin' | 'both'
+  const [printDocType, setPrintDocType] = useState(santri.is_tahsin ? 'tahsin' : 'tahfidz'); // 'tahfidz' | 'tahsin' | 'both'
   const calc = hitungRapor(santri.nilaiJuz || {});
   const calcTahsin = hitungRaporTahsin(santri.nilaiTahsin || {});
   const isAdmin = currentUser?.role === 'admin';
@@ -616,36 +616,6 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
           <div className="print-modal-right-section">
             <div className="print-modal-actions">
-              {/* Selector Lembar Rapor Khusus Santri Tahsin */}
-              {santri.is_tahsin && (
-                <div className="print-doc-type-selector">
-                  <button
-                    type="button"
-                    className={`btn-doc-pill ${printDocType === 'tahfidz' ? 'active' : ''}`}
-                    onClick={() => setPrintDocType('tahfidz')}
-                    title="Cetak lembar Rapor Tahfidz (Hafalan 30 Juz)"
-                  >
-                    📖 Tahfidz
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn-doc-pill ${printDocType === 'tahsin' ? 'active' : ''}`}
-                    onClick={() => setPrintDocType('tahsin')}
-                    title="Cetak lembar Rapor Tahsin (7 Kriteria Tajwid)"
-                  >
-                    🗣️ Tahsin
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn-doc-pill ${printDocType === 'both' ? 'active' : ''}`}
-                    onClick={() => setPrintDocType('both')}
-                    title="Cetak kedua dokumen (Tahfidz & Tahsin) dalam 2 lembar A4"
-                  >
-                    🖨️ Keduanya
-                  </button>
-                </div>
-              )}
-
               {/* Zoom / Scale Controls */}
               <div className="print-zoom-controls">
                 <button 
@@ -739,16 +709,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             }}
           >
             {santri.is_tahsin ? (
-              <>
-                {printDocType === 'tahfidz' && renderTahfidzDocument(false)}
-                {printDocType === 'tahsin' && renderTahsinDocument(false)}
-                {printDocType === 'both' && (
-                  <>
-                    {renderTahfidzDocument(true)}
-                    {renderTahsinDocument(false)}
-                  </>
-                )}
-              </>
+              renderTahsinDocument(false)
             ) : (
               renderTahfidzDocument(false)
             )}
