@@ -153,40 +153,6 @@ export function hitungRapor(nilaiJuz = {}) {
 }
 
 /**
- * Hitung peringkat (ranking) untuk sekumpulan santri dalam satu kelas
- */
-export function hitungRanking(santriList) {
-  const scored = santriList.map(s => {
-    const calc = hitungRapor(s.nilaiJuz || {});
-    return {
-      ...s,
-      calc
-    };
-  });
-
-  scored.sort((a, b) => {
-    if (b.calc.rataRata !== a.calc.rataRata) {
-      return b.calc.rataRata - a.calc.rataRata;
-    }
-    return b.calc.total - a.calc.total;
-  });
-
-  let currentRank = 1;
-  return scored.map((item, index) => {
-    if (index > 0) {
-      const prev = scored[index - 1];
-      if (prev.calc.rataRata !== item.calc.rataRata || prev.calc.total !== item.calc.total) {
-        currentRank = index + 1;
-      }
-    }
-    return {
-      ...item,
-      ranking: item.calc.count > 0 ? currentRank : '-'
-    };
-  });
-}
-
-/**
  * 7 Kriteria Penilaian Rapor Tahsin Al-Qur'an (Sesuai Master Excel Pondok)
  */
 export const KRITERIA_TAHSIN = [
@@ -232,4 +198,54 @@ export function hitungRaporTahsin(nilaiTahsin = {}) {
     predikatAkhir,
     details
   };
+}
+
+/**
+ * Hitung peringkat (ranking) untuk sekumpulan santri dalam satu kelas.
+ * - Peringkat (ranking) hanya dihitung untuk santriwati program reguler Tahfidz yang memiliki nilai juz.
+ * - Santriwati program Tahsin mendapat ranking '-' agar tidak berebut peringkat juz.
+ * - Urutan nama santriwati tetap dipertahankan sesuai abjad (A-Z) dan santri Tahsin tidak turun ke bawah.
+ */
+export function hitungRanking(santriList) {
+  const scored = santriList.map(s => {
+    const calc = hitungRapor(s.nilaiJuz || {});
+    const calcTahsin = s.is_tahsin ? hitungRaporTahsin(s.nilaiTahsin || {}) : null;
+    return {
+      ...s,
+      calc,
+      calcTahsin
+    };
+  });
+
+  // Hitung ranking khusus santri Tahfidz murni yang sudah memiliki nilai juz
+  const tahfidzScored = scored.filter(s => !s.is_tahsin && s.calc && s.calc.count > 0);
+  tahfidzScored.sort((a, b) => {
+    if (b.calc.rataRata !== a.calc.rataRata) {
+      return b.calc.rataRata - a.calc.rataRata;
+    }
+    return b.calc.total - a.calc.total;
+  });
+
+  const rankMap = new Map();
+  let currentRank = 1;
+  tahfidzScored.forEach((item, index) => {
+    if (index > 0) {
+      const prev = tahfidzScored[index - 1];
+      if (prev.calc.rataRata !== item.calc.rataRata || prev.calc.total !== item.calc.total) {
+        currentRank = index + 1;
+      }
+    }
+    rankMap.set(item.id, currentRank);
+  });
+
+  // Pasangkan ranking ke seluruh santri (Tahsin & belum dinilai = '-')
+  const withRanking = scored.map(item => ({
+    ...item,
+    ranking: rankMap.has(item.id) ? rankMap.get(item.id) : '-'
+  }));
+
+  // Urutan nama tetap berdasarkan abjad (A-Z) agar santri Tahsin tidak turun ke bawah
+  return withRanking.sort((a, b) => {
+    return (a.nama || '').localeCompare(b.nama || '', 'id', { sensitivity: 'base' });
+  });
 }

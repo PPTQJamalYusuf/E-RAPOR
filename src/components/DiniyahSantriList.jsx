@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Edit3, Printer, BookOpen, CheckCircle, Clock, Eye, Sparkles } from 'lucide-react';
+import { Search, Edit3, Printer, BookOpen, CheckCircle, Clock, Eye, Sparkles, X } from 'lucide-react';
 import { MATA_PELAJARAN_DINIYAH, hitungRaporDiniyah, hitungRankingDiniyah, PREDIKAT_DINIYAH_COLORS } from '../utils/diniyahCalc';
 import { formatNamaKelas } from '../utils/tahfidzCalc';
 
@@ -12,6 +12,7 @@ export default function DiniyahSantriList({
   currentUser
 }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterBelumNilai, setFilterBelumNilai] = useState(false);
   const [selectedKelas, setSelectedKelas] = useState(() => {
     if (currentUser?.role === 'guru_diniyah' && currentUser?.kelas_binaan && currentUser?.kelas_binaan !== 'Semua') {
       return currentUser.kelas_binaan;
@@ -45,7 +46,13 @@ export default function DiniyahSantriList({
     return result;
   }, [santriList]);
 
-  // Filter pencarian & kelas
+  // Cek apakah santri sudah lengkap seluruh nilai mata pelajaran
+  const isSantriDiniyahComplete = (santri) => {
+    const calc = hitungRaporDiniyah(santri.nilaiDiniyah || {});
+    return calc.count === MATA_PELAJARAN_DINIYAH.length;
+  };
+
+  // Filter pencarian, kelas, & status belum terisi nilai
   const filteredSantri = useMemo(() => {
     return rankedSantriList.filter(s => {
       let matchesKelas = false;
@@ -57,19 +64,22 @@ export default function DiniyahSantriList({
         matchesKelas = s.kelas === selectedKelas;
       }
 
+      // Filter khusus santri yang nilainya belum lengkap terisi
+      let matchesStatus = true;
+      if (filterBelumNilai) {
+        matchesStatus = !isSantriDiniyahComplete(s);
+      }
+
       const searchStr = (s.nis || s.id || '').toString().toLowerCase();
       const matchesSearch = s.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             searchStr.includes(searchTerm.toLowerCase());
-      return matchesKelas && matchesSearch;
+      return matchesKelas && matchesStatus && matchesSearch;
     });
-  }, [rankedSantriList, selectedKelas, searchTerm]);
+  }, [rankedSantriList, selectedKelas, filterBelumNilai, searchTerm]);
 
   // Statistik ringkas Diniyah
   const totalSantri = santriList.length;
-  const tuntasSemuaMapel = santriList.filter(s => {
-    const calc = hitungRaporDiniyah(s.nilaiDiniyah || {});
-    return calc.count === MATA_PELAJARAN_DINIYAH.length;
-  }).length;
+  const tuntasSemuaMapel = santriList.filter(isSantriDiniyahComplete).length;
   const belumLengkap = totalSantri - tuntasSemuaMapel;
 
   return (
@@ -96,13 +106,29 @@ export default function DiniyahSantriList({
           </div>
         </div>
 
-        <div className="stat-card">
+        <div
+          className={`stat-card clickable ${filterBelumNilai ? 'active-stat-belum' : ''}`}
+          onClick={() => setFilterBelumNilai(prev => !prev)}
+          title={filterBelumNilai ? "Klik untuk membatalkan filter dan tampilkan semua santri" : "Klik untuk menampilkan santri yang belum lengkap diinput nilai"}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFilterBelumNilai(prev => !prev); }}
+        >
           <div className="stat-icon" style={{ background: '#fffbeb', color: '#b45309' }}>
             <Clock size={24} />
           </div>
-          <div>
+          <div style={{ flex: 1 }}>
             <div className="stat-val">{belumLengkap}</div>
-            <div className="stat-lbl">Belum Lengkap / Proses Input</div>
+            <div className="stat-lbl">Belum Lengkap / Belum Terisi</div>
+            {filterBelumNilai ? (
+              <span className="stat-card-badge-status" style={{ background: '#fde68a', color: '#92400e' }}>
+                ✓ Filter Aktif
+              </span>
+            ) : (
+              <span style={{ fontSize: '0.72rem', color: '#b45309', display: 'block', marginTop: '2px', fontWeight: 600 }}>
+                👉 Klik untuk filter
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -150,14 +176,27 @@ export default function DiniyahSantriList({
             />
           </div>
 
-          <div style={{ fontSize: '0.84rem', color: 'var(--slate-500)', fontWeight: 600 }}>
-            Menampilkan: <strong style={{ color: 'var(--slate-800)' }}>{filteredSantri.length}</strong> santriwati
+          <div style={{ fontSize: '0.84rem', color: 'var(--slate-500)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <div>
+              Menampilkan: <strong style={{ color: 'var(--slate-800)' }}>{filteredSantri.length}</strong> santriwati
+            </div>
+            {filterBelumNilai && (
+              <button
+                type="button"
+                onClick={() => setFilterBelumNilai(false)}
+                className="filter-reset-badge"
+                title="Hapus filter dan tampilkan semua santriwati"
+              >
+                <span>Filter: Belum Lengkap Terisi ({belumLengkap})</span>
+                <X size={13} />
+              </button>
+            )}
           </div>
         </div>
 
         {/* Filter Tombol Kelas */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginTop: '0.25rem' }}>
-          <div className="class-filters">
+          <div className="class-filters" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
             <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--slate-500)', marginRight: '0.5rem' }}>
               Pilih Kelas:
             </span>
@@ -205,7 +244,18 @@ export default function DiniyahSantriList({
             {filteredSantri.length === 0 ? (
               <tr>
                 <td colSpan="9" style={{ textAlign: 'center', padding: '3rem', color: 'var(--slate-400)' }}>
-                  Tidak ada santriwati yang sesuai dengan pencarian.
+                  {filterBelumNilai ? (
+                    <div>
+                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#047857', marginBottom: '0.35rem' }}>
+                        Alhamdulillah, semua santriwati sudah memiliki nilai lengkap!
+                      </div>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--slate-500)' }}>
+                        Tidak ada santriwati di kategori ini yang nilainya masih kosong atau belum lengkap.
+                      </div>
+                    </div>
+                  ) : (
+                    'Tidak ada santriwati yang sesuai dengan pencarian.'
+                  )}
                 </td>
               </tr>
             ) : (
@@ -288,7 +338,23 @@ export default function DiniyahSantriList({
 
       {/* Tampilan Mobile Card View untuk HP */}
       <div className="santri-mobile-cards">
-        {filteredSantri.map((santri, idx) => {
+        {filteredSantri.length === 0 ? (
+          <div className="empty-state-mobile-card">
+            {filterBelumNilai ? (
+              <div>
+                <div style={{ fontWeight: 700, color: '#047857', marginBottom: '4px' }}>
+                  Alhamdulillah, semua santriwati sudah memiliki nilai lengkap!
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>
+                  Tidak ada santriwati di kategori ini yang nilainya masih kosong atau belum lengkap.
+                </div>
+              </div>
+            ) : (
+              'Tidak ada santriwati yang sesuai dengan pencarian.'
+            )}
+          </div>
+        ) : (
+          filteredSantri.map((santri, idx) => {
           const calc = hitungRaporDiniyah(santri.nilaiDiniyah || {});
           const colorInfo = PREDIKAT_DINIYAH_COLORS[calc.predikatAkhir] || PREDIKAT_DINIYAH_COLORS['-'];
 
@@ -353,8 +419,9 @@ export default function DiniyahSantriList({
               </div>
             </div>
           );
-        })}
-      </div>
+        })
+      )}
     </div>
-  );
+  </div>
+);
 }

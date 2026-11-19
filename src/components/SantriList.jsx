@@ -229,8 +229,13 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
               </tr>
             ) : (
               filteredSantri.map((santri, idx) => {
-                const calc = hitungRapor(santri.nilaiJuz || {});
-                const colorInfo = PREDIKAT_COLORS[calc.predikatAkhir] || PREDIKAT_COLORS['-'];
+                const isTahsin = Boolean(santri.is_tahsin);
+                const calcTahfidz = hitungRapor(santri.nilaiJuz || {});
+                const calcTahsin = isTahsin ? hitungRaporTahsin(santri.nilaiTahsin || {}) : null;
+                const effectiveCalc = (isTahsin && calcTahsin && calcTahsin.count > 0)
+                  ? calcTahsin
+                  : calcTahfidz;
+                const colorInfo = PREDIKAT_COLORS[effectiveCalc.predikatAkhir] || PREDIKAT_COLORS['-'];
 
                 return (
                   <tr key={santri.id}>
@@ -270,28 +275,44 @@ export default function SantriList({ santriList, onSelectInput, onSelectPrint, o
                       </span>
                     </td>
                     <td>
-                      {calc.count > 0 ? (
+                      {isTahsin ? (
+                        santri.jumlahHafalan && String(santri.jumlahHafalan).trim() !== '' ? (
+                          <span style={{ fontWeight: 600, color: '#047857' }}>
+                            {santri.jumlahHafalan}
+                          </span>
+                        ) : calcTahfidz.count > 0 ? (
+                          <span style={{ fontWeight: 600, color: '#047857' }}>
+                            ✓ {calcTahfidz.count} Juz
+                          </span>
+                        ) : (
+                          <span style={{ color: '#047857', fontWeight: 600, fontSize: '0.85rem' }}>Tahsin</span>
+                        )
+                      ) : calcTahfidz.count > 0 ? (
                         <span style={{ fontWeight: 600, color: '#047857' }}>
-                          ✓ {calc.count} Juz
+                          ✓ {calcTahfidz.count} Juz
                         </span>
                       ) : (
                         <span style={{ color: 'var(--slate-400)' }}>—</span>
                       )}
                     </td>
-                    <td style={{ fontWeight: 700 }}>
-                      {calc.count > 0 ? calc.rataRata : '—'}
+                    <td style={{ fontWeight: 700, color: effectiveCalc.count > 0 ? 'inherit' : 'var(--slate-400)' }}>
+                      {effectiveCalc.count > 0 ? effectiveCalc.rataRata : '—'}
                     </td>
                     <td>
-                      <span
-                        className="predikat-pill arabic"
-                        style={{
-                          background: colorInfo.bg,
-                          color: colorInfo.text,
-                          border: `1px solid ${colorInfo.border}`
-                        }}
-                      >
-                        {calc.predikatAkhir}
-                      </span>
+                      {effectiveCalc.count > 0 ? (
+                        <span
+                          className="predikat-pill arabic"
+                          style={{
+                            background: colorInfo.bg,
+                            color: colorInfo.text,
+                            border: `1px solid ${colorInfo.border}`
+                          }}
+                        >
+                          {effectiveCalc.predikatAkhir}
+                        </span>
+                      ) : (
+                        <span style={{ color: 'var(--slate-400)' }}>—</span>
+                      )}
                     </td>
                     <td style={{ fontWeight: 700, color: 'var(--slate-700)' }}>
                       {santri.ranking !== '-' ? `#${santri.ranking}` : '—'}

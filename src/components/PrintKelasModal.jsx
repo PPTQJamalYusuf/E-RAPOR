@@ -3,6 +3,7 @@ import { X, Printer, Users, BookOpen, Award, CheckCircle2, ZoomIn, ZoomOut, Rota
 import { 
   getPredikat, 
   hitungRapor, 
+  hitungRaporTahsin,
   hitungRanking, 
   KELAS_BILINGUAL, 
   formatNamaKelas,
@@ -90,7 +91,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
     return hitungRanking(filtered);
   }, [santriList, selectedKelas]);
 
-  // Statistik Kelas untuk Leger
+  // Statistik Kelas untuk Leger (Mencakup Santri Tahfidz & Tahsin)
   const statsKelas = useMemo(() => {
     const total = santriKelas.length;
     let totalNilaiKelas = 0;
@@ -99,14 +100,19 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
     let nilaiTertinggi = 0;
 
     santriKelas.forEach(s => {
-      const calc = s.calc || hitungRapor(s.nilaiJuz || {});
-      if (calc.count > 0) {
+      const calcTahfidz = s.calc || hitungRapor(s.nilaiJuz || {});
+      const calcTahsin = s.is_tahsin ? hitungRaporTahsin(s.nilaiTahsin || {}) : null;
+      const effectiveCalc = (s.is_tahsin && calcTahsin && calcTahsin.count > 0)
+        ? calcTahsin
+        : calcTahfidz;
+
+      if (effectiveCalc.count > 0) {
         countDinilai++;
-        totalNilaiKelas += parseFloat(calc.rataRata);
-        if (parseFloat(calc.rataRata) > nilaiTertinggi) {
-          nilaiTertinggi = parseFloat(calc.rataRata);
+        totalNilaiKelas += parseFloat(effectiveCalc.rataRata);
+        if (parseFloat(effectiveCalc.rataRata) > nilaiTertinggi) {
+          nilaiTertinggi = parseFloat(effectiveCalc.rataRata);
         }
-        if (calc.predikatAkhir !== 'راسب') {
+        if (effectiveCalc.predikatAkhir !== 'راسب') {
           tuntasCount++;
         }
       }
@@ -600,21 +606,30 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
               <table className="rekap-table-formal">
                 <thead>
                   <tr>
-                    <th style={{ width: '50px' }}>Rank</th>
-                    <th style={{ width: '100px' }}>NIS</th>
+                    <th style={{ width: '38px' }}>No</th>
+                    <th style={{ width: '52px' }}>Rank</th>
+                    <th style={{ width: '85px' }}>NIS</th>
                     <th>Nama Santriwati</th>
-                    <th style={{ width: '110px' }}>Hafalan Teruji</th>
-                    <th style={{ width: '90px' }}>Rata-rata</th>
-                    <th style={{ width: '120px' }}>Predikat</th>
+                    <th style={{ width: '105px' }}>Hafalan Teruji</th>
+                    <th style={{ width: '85px' }}>Rata-rata</th>
+                    <th style={{ width: '115px' }}>Predikat</th>
                   </tr>
                 </thead>
                 <tbody>
                   {santriKelas.map((santri, idx) => {
-                    const calc = santri.calc || hitungRapor(santri.nilaiJuz || {});
-                    const colorInfo = PREDIKAT_COLORS[calc.predikatAkhir] || PREDIKAT_COLORS['-'];
+                    const isTahsin = Boolean(santri.is_tahsin);
+                    const calcTahfidz = santri.calc || hitungRapor(santri.nilaiJuz || {});
+                    const calcTahsin = isTahsin ? hitungRaporTahsin(santri.nilaiTahsin || {}) : null;
+                    const effectiveCalc = (isTahsin && calcTahsin && calcTahsin.count > 0)
+                      ? calcTahsin
+                      : calcTahfidz;
+                    const colorInfo = PREDIKAT_COLORS[effectiveCalc.predikatAkhir] || PREDIKAT_COLORS['-'];
 
                     return (
                       <tr key={santri.id}>
+                        <td style={{ textAlign: 'center', fontWeight: 600, color: '#64748b' }}>
+                          {idx + 1}
+                        </td>
                         <td style={{ textAlign: 'center', fontWeight: 800 }}>
                           {santri.ranking === 1 ? (
                             <span className="rank-badge rank-gold">🥇 1</span>
@@ -622,34 +637,59 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                             <span className="rank-badge rank-silver">🥈 2</span>
                           ) : santri.ranking === 3 ? (
                             <span className="rank-badge rank-bronze">🥉 3</span>
-                          ) : (
+                          ) : santri.ranking && santri.ranking !== '-' ? (
                             <span className="rank-badge-normal">
-                              {santri.ranking !== '-' ? `#${santri.ranking}` : idx + 1}
+                              #{santri.ranking}
+                            </span>
+                          ) : (
+                            <span className="rank-badge-normal" style={{ color: '#94a3b8' }}>
+                              —
                             </span>
                           )}
                         </td>
                         <td style={{ fontSize: '8.5pt' }}>{santri.nis || santri.id}</td>
-                        <td style={{ fontWeight: 600 }}>{santri.nama}</td>
-                        <td style={{ textAlign: 'center', fontWeight: 600 }}>
-                          {calc.count > 0 ? `${calc.count} Juz` : '—'}
+                        <td style={{ fontWeight: 600 }}>
+                          <span>{santri.nama}</span>
+                          {isTahsin && (
+                            <span className="badge-tahsin-tag" title="Program Tahsin Al-Qur'an">
+                              [Tahsin]
+                            </span>
+                          )}
                         </td>
-                        <td style={{ textAlign: 'center', fontWeight: 700, color: calc.count > 0 ? '#000000' : '#94a3b8' }}>
-                          {calc.count > 0 ? calc.rataRata : '—'}
+                        <td style={{ textAlign: 'center', fontWeight: 600 }}>
+                          {isTahsin ? (
+                            santri.jumlahHafalan && String(santri.jumlahHafalan).trim() !== '' ? (
+                              <span>{santri.jumlahHafalan}</span>
+                            ) : calcTahfidz.count > 0 ? (
+                              `${calcTahfidz.count} Juz`
+                            ) : (
+                              <span style={{ color: '#047857', fontSize: '8.5pt' }}>Tahsin</span>
+                            )
+                          ) : (
+                            calcTahfidz.count > 0 ? `${calcTahfidz.count} Juz` : '—'
+                          )}
+                        </td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: effectiveCalc.count > 0 ? '#000000' : '#94a3b8' }}>
+                          {effectiveCalc.count > 0 ? effectiveCalc.rataRata : '—'}
                         </td>
                         <td style={{ textAlign: 'center' }}>
-                          <span
-                            className="predikat-pill"
-                            style={{
-                              background: colorInfo.bg,
-                              color: colorInfo.text,
-                              border: `1px solid ${colorInfo.border}`,
-                              fontSize: '8pt',
-                              padding: '2px 6px',
-                              whiteSpace: 'nowrap'
-                            }}
-                          >
-                            <strong className="arabic">{calc.predikatAkhir}</strong> {PREDIKAT_LABEL_ID[calc.predikatAkhir] ? `(${PREDIKAT_LABEL_ID[calc.predikatAkhir]})` : ''}
-                          </span>
+                          {effectiveCalc.count > 0 ? (
+                            <span
+                              className="predikat-pill"
+                              style={{
+                                background: colorInfo.bg,
+                                color: colorInfo.text,
+                                border: `1px solid ${colorInfo.border}`,
+                                fontSize: '8pt',
+                                padding: '2px 6px',
+                                whiteSpace: 'nowrap'
+                              }}
+                            >
+                              <strong className="arabic">{effectiveCalc.predikatAkhir}</strong> {PREDIKAT_LABEL_ID[effectiveCalc.predikatAkhir] ? `(${PREDIKAT_LABEL_ID[effectiveCalc.predikatAkhir]})` : ''}
+                            </span>
+                          ) : (
+                            <span style={{ color: '#94a3b8', fontSize: '8pt' }}>—</span>
+                          )}
                         </td>
                       </tr>
                     );

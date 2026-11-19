@@ -100,8 +100,14 @@ export default function InputDiniyahMapelModal({
               Ketik nilai lalu tekan <strong>Enter [↵]</strong> untuk langsung pindah ke santri berikutnya ala Excel.
             </p>
           </div>
-          <button type="button" className="btn-close" onClick={onClose} style={{ color: '#ffffff', flexShrink: 0 }}>
-            <X size={20} />
+          <button 
+            type="button" 
+            className="btn-modal-close-red" 
+            onClick={onClose} 
+            title="Tutup (ESC)"
+            aria-label="Tutup Modal"
+          >
+            <X size={18} strokeWidth={2.5} />
           </button>
         </div>
 
