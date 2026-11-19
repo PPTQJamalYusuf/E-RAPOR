@@ -2834,10 +2834,12 @@ body {
 .login-overlay {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle at 50% 25%, #065f46 0%, #064e3b 50%, #022c22 100%);
   padding: 1.5rem;
+  position: relative;
 }
 
 .login-card {
@@ -3087,6 +3089,34 @@ body {
   font-size: 0.78rem;
   color: #64748b !important;
   font-weight: 500;
+}
+
+/* Craftsman Mark (Quiet Monogram) */
+.login-craftsman-monogram {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 1.5rem;
+  font-size: 0.7rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  letter-spacing: 0.07em;
+  color: #a7f3d0;
+  opacity: 0.35;
+  user-select: none;
+  transition: opacity 0.3s ease, color 0.3s ease;
+  cursor: default;
+}
+
+.login-craftsman-monogram:hover {
+  opacity: 0.85;
+  color: #6ee7b7;
+}
+
+@media screen and (max-width: 640px) {
+  .login-craftsman-monogram {
+    position: static;
+    margin-top: 1.25rem;
+    text-align: center;
+  }
 }
 
 /* ==========================================================================

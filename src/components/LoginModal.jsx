@@ -141,6 +141,14 @@ export default function LoginModal({ onLoginSuccess }) {
           <span>PPTQ JAMAL YUSUF AL-HADDAD • Terkoneksi Cloud Database</span>
         </div>
       </div>
+
+      {/* Subtle Craftsman Monogram (Quiet Signature) */}
+      <div 
+        className="login-craftsman-monogram" 
+        title="Dibuat dengan ketulusan oleh Bagas Irfa'i"
+      >
+        v1.0 • crafted by bagas irfa'i
+      </div>
     </div>
   );
 }
