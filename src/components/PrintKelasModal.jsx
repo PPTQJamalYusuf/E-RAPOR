@@ -12,6 +12,7 @@ import {
   PREDIKAT_COLORS,
   KRITERIA_TAHSIN
 } from '../utils/tahfidzCalc';
+import { usePrintDocumentTitle, executePrintWithTitle } from '../utils/printTitleHelper';
 
 export default function PrintKelasModal({ santriList, initialKelas, currentPeriod, onClose }) {
   // Listener keyboard ESC untuk menutup modal
@@ -63,10 +64,6 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
   const startYear = currentMonth >= 6 ? currentYear : currentYear - 1;
   const defaultTahunPelajaran = `${startYear} / ${startYear + 1}`;
   const tahunPelajaran = currentPeriod?.tahun_ajaran || defaultTahunPelajaran;
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   const toArabicNum = (n) => {
     const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -127,6 +124,19 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
       persenTuntas: countDinilai > 0 ? Math.round((tuntasCount / countDinilai) * 100) : 0
     };
   }, [santriKelas]);
+
+  // Format Nama File Otomatis saat Simpan PDF
+  const isKelasTahsin = santriKelas && santriKelas.length > 0 && santriKelas.every(s => s.is_tahsin);
+  const jenisLabel = isKelasTahsin ? 'Tahsin' : 'Tahfidz';
+  const kelasLabel = formatNamaKelas(selectedKelas);
+  const printTitle = (printMode === 'leger' || printMode === 'rekap')
+    ? `${kelasLabel} - Rekap Leger Nilai ${jenisLabel}`
+    : `${kelasLabel} - Semua Rapor ${jenisLabel}`;
+  usePrintDocumentTitle(printTitle);
+
+  const handlePrint = () => {
+    executePrintWithTitle(printTitle);
+  };
 
   // Render Tabel Vertikal Juz startJuz s/d endJuz untuk satu santri
   const renderSplitVerticalTable = (santri, startJuz, endJuz) => {
@@ -370,18 +380,18 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
           </div>
 
           {/* 7. CATATAN PEMBINA TAHSIN */}
-          <div className="catatan-box-formal" style={{ marginTop: '6px', marginBottom: '10px' }}>
+          <div className="catatan-box-formal" style={{ marginTop: '6px', marginBottom: '8px' }}>
             <div className="catatan-title-formal">
               <span>C. Catatan Perkembangan Tahsin</span>
             </div>
-            <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '38px', color: '#000000' }}>
+            <div className="catatan-content-formal" style={{ fontSize: '9.5pt', lineHeight: 1.35, minHeight: '32px', color: '#000000' }}>
               {santri.catatan || ''}
             </div>
-            <div className="catatan-dotted-line"></div>
+            {!santri.catatan && <div className="catatan-dotted-line"></div>}
           </div>
 
           {/* SPASI FORM TTD */}
-          <div className="spacer-3" style={{ height: '16px' }}></div>
+          <div className="spacer-3" style={{ height: '14px' }}></div>
 
           {/* 8. TANDA TANGAN RESMI */}
           <div className="signature-container-formal">
@@ -728,14 +738,14 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                         <div className="catatan-title-formal">
                           <span>C. Catatan</span>
                         </div>
-                        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px', color: '#000000' }}>
+                        <div className="catatan-content-formal" style={{ fontSize: '9.2pt', lineHeight: 1.35, minHeight: '20px', color: '#000000' }}>
                           {santri.catatan || ''}
                         </div>
-                        <div className="catatan-dotted-line"></div>
+                        {!santri.catatan && <div className="catatan-dotted-line"></div>}
                       </div>
 
                       {/* SPASI 4 */}
-                      <div className="spacer-3"></div>
+                      <div className="spacer-3" style={{ height: '8px' }}></div>
 
                       {/* 8. TANDA TANGAN RESMI */}
                       <div className="signature-container-formal">

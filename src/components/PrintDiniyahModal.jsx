@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Printer, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { formatNamaKelas } from '../utils/tahfidzCalc';
+import { usePrintDocumentTitle, executePrintWithTitle } from '../utils/printTitleHelper';
 import DiniyahRaporA4Sheet from './DiniyahRaporA4Sheet';
 
 export default function PrintDiniyahModal({
@@ -15,6 +16,11 @@ export default function PrintDiniyahModal({
   const [zoom, setZoom] = useState(1);
   const isAdmin = currentUser?.role === 'admin';
 
+  // Format Nama File Otomatis saat Simpan PDF: [Nama] - Rapor Diniyah [Kelas]
+  const kelasLabel = formatNamaKelas(santri.kelas);
+  const printTitle = `${santri.nama || 'Santri'} - Rapor Diniyah ${kelasLabel}`;
+  usePrintDocumentTitle(printTitle);
+
   // Listener keyboard ESC untuk menutup modal
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -28,7 +34,7 @@ export default function PrintDiniyahModal({
 
   const handlePrint = () => {
     if (!isAdmin) return;
-    window.print();
+    executePrintWithTitle(printTitle);
   };
 
   // Cegah pintasan cetak Ctrl+P jika akun Guru (Hanya Lihat)

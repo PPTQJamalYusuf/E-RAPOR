@@ -10,6 +10,7 @@ import {
   SEMESTER_BILINGUAL,
   PREDIKAT_LABEL_ID 
 } from '../utils/tahfidzCalc';
+import { usePrintDocumentTitle, executePrintWithTitle } from '../utils/printTitleHelper';
 
 export default function PrintRaporModal({ santri, ranking, onClose, currentPeriod, currentUser }) {
   const initialSem = currentPeriod?.semester === 'Genap' ? 'الثاني' : (santri.semester || 'الأول');
@@ -19,6 +20,16 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
   const calc = hitungRapor(santri.nilaiJuz || {});
   const calcTahsin = hitungRaporTahsin(santri.nilaiTahsin || {});
   const isAdmin = currentUser?.role === 'admin';
+
+  // Format Nama File Otomatis saat Simpan PDF: [Nama] - Rapor [Jenis] [Kelas]
+  const kelasLabel = formatNamaKelas(santri.kelas);
+  const jenisLabel = printDocType === 'tahsin' 
+    ? 'Rapor Tahsin' 
+    : printDocType === 'both' 
+      ? 'Rapor Tahfidz & Tahsin' 
+      : 'Rapor Tahfidz';
+  const printTitle = `${santri.nama || 'Santri'} - ${jenisLabel} ${kelasLabel}`;
+  usePrintDocumentTitle(printTitle);
 
   // Listener keyboard ESC untuk menutup modal
   useEffect(() => {
@@ -41,7 +52,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
   const handlePrint = () => {
     if (!isAdmin) return;
-    window.print();
+    executePrintWithTitle(printTitle);
   };
 
   // Cegah pintasan cetak Ctrl+P jika akun Guru (Hanya Lihat)
@@ -291,14 +302,14 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
         <div className="catatan-title-formal">
           <span>C. Catatan</span>
         </div>
-        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '22px', color: '#000000' }}>
+        <div className="catatan-content-formal" style={{ fontSize: '9.2pt', lineHeight: 1.35, minHeight: '20px', color: '#000000' }}>
           {santri.catatan || ''}
         </div>
-        <div className="catatan-dotted-line"></div>
+        {!santri.catatan && <div className="catatan-dotted-line"></div>}
       </div>
 
       {/* SPASI 4: Form ttd */}
-      <div className="spacer-3"></div>
+      <div className="spacer-3" style={{ height: '8px' }}></div>
 
       {/* 8. TANDA TANGAN RESMI */}
       <div className="signature-container-formal">
@@ -531,18 +542,18 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
       </div>
 
       {/* 7. CATATAN PEMBINA TAHSIN */}
-      <div className="catatan-box-formal" style={{ marginTop: '6px', marginBottom: '10px' }}>
+      <div className="catatan-box-formal" style={{ marginTop: '6px', marginBottom: '8px' }}>
         <div className="catatan-title-formal">
           <span>C. Catatan Perkembangan Tahsin</span>
         </div>
-        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '38px', color: '#000000' }}>
+        <div className="catatan-content-formal" style={{ fontSize: '9.5pt', lineHeight: 1.35, minHeight: '32px', color: '#000000' }}>
           {santri.catatan || ''}
         </div>
-        <div className="catatan-dotted-line"></div>
+        {!santri.catatan && <div className="catatan-dotted-line"></div>}
       </div>
 
       {/* SPASI: Form ttd */}
-      <div className="spacer-3" style={{ height: '16px' }}></div>
+      <div className="spacer-3" style={{ height: '14px' }}></div>
 
       {/* 8. TANDA TANGAN RESMI */}
       <div className="signature-container-formal">

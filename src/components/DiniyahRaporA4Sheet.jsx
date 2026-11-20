@@ -40,7 +40,7 @@ export default function DiniyahRaporA4Sheet({
   const hasRank = ranking !== '-' && ranking !== undefined && ranking !== null;
 
   return (
-    <div className="rapor-a4-formal">
+    <div className="rapor-a4-formal rapor-diniyah-sheet">
       {/* 1. KOP PONDOK RESMI */}
       <div className="letterhead-wrapper">
         <img
@@ -245,18 +245,18 @@ export default function DiniyahRaporA4Sheet({
       </div>
 
       {/* 7. CATATAN */}
-      <div className="catatan-box-formal" style={{ marginTop: '6px', marginBottom: '10px' }}>
+      <div className="catatan-box-formal" style={{ marginTop: '6px', marginBottom: '4px' }}>
         <div className="catatan-title-formal">
           <span>C. Catatan</span>
         </div>
-        <div className="catatan-content-formal" style={{ fontSize: '10pt', lineHeight: 1.5, minHeight: '36px', color: '#000000' }}>
+        <div className="catatan-content-formal" style={{ fontSize: '9.5pt', lineHeight: 1.35, minHeight: '30px', color: '#000000' }}>
           {santri.catatanDiniyah || santri.catatan || ''}
         </div>
-        <div className="catatan-dotted-line"></div>
+        {!(santri.catatanDiniyah || santri.catatan) && <div className="catatan-dotted-line"></div>}
       </div>
 
-      {/* SPASI 4: Form ttd */}
-      <div className="spacer-3" style={{ height: '18px' }}></div>
+      {/* SPASI 4: Form ttd (ditarik lebih ke atas agar proporsional) */}
+      <div className="spacer-3" style={{ height: '4px' }}></div>
 
       {/* 8. TANDA TANGAN RESMI 3 PIHAK (Format Sejajar Sempurna & Kosong Sesuai Permintaan) */}
       <div className="signature-container-formal signature-3col-formal">

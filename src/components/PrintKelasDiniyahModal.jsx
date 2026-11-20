@@ -8,6 +8,7 @@ import {
   PREDIKAT_DINIYAH_COLORS 
 } from '../utils/diniyahCalc';
 import { formatNamaKelas, SEMESTER_BILINGUAL } from '../utils/tahfidzCalc';
+import { usePrintDocumentTitle, executePrintWithTitle } from '../utils/printTitleHelper';
 import DiniyahRaporA4Sheet from './DiniyahRaporA4Sheet';
 
 export default function PrintKelasDiniyahModal({ santriList = [], initialKelas = 'الأول', currentPeriod, onClose }) {
@@ -109,8 +110,15 @@ export default function PrintKelasDiniyahModal({ santriList = [], initialKelas =
     };
   }, [santriKelas]);
 
+  // Format Nama File Otomatis saat Simpan PDF
+  const kelasLabel = formatNamaKelas(selectedKelas);
+  const printTitle = (printMode === 'leger' || printMode === 'rekap')
+    ? `${kelasLabel} - Rekap Leger Nilai Diniyah`
+    : `${kelasLabel} - Semua Rapor Diniyah`;
+  usePrintDocumentTitle(printTitle);
+
   const handlePrint = () => {
-    window.print();
+    executePrintWithTitle(printTitle);
   };
 
   return (
