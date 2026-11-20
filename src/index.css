@@ -2334,10 +2334,12 @@ body {
 .catatan-content-formal {
   color: #000000;
   line-height: 1.35;
+  text-align: justify;
+  text-justify: inter-word;
+  text-align-last: left;
   white-space: pre-wrap;
   word-wrap: break-word;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .catatan-dotted-line {
