@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Save, MessageSquare, BookOpen, AlertCircle } from 'lucide-react';
 import { MATA_PELAJARAN_DINIYAH, getPredikatDiniyah, hitungRaporDiniyah, PREDIKAT_DINIYAH_COLORS } from '../utils/diniyahCalc';
 import { formatNamaKelas } from '../utils/tahfidzCalc';
@@ -11,6 +11,26 @@ export default function InputDiniyahSiswaModal({
   const [nilaiMapel, setNilaiMapel] = useState({ ...(santri.nilaiDiniyah || {}) });
   const [catatan, setCatatan] = useState(santri.catatanDiniyah || '');
   const [saving, setSaving] = useState(false);
+
+  // Input refs untuk navigasi keyboard Enter (loncat antar mapel secara berurutan)
+  const inputRefs = useRef([]);
+  const catatanRef = useRef(null);
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === 'Enter' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      const nextInput = inputRefs.current[index + 1];
+      if (nextInput) {
+        nextInput.focus();
+      } else if (catatanRef.current) {
+        catatanRef.current.focus();
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prevInput = inputRefs.current[index - 1];
+      if (prevInput) prevInput.focus();
+    }
+  };
 
   const handleScoreChange = (mapelId, val) => {
     if (val === '') {
@@ -101,8 +121,8 @@ export default function InputDiniyahSiswaModal({
                 <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
                   <th className="col-hide-mobile" style={{ width: '42px', textAlign: 'center', padding: '8px' }}>No</th>
                   <th style={{ textAlign: 'left', padding: '8px 10px' }}>Mata Pelajaran</th>
-                  <th style={{ width: '92px', textAlign: 'center', padding: '8px 6px' }}>Nilai</th>
-                  <th style={{ width: '105px', textAlign: 'center', padding: '8px 6px' }}>Predikat</th>
+                  <th className="col-diniyah-nilai" style={{ width: '92px', textAlign: 'center', padding: '8px 6px' }}>Nilai</th>
+                  <th className="col-diniyah-pred" style={{ width: '105px', textAlign: 'center', padding: '8px 6px' }}>Predikat</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,6 +148,7 @@ export default function InputDiniyahSiswaModal({
                       </td>
                       <td style={{ textAlign: 'center', padding: '6px' }}>
                         <input
+                          ref={el => inputRefs.current[idx] = el}
                           type="number"
                           inputMode="numeric"
                           min="0"
@@ -135,6 +156,9 @@ export default function InputDiniyahSiswaModal({
                           placeholder=""
                           value={val}
                           onChange={(e) => handleScoreChange(m.id, e.target.value)}
+                          onKeyDown={(e) => handleKeyDown(e, idx)}
+                          onFocus={(e) => e.target.select()}
+                          enterKeyHint="next"
                           className="diniyah-score-input"
                           style={{
                             border: val !== '' ? '2px solid #4338ca' : '1.5px solid #cbd5e1'
@@ -175,6 +199,7 @@ export default function InputDiniyahSiswaModal({
               </span>
             </div>
             <textarea
+              ref={catatanRef}
               rows={3}
               maxLength={300}
               value={catatan}
