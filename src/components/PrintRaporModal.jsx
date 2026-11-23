@@ -276,10 +276,10 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
         <div className="summary-card-item">
           <div className="summary-card-label">
-            <span>Peringkat Kelas</span>
+            <span>Peringkat</span>
           </div>
           <div className="summary-card-val" style={{ color: '#000000', fontWeight: 800 }}>
-            —
+            &nbsp;
           </div>
         </div>
       </div>
