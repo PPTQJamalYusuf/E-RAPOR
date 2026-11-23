@@ -49,6 +49,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
   const startYear = currentMonth >= 6 ? currentYear : currentYear - 1;
   const defaultTahunPelajaran = `${startYear} / ${startYear + 1}`;
   const tahunPelajaran = currentPeriod?.tahun_ajaran || santri.tahunPelajaran || santri.tahun_pelajaran || defaultTahunPelajaran;
+  const formattedDate = currentPeriod?.tanggal_rapor || '13 Desember 2026';
 
   const handlePrint = () => {
     if (!isAdmin) return;
@@ -331,7 +332,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
         <div className="signature-col-formal">
           <div className="sig-date-formal">
-            Tulang Bawang, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+            Tulang Bawang, {formattedDate}
           </div>
           <div className="sig-role-formal bold">
             Pembina Tahfidz <span className="arabic">(رئيسة قسم التحفيظ)</span>
@@ -575,7 +576,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
         <div className="signature-col-formal">
           <div className="sig-date-formal">
-            Tulang Bawang, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+            Tulang Bawang, {formattedDate}
           </div>
           <div className="sig-role-formal bold">
             Pembina Tahfidz <span className="arabic">(رئيسة قسم التحفيظ)</span>

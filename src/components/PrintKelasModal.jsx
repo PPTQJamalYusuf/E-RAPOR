@@ -64,6 +64,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
   const startYear = currentMonth >= 6 ? currentYear : currentYear - 1;
   const defaultTahunPelajaran = `${startYear} / ${startYear + 1}`;
   const tahunPelajaran = currentPeriod?.tahun_ajaran || defaultTahunPelajaran;
+  const formattedDate = currentPeriod?.tanggal_rapor || '13 Desember 2026';
 
   const toArabicNum = (n) => {
     const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -413,7 +414,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
 
             <div className="signature-col-formal">
               <div className="sig-date-formal">
-                Tulang Bawang, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                Tulang Bawang, {formattedDate}
               </div>
               <div className="sig-role-formal bold">
                 Pembina Tahfidz <span className="arabic">(رئيسة قسم التحفيظ)</span>
@@ -767,7 +768,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
 
                         <div className="signature-col-formal">
                           <div className="sig-date-formal">
-                            Tulang Bawang, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            Tulang Bawang, {formattedDate}
                           </div>
                           <div className="sig-role-formal bold">
                             Pembina Tahfidz <span className="arabic">(رئيسة قسم التحفيظ)</span>
@@ -878,28 +879,18 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                     const effectiveCalc = (isTahsin && calcTahsin && calcTahsin.count > 0)
                       ? calcTahsin
                       : calcTahfidz;
-                    const colorInfo = PREDIKAT_COLORS[effectiveCalc.predikatAkhir] || PREDIKAT_COLORS['-'];
+                    const isRasib = effectiveCalc.predikatAkhir === 'راسب';
 
                     return (
                       <tr key={santri.id}>
                         <td style={{ textAlign: 'center', fontWeight: 600, color: '#64748b' }}>
                           {idx + 1}
                         </td>
-                        <td style={{ textAlign: 'center', fontWeight: 800 }}>
-                          {santri.ranking === 1 ? (
-                            <span className="rank-badge rank-gold">🥇 1</span>
-                          ) : santri.ranking === 2 ? (
-                            <span className="rank-badge rank-silver">🥈 2</span>
-                          ) : santri.ranking === 3 ? (
-                            <span className="rank-badge rank-bronze">🥉 3</span>
-                          ) : santri.ranking && santri.ranking !== '-' ? (
-                            <span className="rank-badge-normal">
-                              #{santri.ranking}
-                            </span>
+                        <td style={{ textAlign: 'center', fontWeight: 700, fontSize: '8.5pt' }}>
+                          {santri.ranking && santri.ranking !== '-' ? (
+                            santri.ranking
                           ) : (
-                            <span className="rank-badge-normal" style={{ color: '#94a3b8' }}>
-                              —
-                            </span>
+                            <span style={{ color: '#94a3b8' }}>—</span>
                           )}
                         </td>
                         <td style={{ fontSize: '8.5pt' }}>{santri.nis || santri.id}</td>
@@ -930,13 +921,10 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                         <td style={{ textAlign: 'center' }}>
                           {effectiveCalc.count > 0 ? (
                             <span
-                              className="predikat-pill"
                               style={{
-                                background: colorInfo.bg,
-                                color: colorInfo.text,
-                                border: `1px solid ${colorInfo.border}`,
+                                color: isRasib ? '#dc2626' : '#111827',
+                                fontWeight: isRasib ? 700 : 600,
                                 fontSize: '8pt',
-                                padding: '2px 6px',
                                 whiteSpace: 'nowrap'
                               }}
                             >
@@ -972,7 +960,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
 
                 <div className="signature-col-formal">
                   <div className="sig-date-formal">
-                    Tulang Bawang, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    Tulang Bawang, {formattedDate}
                   </div>
                   <div className="sig-role-formal bold">
                     Pembina Tahfidz <span className="arabic">(رئيسة قسم التحفيظ)</span>

@@ -60,11 +60,7 @@ export default function PrintKelasDiniyahModal({ santriList = [], initialKelas =
   const defaultTahunPelajaran = `${startYear} / ${startYear + 1}`;
   const tahunPelajaran = currentPeriod?.tahun_ajaran || defaultTahunPelajaran;
 
-  const formattedDate = new Intl.DateTimeFormat('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }).format(now);
+  const formattedDate = currentPeriod?.tanggal_rapor || '13 Desember 2026';
 
   // Santri di kelas terpilih beserta ranking Diniyah
   const santriKelas = useMemo(() => {
@@ -369,21 +365,15 @@ export default function PrintKelasDiniyahModal({ santriList = [], initialKelas =
                   <tbody>
                     {santriKelas.map((santri, idx) => {
                       const calc = hitungRaporDiniyah(santri.nilaiDiniyah || {});
-                      const colorInfo = PREDIKAT_DINIYAH_COLORS[calc.predikatAkhir] || PREDIKAT_DINIYAH_COLORS['-'];
+                      const isRasib = calc.predikatAkhir === 'راسب';
 
                       return (
                         <tr key={santri.id}>
-                          <td style={{ textAlign: 'center', fontWeight: 800 }}>
-                            {santri.ranking === 1 ? (
-                              <span className="rank-badge rank-gold">🥇 1</span>
-                            ) : santri.ranking === 2 ? (
-                              <span className="rank-badge rank-silver">🥈 2</span>
-                            ) : santri.ranking === 3 ? (
-                              <span className="rank-badge rank-bronze">🥉 3</span>
+                          <td style={{ textAlign: 'center', fontWeight: 700, fontSize: '8.5pt' }}>
+                            {santri.ranking && santri.ranking !== '-' ? (
+                              santri.ranking
                             ) : (
-                              <span className="rank-badge-normal">
-                                {santri.ranking !== '-' ? `#${santri.ranking}` : idx + 1}
-                              </span>
+                              <span style={{ color: '#94a3b8' }}>—</span>
                             )}
                           </td>
                           <td style={{ fontSize: '8pt', textAlign: 'center' }}>{santri.nis || santri.id}</td>
@@ -401,20 +391,20 @@ export default function PrintKelasDiniyahModal({ santriList = [], initialKelas =
                             {calc.count > 0 ? calc.rataRata : '—'}
                           </td>
                           <td style={{ textAlign: 'center' }}>
-                            <span
-                              className="predikat-pill"
-                              style={{
-                                background: colorInfo.bg,
-                                color: colorInfo.text,
-                                border: `1px solid ${colorInfo.border}`,
-                                fontSize: '7.8pt',
-                                padding: '2px 5px',
-                                borderRadius: '4px',
-                                whiteSpace: 'nowrap'
-                              }}
-                            >
-                              <strong className="arabic">{calc.predikatAkhir}</strong> {PREDIKAT_DINIYAH_LABEL_ID[calc.predikatAkhir] ? `(${PREDIKAT_DINIYAH_LABEL_ID[calc.predikatAkhir]})` : ''}
-                            </span>
+                            {calc.count > 0 ? (
+                              <span
+                                style={{
+                                  color: isRasib ? '#dc2626' : '#111827',
+                                  fontWeight: isRasib ? 700 : 600,
+                                  fontSize: '8pt',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                <strong className="arabic">{calc.predikatAkhir}</strong> {PREDIKAT_DINIYAH_LABEL_ID[calc.predikatAkhir] ? `(${PREDIKAT_DINIYAH_LABEL_ID[calc.predikatAkhir]})` : ''}
+                              </span>
+                            ) : (
+                              <span style={{ color: '#94a3b8', fontSize: '8pt' }}>—</span>
+                            )}
                           </td>
                         </tr>
                       );

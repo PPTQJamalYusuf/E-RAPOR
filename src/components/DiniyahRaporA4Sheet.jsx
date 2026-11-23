@@ -31,11 +31,7 @@ export default function DiniyahRaporA4Sheet({
   const semVal = selectedSemester || (currentPeriod?.semester === 'Genap' ? 'الثاني' : 'الأول');
   const semLabel = SEMESTER_BILINGUAL[semVal] || semVal || 'Ganjil (الأول)';
 
-  const formattedDate = new Intl.DateTimeFormat('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }).format(now);
+  const formattedDate = currentPeriod?.tanggal_rapor || '13 Desember 2026';
 
   const hasRank = ranking !== '-' && ranking !== undefined && ranking !== null;
 
