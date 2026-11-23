@@ -37,6 +37,11 @@ export default function DiniyahRaporA4Sheet({
 
   return (
     <div className="rapor-a4-formal rapor-diniyah-sheet">
+      {/* Watermark Resmi Logo Pondok (Center Lembar Rapor) */}
+      <div className="watermark-bg" aria-hidden="true">
+        <img src="/logo.png" alt="" className="watermark-img" />
+      </div>
+
       {/* 1. KOP PONDOK RESMI */}
       <div className="letterhead-wrapper">
         <img

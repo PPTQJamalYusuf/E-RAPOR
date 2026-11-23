@@ -1967,6 +1967,35 @@ body {
   border: 1px solid #d1d5db;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Watermark Resmi Logo Pondok di Tengah Lembar Rapor A4 */
+.watermark-bg {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 340px;
+  max-width: 46%;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+  user-select: none;
+}
+
+.watermark-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* Spacers Proporsional Sesuai Permintaan */
@@ -2508,7 +2537,7 @@ body {
 
 @page {
   size: A4 portrait;
-  margin: 6mm 8mm;
+  margin: 6mm 10mm;
 }
 
 @media print {
@@ -2585,7 +2614,10 @@ body {
   }
 
   .rapor-a4-formal {
+    position: relative !important;
     width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
     min-height: 275mm !important;
     height: auto !important;
     max-height: 280mm !important;
@@ -2599,6 +2631,32 @@ body {
     page-break-after: avoid !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+
+  .watermark-bg {
+    position: absolute !important;
+    top: 52% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 340px !important;
+    max-width: 46% !important;
+    opacity: 0.07 !important;
+    mix-blend-mode: multiply !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+  }
+
+  .watermark-img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .letterhead-img {

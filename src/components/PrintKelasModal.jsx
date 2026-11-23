@@ -203,6 +203,11 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
     return (
       <div key={santri.id} className="batch-rapor-page">
         <div className="rapor-a4-formal rapor-tahsin-sheet">
+          {/* Watermark Resmi Logo Pondok (Center Lembar Rapor) */}
+          <div className="watermark-bg" aria-hidden="true">
+            <img src="/logo.png" alt="" className="watermark-img" />
+          </div>
+
           {/* 1. KOP PONDOK RESMI */}
           <div className="letterhead-wrapper">
             <img
@@ -583,6 +588,11 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                 return (
                   <div key={santri.id} className="batch-rapor-page">
                     <div className="rapor-a4-formal">
+                      {/* Watermark Resmi Logo Pondok (Center Lembar Rapor) */}
+                      <div className="watermark-bg" aria-hidden="true">
+                        <img src="/logo.png" alt="" className="watermark-img" />
+                      </div>
+
                       {/* 1. KOP PONDOK RESMI */}
                       <div className="letterhead-wrapper">
                         <img

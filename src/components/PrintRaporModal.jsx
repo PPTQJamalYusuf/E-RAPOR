@@ -147,6 +147,11 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
   // Render Dokumen Rapor Tahfidz (30 Juz)
   const renderTahfidzDocument = (isPageBreak = false) => (
     <div className={`rapor-a4-formal ${isPageBreak ? 'page-break-print' : ''}`}>
+      {/* Watermark Resmi Logo Pondok (Center Lembar Rapor) */}
+      <div className="watermark-bg" aria-hidden="true">
+        <img src="/logo.png" alt="" className="watermark-img" />
+      </div>
+
       {/* 1. KOP PONDOK RESMI */}
       <div className="letterhead-wrapper">
         <img
@@ -355,6 +360,11 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
   // Render Dokumen Rapor Tahsin (7 Kriteria Tajwid Sesuai Excel Ust. Hanifah)
   const renderTahsinDocument = (isPageBreak = false) => (
     <div className={`rapor-a4-formal rapor-tahsin-sheet ${isPageBreak ? 'page-break-print' : ''}`}>
+      {/* Watermark Resmi Logo Pondok (Center Lembar Rapor) */}
+      <div className="watermark-bg" aria-hidden="true">
+        <img src="/logo.png" alt="" className="watermark-img" />
+      </div>
+
       {/* 1. KOP PONDOK RESMI */}
       <div className="letterhead-wrapper">
         <img
