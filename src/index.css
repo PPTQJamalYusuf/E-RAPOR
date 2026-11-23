@@ -2462,14 +2462,14 @@ body {
   height: 85px;
 }
 
-/* Khusus Lembar Tahfidz 30 Juz: Spasi TTD 58px agar catatan panjang tidak menekan halaman */
+/* Khusus Lembar Tahfidz 30 Juz: Spasi TTD 72px (+1 space lega) */
 .rapor-a4-formal:not(.rapor-tahsin-sheet):not(.rapor-diniyah-sheet) .sig-space-formal {
-  height: 58px;
+  height: 72px;
 }
 
-/* Khusus Lembar Diniyah Formal: Spasi TTD 75px (ditarik ke atas dari Mengetahui, posisi bawah nama ttd tetap) */
+/* Khusus Lembar Diniyah Formal: Spasi TTD 90px (+1 space lega) */
 .rapor-diniyah-sheet .sig-space-formal {
-  height: 75px;
+  height: 90px;
 }
 
 .sig-name-box {
@@ -2618,9 +2618,9 @@ body {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
-    min-height: 275mm !important;
-    height: auto !important;
-    max-height: 280mm !important;
+    height: 282mm !important;
+    min-height: 282mm !important;
+    max-height: 283mm !important;
     padding: 0 !important;
     margin: 0 !important;
     border: none !important;
@@ -2631,6 +2631,7 @@ body {
     page-break-after: avoid !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    overflow: hidden !important;
   }
 
   .watermark-bg {
@@ -2772,10 +2773,13 @@ body {
     color: #000000 !important;
   }
 
-  /* Tahsin Lembar A4 Penuh & TTD Turun Rapi Mengisi Bagian Bawah */
+  /* Kembalikan Blok TTD ke Posisi Semula (Rapat di Bawah Catatan) */
+  .rapor-a4-formal .signature-container-formal {
+    margin-top: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
   .rapor-tahsin-sheet .signature-container-formal {
-    margin-top: auto !important;
-    margin-bottom: 14px !important;
     padding: 0 15px !important;
     font-size: 9.2pt !important;
   }
@@ -2791,21 +2795,17 @@ body {
   }
 
   .rapor-tahsin-sheet .sig-space-formal {
-    height: 85px !important;
+    height: 100px !important;
   }
 
-  /* Khusus Tahfidz 30 Juz saat cetak: 56px agar catatan 3 baris pas dan tidak menabrak */
+  /* Khusus Tahfidz 30 Juz saat cetak: 70px (+1 space lega) */
   .rapor-a4-formal:not(.rapor-tahsin-sheet):not(.rapor-diniyah-sheet) .sig-space-formal {
-    height: 56px !important;
+    height: 70px !important;
   }
 
-  /* Khusus Lembar Diniyah Cetak Fisik: Spasi TTD 75px proporsional & margin bawah nama ttd tetap */
+  /* Khusus Lembar Diniyah Cetak Fisik: Spasi TTD 90px (+1 space lega) */
   .rapor-diniyah-sheet .sig-space-formal {
-    height: 75px !important;
-  }
-
-  .rapor-diniyah-sheet .signature-container-formal {
-    margin-bottom: 14px !important;
+    height: 90px !important;
   }
 
   .rapor-tahsin-sheet .sig-name-ar {
@@ -2861,6 +2861,8 @@ body {
     break-after: page !important;
     display: block !important;
     width: 100% !important;
+    height: 282mm !important;
+    max-height: 283mm !important;
     margin: 0 !important;
     padding: 0 !important;
   }
