@@ -10,7 +10,10 @@ import {
   SEMESTER_BILINGUAL,
   PREDIKAT_LABEL_ID,
   PREDIKAT_COLORS,
-  KRITERIA_TAHSIN
+  KRITERIA_TAHSIN,
+  getCatatanTahfidz,
+  getCatatanTahsin,
+  parseCatatan
 } from '../utils/tahfidzCalc';
 import { usePrintDocumentTitle, executePrintWithTitle } from '../utils/printTitleHelper';
 
@@ -391,9 +394,33 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
               <span>C. Catatan Perkembangan Tahsin</span>
             </div>
             <div className="catatan-content-formal" style={{ fontSize: '9.5pt', lineHeight: 1.35, minHeight: '32px', color: '#000000' }}>
-              {santri.catatan || ''}
+              {(() => {
+                const { text, doa } = parseCatatan(getCatatanTahsin(calcTahsin.predikatAkhir, santri.catatan));
+                if (!text && !doa) return null;
+                return (
+                  <>
+                    {text && <div className="catatan-text-id">{text}</div>}
+                    {doa && (
+                      <div
+                        className="catatan-doa-ar"
+                        dir="rtl"
+                        style={{
+                          textAlign: 'right',
+                          textAlignLast: 'right',
+                          direction: 'rtl',
+                          display: 'block',
+                          width: '100%',
+                          fontFamily: "'Amiri', serif"
+                        }}
+                      >
+                        {doa}
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
-            {!santri.catatan && <div className="catatan-dotted-line"></div>}
+            {!getCatatanTahsin(calcTahsin.predikatAkhir, santri.catatan) && <div className="catatan-dotted-line"></div>}
           </div>
 
           {/* SPASI FORM TTD */}
@@ -750,9 +777,33 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
                           <span>C. Catatan</span>
                         </div>
                         <div className="catatan-content-formal" style={{ fontSize: '9.2pt', lineHeight: 1.35, minHeight: '20px', color: '#000000' }}>
-                          {santri.catatan || ''}
+                          {(() => {
+                            const { text, doa } = parseCatatan(getCatatanTahfidz(calc.predikatAkhir, santri.catatan));
+                            if (!text && !doa) return null;
+                            return (
+                              <>
+                                {text && <div className="catatan-text-id">{text}</div>}
+                                {doa && (
+                                  <div
+                                    className="catatan-doa-ar"
+                                    dir="rtl"
+                                    style={{
+                                      textAlign: 'right',
+                                      textAlignLast: 'right',
+                                      direction: 'rtl',
+                                      display: 'block',
+                                      width: '100%',
+                                      fontFamily: "'Amiri', serif"
+                                    }}
+                                  >
+                                    {doa}
+                                  </div>
+                                )}
+                              </>
+                            );
+                          })()}
                         </div>
-                        {!santri.catatan && <div className="catatan-dotted-line"></div>}
+                        {!getCatatanTahfidz(calc.predikatAkhir, santri.catatan) && <div className="catatan-dotted-line"></div>}
                       </div>
 
                       {/* SPASI 4 */}

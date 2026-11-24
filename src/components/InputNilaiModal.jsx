@@ -467,7 +467,7 @@ export default function InputNilaiModal({ santri, onClose, onSave }) {
               maxLength={300}
               value={catatan}
               onChange={(e) => setCatatan(e.target.value)}
-              placeholder="Tulis catatan evaluasi hafalan santri di sini (maksimal 300 karakter agar muat presisi 1 lembar cetak A4)..."
+              placeholder="Kosongkan untuk otomatis mencetak kalimat evaluasi resmi sesuai predikat nilai, atau ketik catatan khusus santri di sini..."
               className="catatan-pembina-textarea"
             />
           </div>

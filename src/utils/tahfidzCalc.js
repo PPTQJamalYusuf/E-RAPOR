@@ -249,3 +249,75 @@ export function hitungRanking(santriList) {
     return (a.nama || '').localeCompare(b.nama || '', 'id', { sensitivity: 'base' });
   });
 }
+
+/**
+ * Template Catatan Evaluasi Otomatis Resmi Rapor Tahfidz Al-Qur'an
+ */
+export const CATATAN_OTOMATIS_TAHFIDZ = {
+  'ممتاز': "Alhamdulillah, Ananda menunjukkan hafalan yang lancar, kuat dan bacaan baik. Pertahankan kualitas hafalan serta tingkatkan murojaah agar semakin mutqin. Semoga Al-Qur'an menjadi cahaya hati dan pedoman hidup Ananda.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ.",
+  'جيّد جدا': "Alhamdulillah, Ananda menunjukkan perkembangan hafalan yang baik. Tingkatkan ketelitian, kelancaran dan ketepatan bacaan dengan memperbanyak murojaah. Semoga Allah memberkahi dan memudahkan Ananda menjaga Kalam-Nya.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ.",
+  'جيّد': "Ananda telah menunjukkan usaha hafalan yang baik. Namun kelancaran dan kekuatan perlu ditingkatkan. Rajinlah murojaah dan perbaiki bacaan yang keliru. Semoga Allah memberi kekuatan dan istiqamah menghafal Al-Qur'an.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ.",
+  'مقبول': "Ananda telah mencapai standar ketuntasan, namun kesungguhan dan kualitas perlu ditingkatkan. Biasakan murojaah rutin dan perbaiki bacaan yang belum tepat. Semoga Allah memberi kemudahan dan semangat menjaga hafalan.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ.",
+  'راسب': "Ananda perlu meningkatkan kesungguhan dan ketekunan menghafal. Perbanyak murojaah, benahi hafalan bersama ustadzah. Jangan berkecil hati, jadikan motivasi. Semoga Allah beri kemudahan dan kekuatan bersama Al-Qur'an.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ."
+};
+
+// Aliases tanpa tasydid/shaddah
+CATATAN_OTOMATIS_TAHFIDZ['جيد جدا'] = CATATAN_OTOMATIS_TAHFIDZ['جيّد جدا'];
+CATATAN_OTOMATIS_TAHFIDZ['جيد'] = CATATAN_OTOMATIS_TAHFIDZ['جيّد'];
+
+/**
+ * Template Catatan Evaluasi Otomatis Resmi Rapor Tahsin Al-Qur'an
+ */
+export const CATATAN_OTOMATIS_TAHSIN = {
+  'ممتاز': "Alhamdulillah, Ananda menunjukkan bacaan Al-Qur'an yang sangat baik, tartil, fasih, serta penguasaan makharijul huruf dan tajwid yang tepat. Pertahankan kelancaran dan adab tilawah. Semoga Al-Qur'an menjadi cahaya hati dan pedoman hidup Ananda.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ.",
+  'جيّد جدا': "Alhamdulillah, Ananda menunjukkan perkembangan bacaan tahsin yang baik. Tingkatkan ketelitian pada hukum tajwid dan kelancaran makhraj huruf dengan memperbanyak latihan tilawah. Semoga Allah memberkahi dan memudahkan Ananda menjaga Kalam-Nya.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ.",
+  'جيّد': "Ananda telah menunjukkan usaha perbaikan bacaan yang baik. Namun ketepatan makharijul huruf dan hukum tajwid perlu ditingkatkan. Rajinlah berlatih talaqqi dan perbaiki bacaan yang keliru. Semoga Allah memberi kekuatan dan istiqamah bersama Al-Qur'an.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ.",
+  'مقبول': "Ananda telah mencapai standar ketuntasan tahsin, namun kefasihan makhraj dan ketepatan hukum mad serta harakat perlu ditingkatkan. Biasakan tilawah rutin dan terus menyimak ustadzah. Semoga Allah memberi kemudahan dan semangat memperbagus bacaan Al-Qur'an.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ.",
+  'راسب': "Ananda perlu meningkatkan kesungguhan dan ketekunan dalam memperbaiki bacaan Al-Qur'an. Perbanyak latihan dasar makhraj dan harakat bersama ustadzah. Jangan berkecil hati, jadikan motivasi. Semoga Allah beri kemudahan dan kekuatan bersama Al-Qur'an.\nبَارَكَ اللهُ فِيكِ، وَنَفَعَكِ بِالْقُرْآنِ، وَجَعَلَكِ مِنْ أَهْلِهِ وَخَاصَّتِهِ."
+};
+
+// Aliases tanpa tasydid/shaddah
+CATATAN_OTOMATIS_TAHSIN['جيد جدا'] = CATATAN_OTOMATIS_TAHSIN['جيّد جدا'];
+CATATAN_OTOMATIS_TAHSIN['جيد'] = CATATAN_OTOMATIS_TAHSIN['جيّد'];
+
+/**
+ * Mengambil catatan evaluasi Tahfidz (memprioritaskan catatan khusus manual guru jika ada)
+ */
+export function getCatatanTahfidz(predikat, customCatatan) {
+  if (customCatatan && typeof customCatatan === 'string' && customCatatan.trim() !== '') {
+    return customCatatan.trim();
+  }
+  return CATATAN_OTOMATIS_TAHFIDZ[predikat] || '';
+}
+
+/**
+ * Mengambil catatan evaluasi Tahsin (memprioritaskan catatan khusus manual guru jika ada)
+ */
+export function getCatatanTahsin(predikat, customCatatan) {
+  if (customCatatan && typeof customCatatan === 'string' && customCatatan.trim() !== '') {
+    return customCatatan.trim();
+  }
+  return CATATAN_OTOMATIS_TAHSIN[predikat] || '';
+}
+
+/**
+ * Memisahkan teks evaluasi Bahasa Indonesia dan doa berbahasa Arab
+ * agar doa Arab dapat dirender rapi rata kanan (RTL).
+ * Menggunakan regex fleksibel untuk mencocokkan blok doa Arab di bagian akhir teks
+ * baik dengan/tanpa baris baru (\n), tanda baca Arab/Latin, maupun perbedaan harakat.
+ */
+export function parseCatatan(rawCatatan) {
+  if (!rawCatatan || typeof rawCatatan !== 'string') {
+    return { text: '', doa: '' };
+  }
+  const str = rawCatatan.trim();
+  const match = str.match(/([\u0600-\u06FF][\u0600-\u06FF\s،,.\u060C\u061B\u061F-]*)$/);
+  if (match) {
+    const doa = match[1].trim();
+    const text = str.slice(0, match.index).trim();
+    if (doa.length >= 5) {
+      return { text, doa };
+    }
+  }
+  return { text: str, doa: '' };
+}

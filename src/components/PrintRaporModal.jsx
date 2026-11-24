@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { X, Printer, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
-import { 
-  getPredikat, 
-  hitungRapor, 
+import {
+  getPredikat,
+  hitungRapor,
   hitungRaporTahsin,
   KRITERIA_TAHSIN,
   formatNamaKelas,
-  KELAS_BILINGUAL, 
+  KELAS_BILINGUAL,
   SEMESTER_BILINGUAL,
-  PREDIKAT_LABEL_ID 
+  PREDIKAT_LABEL_ID,
+  getCatatanTahfidz,
+  getCatatanTahsin,
+  parseCatatan
 } from '../utils/tahfidzCalc';
 import { usePrintDocumentTitle, executePrintWithTitle } from '../utils/printTitleHelper';
 
@@ -23,10 +26,10 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
   // Format Nama File Otomatis saat Simpan PDF: [Nama] - Rapor [Jenis] [Kelas]
   const kelasLabel = formatNamaKelas(santri.kelas);
-  const jenisLabel = printDocType === 'tahsin' 
-    ? 'Rapor Tahsin' 
-    : printDocType === 'both' 
-      ? 'Rapor Tahfidz & Tahsin' 
+  const jenisLabel = printDocType === 'tahsin'
+    ? 'Rapor Tahsin'
+    : printDocType === 'both'
+      ? 'Rapor Tahfidz & Tahsin'
       : 'Rapor Tahfidz';
   const printTitle = `${santri.nama || 'Santri'} - ${jenisLabel} ${kelasLabel}`;
   usePrintDocumentTitle(printTitle);
@@ -309,9 +312,33 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
           <span>C. Catatan</span>
         </div>
         <div className="catatan-content-formal" style={{ fontSize: '9.2pt', lineHeight: 1.35, minHeight: '20px', color: '#000000' }}>
-          {santri.catatan || ''}
+          {(() => {
+            const { text, doa } = parseCatatan(getCatatanTahfidz(calc.predikatAkhir, santri.catatan));
+            if (!text && !doa) return null;
+            return (
+              <>
+                {text && <div className="catatan-text-id">{text}</div>}
+                {doa && (
+                  <div
+                    className="catatan-doa-ar"
+                    dir="rtl"
+                    style={{
+                      textAlign: 'right',
+                      textAlignLast: 'right',
+                      direction: 'rtl',
+                      display: 'block',
+                      width: '100%',
+                      fontFamily: "'Amiri', serif"
+                    }}
+                  >
+                    {doa}
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
-        {!santri.catatan && <div className="catatan-dotted-line"></div>}
+        {!getCatatanTahfidz(calc.predikatAkhir, santri.catatan) && <div className="catatan-dotted-line"></div>}
       </div>
 
       {/* SPASI 4: Form ttd */}
@@ -558,9 +585,33 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
           <span>C. Catatan Perkembangan Tahsin</span>
         </div>
         <div className="catatan-content-formal" style={{ fontSize: '9.5pt', lineHeight: 1.35, minHeight: '32px', color: '#000000' }}>
-          {santri.catatan || ''}
+          {(() => {
+            const { text, doa } = parseCatatan(getCatatanTahsin(calcTahsin.predikatAkhir, santri.catatan));
+            if (!text && !doa) return null;
+            return (
+              <>
+                {text && <div className="catatan-text-id">{text}</div>}
+                {doa && (
+                  <div
+                    className="catatan-doa-ar"
+                    dir="rtl"
+                    style={{
+                      textAlign: 'right',
+                      textAlignLast: 'right',
+                      direction: 'rtl',
+                      display: 'block',
+                      width: '100%',
+                      fontFamily: "'Amiri', serif"
+                    }}
+                  >
+                    {doa}
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
-        {!santri.catatan && <div className="catatan-dotted-line"></div>}
+        {!getCatatanTahsin(calcTahsin.predikatAkhir, santri.catatan) && <div className="catatan-dotted-line"></div>}
       </div>
 
       {/* SPASI: Form ttd */}
@@ -640,28 +691,28 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             <div className="print-modal-actions">
               {/* Zoom / Scale Controls */}
               <div className="print-zoom-controls">
-                <button 
-                  type="button" 
-                  className="btn-zoom" 
-                  onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))} 
+                <button
+                  type="button"
+                  className="btn-zoom"
+                  onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))}
                   title="Perkecil Ukuran Lembar"
                 >
                   <ZoomOut size={14} />
                 </button>
                 <span className="zoom-label">{Math.round(zoom * 100)}%</span>
-                <button 
-                  type="button" 
-                  className="btn-zoom" 
-                  onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))} 
+                <button
+                  type="button"
+                  className="btn-zoom"
+                  onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))}
                   title="Perbesar Ukuran Lembar"
                 >
                   <ZoomIn size={14} />
                 </button>
                 {zoom !== 1 && (
-                  <button 
-                    type="button" 
-                    className="btn-zoom-reset" 
-                    onClick={() => setZoom(1)} 
+                  <button
+                    type="button"
+                    className="btn-zoom-reset"
+                    onClick={() => setZoom(1)}
                     title="Kembalikan ke 100%"
                   >
                     <RotateCcw size={12} />
@@ -686,7 +737,7 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
                   <Printer size={16} /> Cetak Dokumen (A4)
                 </button>
               ) : (
-                <div 
+                <div
                   className="guru-view-only-badge"
                   style={{
                     display: 'inline-flex',
@@ -708,10 +759,10 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
             </div>
 
             {/* Tombol X Merah Background Putih di Ujung Kanan */}
-            <button 
-              type="button" 
-              className="btn-modal-close-corner" 
-              onClick={onClose} 
+            <button
+              type="button"
+              className="btn-modal-close-corner"
+              onClick={onClose}
               title="Tutup"
               aria-label="Tutup"
             >
@@ -722,9 +773,9 @@ export default function PrintRaporModal({ santri, ranking, onClose, currentPerio
 
         {/* Dokumen Rapor Siap Cetak A4 */}
         <div className="modal-body print-modal-body">
-          <div 
+          <div
             className="print-paper-wrapper"
-            style={{ 
+            style={{
               transform: zoom !== 1 ? `scale(${zoom})` : 'none',
               transformOrigin: 'top center',
               transition: 'transform 0.15s ease-out'
