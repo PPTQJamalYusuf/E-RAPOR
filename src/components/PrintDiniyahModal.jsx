@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Printer, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { formatNamaKelas } from '../utils/tahfidzCalc';
-import { usePrintDocumentTitle, executePrintWithTitle } from '../utils/printTitleHelper';
+import { usePrintDocumentTitle, executePrintWithTitle, calculateFitZoom } from '../utils/printTitleHelper';
 import DiniyahRaporA4Sheet from './DiniyahRaporA4Sheet';
 
 export default function PrintDiniyahModal({
@@ -13,8 +13,19 @@ export default function PrintDiniyahModal({
 }) {
   const initialSem = currentPeriod?.semester === 'Genap' ? 'الثاني' : (santri.semester || 'الأول');
   const [selectedSemester, setSelectedSemester] = useState(initialSem);
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(calculateFitZoom);
   const isAdmin = currentUser?.role === 'admin';
+
+  // Sinkronkan skala otomatis jika orientasi layar perangkat diubah (portrait <-> landscape)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 850) {
+        setZoom(calculateFitZoom());
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Format Nama File Otomatis saat Simpan PDF: [Nama] - Rapor Diniyah [Kelas]
   const kelasLabel = formatNamaKelas(santri.kelas);
@@ -81,7 +92,7 @@ export default function PrintDiniyahModal({
                 <button 
                   type="button" 
                   className="btn-zoom" 
-                  onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))} 
+                  onClick={() => setZoom(prev => Math.max(0.35, +(prev - 0.05).toFixed(2)))} 
                   title="Perkecil Ukuran Lembar"
                 >
                   <ZoomOut size={14} />
@@ -90,21 +101,19 @@ export default function PrintDiniyahModal({
                 <button 
                   type="button" 
                   className="btn-zoom" 
-                  onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))} 
+                  onClick={() => setZoom(prev => Math.min(1.5, +(prev + 0.05).toFixed(2)))} 
                   title="Perbesar Ukuran Lembar"
                 >
                   <ZoomIn size={14} />
                 </button>
-                {zoom !== 1 && (
-                  <button 
-                    type="button" 
-                    className="btn-zoom-reset" 
-                    onClick={() => setZoom(1)} 
-                    title="Kembalikan ke 100%"
-                  >
-                    <RotateCcw size={12} />
-                  </button>
-                )}
+                <button 
+                  type="button" 
+                  className="btn-zoom-reset" 
+                  onClick={() => setZoom(calculateFitZoom())} 
+                  title="Sesuaikan Pas Layar (Fit to Screen)"
+                >
+                  <RotateCcw size={12} />
+                </button>
               </div>
 
               {/* Semester Selector */}
@@ -163,9 +172,9 @@ export default function PrintDiniyahModal({
           <div 
             className="print-paper-wrapper"
             style={{ 
-              transform: zoom !== 1 ? `scale(${zoom})` : 'none',
+              zoom: zoom,
               transformOrigin: 'top center',
-              transition: 'transform 0.15s ease-out'
+              transition: 'all 0.15s ease-out'
             }}
           >
             <DiniyahRaporA4Sheet

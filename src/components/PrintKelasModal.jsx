@@ -15,7 +15,7 @@ import {
   getCatatanTahsin,
   parseCatatan
 } from '../utils/tahfidzCalc';
-import { usePrintDocumentTitle, executePrintWithTitle } from '../utils/printTitleHelper';
+import { usePrintDocumentTitle, executePrintWithTitle, calculateFitZoom } from '../utils/printTitleHelper';
 
 export default function PrintKelasModal({ santriList, initialKelas, currentPeriod, onClose }) {
   // Listener keyboard ESC untuk menutup modal
@@ -55,7 +55,18 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
   
   const [selectedKelas, setSelectedKelas] = useState(validInitialKelas);
   const [printMode, setPrintMode] = useState('batch'); // 'batch' (seluruh rapor) atau 'leger' (rekap nilai)
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(calculateFitZoom);
+
+  // Sinkronkan skala otomatis jika orientasi layar perangkat diubah (portrait <-> landscape)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 850) {
+        setZoom(calculateFitZoom());
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const initialSem = currentPeriod?.semester === 'Genap' ? 'الثاني' : 'الأول';
   const [selectedSemester, setSelectedSemester] = useState(initialSem);
@@ -528,7 +539,7 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
               <button 
                 type="button" 
                 className="btn-zoom" 
-                onClick={() => setZoom(prev => Math.max(0.6, +(prev - 0.1).toFixed(1)))} 
+                onClick={() => setZoom(prev => Math.max(0.35, +(prev - 0.05).toFixed(2)))} 
                 title="Perkecil Ukuran Lembar"
               >
                 <ZoomOut size={14} />
@@ -537,21 +548,19 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
               <button 
                 type="button" 
                 className="btn-zoom" 
-                onClick={() => setZoom(prev => Math.min(1.2, +(prev + 0.1).toFixed(1)))} 
+                onClick={() => setZoom(prev => Math.min(1.5, +(prev + 0.05).toFixed(2)))} 
                 title="Perbesar Ukuran Lembar"
               >
                 <ZoomIn size={14} />
               </button>
-              {zoom !== 1 && (
-                <button 
-                  type="button" 
-                  className="btn-zoom-reset" 
-                  onClick={() => setZoom(1)} 
-                  title="Kembalikan ke 100%"
-                >
-                  <RotateCcw size={12} />
-                </button>
-              )}
+              <button 
+                type="button" 
+                className="btn-zoom-reset" 
+                onClick={() => setZoom(calculateFitZoom())} 
+                title="Sesuaikan Pas Layar (Fit to Screen)"
+              >
+                <RotateCcw size={12} />
+              </button>
             </div>
 
             {/* Pilihan Kelas */}
@@ -592,9 +601,9 @@ export default function PrintKelasModal({ santriList, initialKelas, currentPerio
           <div 
             className="print-paper-wrapper"
             style={{ 
-              transform: zoom !== 1 ? `scale(${zoom})` : 'none',
+              zoom: zoom,
               transformOrigin: 'top center',
-              transition: 'transform 0.15s ease-out'
+              transition: 'all 0.15s ease-out'
             }}
           >
           {santriKelas.length === 0 ? (

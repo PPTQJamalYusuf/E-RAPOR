@@ -63,3 +63,21 @@ export function executePrintWithTitle(title) {
     }
   }, 2000);
 }
+
+/**
+ * Menghitung skala zoom awal agar lembar A4 (lebar 210mm / ~794px)
+ * tampil pas sempurna (fit-to-screen) di layar smartphone atau tablet.
+ * @returns {number} Nilai skala (0.35 s/d 1.0)
+ */
+export function calculateFitZoom() {
+  if (typeof window === 'undefined') return 1;
+  const screenW = window.innerWidth;
+  // Jika di mobile / tablet (< 850px), sesuaikan skala agar 210mm (~794px) pas di layar
+  if (screenW < 850) {
+    const targetDocWidth = 794; // Lebar standar kertas A4 (210mm) dalam piksel layar (96dpi)
+    const availableWidth = screenW - 24; // Dikurangi sedikit margin sisi
+    const rawScale = availableWidth / targetDocWidth;
+    return Math.min(1, Math.max(0.35, +rawScale.toFixed(2)));
+  }
+  return 1;
+}
